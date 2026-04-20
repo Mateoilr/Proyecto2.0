@@ -1,0 +1,116 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>{{ isEditMode ? 'Editar Paciente' : 'Nuevo Paciente' }}</h1>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Documento</mat-label>
+            <mat-select formControlName="tipoDocumento">
+              <mat-option *ngFor="let tipo of tiposDocumento" [value]="tipo.value">
+                {{tipo.label}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="patientForm.get('tipoDocumento')?.touched">
+              {{getErrorMessage('tipoDocumento')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número de Documento</mat-label>
+            <input matInput formControlName="documento" placeholder="1234567890">
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="patientForm.get('documento')?.touched">
+              {{getErrorMessage('documento')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombres</mat-label>
+            <input matInput formControlName="nombres" placeholder="Juan">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="patientForm.get('nombres')?.touched">
+              {{getErrorMessage('nombres')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="apellidos" placeholder="Pérez">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="patientForm.get('apellidos')?.touched">
+              {{getErrorMessage('apellidos')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="patientForm.get('fechaNacimiento')?.touched">
+              {{getErrorMessage('fechaNacimiento')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Sexo</mat-label>
+            <mat-select formControlName="sexo">
+              <mat-option *ngFor="let sexo of sexos" [value]="sexo.value">
+                {{sexo.label}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="patientForm.get('sexo')?.touched">
+              {{getErrorMessage('sexo')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección</mat-label>
+          <textarea matInput formControlName="direccion" rows="3" placeholder="Calle Principal, Ciudad"></textarea>
+          <mat-icon matPrefix>home</mat-icon>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="contacto" placeholder="0987654321">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error *ngIf="patientForm.get('contacto')?.touched">
+              {{getErrorMessage('contacto')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="ejemplo@email.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="patientForm.get('email')?.touched">
+              {{getErrorMessage('email')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon>
+            {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,112 @@
+<div class="list-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>group</mat-icon>
+        Gestión de Usuarios
+      </mat-card-title>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="onCreate()">
+          <mat-icon>add</mat-icon>
+          Nuevo Usuario
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Buscar por nombre o email...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Estado</mat-label>
+          <mat-select [formControl]="statusControl">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="ACTIVE">Activo</mat-option>
+            <mat-option value="INACTIVE">Inactivo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Tabla de Usuarios -->
+      <div class="table-container">
+        <table mat-table [dataSource]="users" class="full-width-table">
+
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-cell">
+                <strong>{{ user.nombres }}</strong>
+                <span class="user-email">{{ user.email }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.email }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="roles">
+            <th mat-header-cell *matHeaderCellDef>Roles</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip-set>
+                <mat-chip *ngFor="let userRole of user.roles" [style.background-color]="getRoleColor(userRole.role.name)" class="role-chip">
+                  {{ userRole.role.name }}
+                </mat-chip>
+              </mat-chip-set>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip [style.background-color]="getEstadoColor(user.status)" class="estado-chip">
+                {{ user.status === 'ACTIVE' ? 'Activo' : 'Inactivo' }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button [matTooltip]="'Editar'" (click)="onEdit(user)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                [matTooltip]="user.status === 'ACTIVE' ? 'Desactivar' : 'Activar'"
+                [color]="user.status === 'ACTIVE' ? 'warn' : 'primary'"
+                (click)="onToggleStatus(user)">
+                <mat-icon>{{ user.status === 'ACTIVE' ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+              <button mat-icon-button [matTooltip]="'Eliminar'" color="warn" (click)="onDelete(user)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && users.length === 0">
+          <mat-icon>inbox</mat-icon>
+          <p>No se encontraron usuarios</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="loading">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>Cargando usuarios...</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,94 @@
+<div class="list-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>history</mat-icon>
+        Logs de Auditoría
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Buscar por usuario o entidad...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Acción</mat-label>
+          <mat-select [formControl]="actionControl">
+            <mat-option value="">Todas</mat-option>
+            <mat-option value="CREATE">Crear</mat-option>
+            <mat-option value="UPDATE">Actualizar</mat-option>
+            <mat-option value="DELETE">Eliminar</mat-option>
+            <mat-option value="LOGIN">Login</mat-option>
+            <mat-option value="LOGOUT">Logout</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Tabla de Logs -->
+      <div class="table-container">
+        <table mat-table [dataSource]="logs" class="full-width-table">
+
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let log">
+              {{ log.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef>Usuario</th>
+            <td mat-cell *matCellDef="let log">
+              <div class="user-cell">
+                <strong>{{ log.user?.nombres || 'N/A' }}</strong>
+                <span class="user-email">{{ log.user?.email || '-' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef>Acción</th>
+            <td mat-cell *matCellDef="let log">
+              <mat-chip [style.background-color]="getActionColor(log.action)" class="action-chip">
+                {{ log.action }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="entidad">
+            <th mat-header-cell *matHeaderCellDef>Entidad</th>
+            <td mat-cell *matCellDef="let log">
+              {{ log.entity }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="entityId">
+            <th mat-header-cell *matHeaderCellDef>ID Entidad</th>
+            <td mat-cell *matCellDef="let log">
+              <code>{{ log.entityId }}</code>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && logs.length === 0">
+          <mat-icon>inbox</mat-icon>
+          <p>No se encontraron registros de auditoría</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="loading">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>Cargando logs...</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

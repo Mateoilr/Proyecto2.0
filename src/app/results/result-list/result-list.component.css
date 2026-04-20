@@ -1,0 +1,95 @@
+.list-container {
+  padding: 20px;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-field {
+  flex: 1;
+}
+
+.filter-field {
+  min-width: 200px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.full-width-table {
+  width: 100%;
+  background: white;
+}
+
+.exam-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.exam-code {
+  font-size: 12px;
+  color: #666;
+}
+
+.valor-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.unidad {
+  font-size: 12px;
+  color: #666;
+}
+
+.estado-chip {
+  color: white !important;
+  font-weight: 500;
+  font-size: 11px;
+  min-height: 24px;
+  padding: 4px 8px;
+}
+
+.empty-state,
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.empty-state mat-icon,
+.loading-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+}
+
+.empty-state p,
+.loading-state p {
+  color: #999;
+  font-size: 16px;
+}
+
+button[mat-icon-button] {
+  margin-right: 4px;
+}

@@ -1,0 +1,190 @@
+<div class="detail-container" *ngIf="!loading && order">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <button mat-icon-button (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-title">
+        <h1>Orden #{{ order.codigo }}</h1>
+        <mat-chip [style.background-color]="getEstadoColor(order.estado)" class="estado-chip">
+          {{ order.estado }}
+        </mat-chip>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="onCloseOrder()"
+        *ngIf="order.estado !== 'CERRADA' && order.estado !== 'CANCELADA'"
+        matTooltip="Cerrar orden para poder enviar notificaciones">
+        <mat-icon>check_circle</mat-icon>
+        Cerrar Orden
+      </button>
+      <button
+        mat-button
+        (click)="onSendEmail()"
+        [disabled]="!canSendNotifications()"
+        [matTooltip]="!canSendNotifications() ? 'Solo disponible para órdenes cerradas' : 'Enviar PDF por email'">
+        <mat-icon>email</mat-icon>
+        Enviar por Email
+      </button>
+      <button
+        mat-button
+        (click)="onSendWhatsApp()"
+        [disabled]="!canSendNotifications()"
+        [matTooltip]="!canSendNotifications() ? 'Solo disponible para órdenes cerradas' : 'Enviar PDF por WhatsApp'"
+        style="color: #25D366;">
+        <mat-icon>chat</mat-icon>
+        Enviar por WhatsApp
+      </button>
+      <button mat-button (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button mat-button color="warn" (click)="onDelete()">
+        <mat-icon>delete</mat-icon>
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Content Tabs -->
+  <mat-tab-group>
+
+    <!-- Información General -->
+    <mat-tab label="Información General">
+      <div class="tab-content">
+        <div class="info-grid">
+
+          <!-- Información del Paciente -->
+          <mat-card>
+            <mat-card-header>
+              <mat-icon mat-card-avatar>person</mat-icon>
+              <mat-card-title>Paciente</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-row">
+                <span class="label">Nombre:</span>
+                <span class="value">{{ order.patient.nombres }} {{ order.patient.apellidos }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Documento:</span>
+                <span class="value">{{ order.patient.tipoDocumento }} {{ order.patient.documento }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Edad:</span>
+                <span class="value">{{ getAge(order.patient.fechaNacimiento) }} años</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Sexo:</span>
+                <span class="value">{{ order.patient.sexo }}</span>
+              </div>
+              <div class="info-row" *ngIf="order.patient.contacto">
+                <span class="label">Contacto:</span>
+                <span class="value">{{ order.patient.contacto }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Información de la Orden -->
+          <mat-card>
+            <mat-card-header>
+              <mat-icon mat-card-avatar>assignment</mat-icon>
+              <mat-card-title>Detalles de la Orden</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-row">
+                <span class="label">Código:</span>
+                <span class="value">{{ order.codigo }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Estado:</span>
+                <mat-chip [style.background-color]="getEstadoColor(order.estado)" class="small-chip">
+                  {{ order.estado }}
+                </mat-chip>
+              </div>
+              <div class="info-row">
+                <span class="label">Prioridad:</span>
+                <mat-chip [style.background-color]="getPrioridadColor(order.prioridad)" class="small-chip">
+                  {{ order.prioridad }}
+                </mat-chip>
+              </div>
+              <div class="info-row">
+                <span class="label">Fecha Creación:</span>
+                <span class="value">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <div class="info-row" *ngIf="order.observaciones">
+                <span class="label">Observaciones:</span>
+                <span class="value">{{ order.observaciones }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Exámenes y Resultados -->
+    <mat-tab label="Exámenes">
+      <div class="tab-content">
+        <table mat-table [dataSource]="order.items" class="full-width-table">
+
+          <ng-container matColumnDef="examen">
+            <th mat-header-cell *matHeaderCellDef>Examen</th>
+            <td mat-cell *matCellDef="let item">
+              <div class="exam-cell">
+                <strong>{{ item.exam.nombre }}</strong>
+                <span class="exam-code">{{ item.exam.codigo }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-chip [style.background-color]="getItemEstadoColor(item.estado)" class="small-chip">
+                {{ item.estado }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="muestra">
+            <th mat-header-cell *matHeaderCellDef>Tipo Muestra</th>
+            <td mat-cell *matCellDef="let item">
+              {{ item.sampleType || '-' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="resultado">
+            <th mat-header-cell *matHeaderCellDef>Resultado</th>
+            <td mat-cell *matCellDef="let item">
+              <div *ngIf="item.result">
+                <span>{{ item.result.valor }}</span>
+                <span *ngIf="item.result.unidad"> {{ item.result.unidad }}</span>
+              </div>
+              <button mat-button color="primary" *ngIf="!item.result" (click)="onRegisterResult(item.id)">
+                <mat-icon>add</mat-icon>
+                Registrar
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Cargando orden...</p>
+</div>

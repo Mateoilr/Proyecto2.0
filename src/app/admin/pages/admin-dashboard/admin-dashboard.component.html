@@ -1,0 +1,25 @@
+<div class="admin-container">
+
+  <div class="page-header">
+    <h1><mat-icon>settings</mat-icon> Panel de Administración</h1>
+  </div>
+
+  <div class="admin-grid">
+    <mat-card *ngFor="let section of adminSections" class="admin-card" [routerLink]="section.route">
+      <mat-card-content>
+        <div class="section-icon">
+          <mat-icon>{{ section.icon }}</mat-icon>
+        </div>
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary">
+          Acceder
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+</div>

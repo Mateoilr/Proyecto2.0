@@ -1,0 +1,60 @@
+.results-container {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.page-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px 0;
+  font-size: 28px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.page-header h1 mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  background: white;
+}
+
+.results-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.results-table td {
+  padding: 16px 12px;
+}
+
+.results-table td button {
+  margin: 0 4px;
+}
+
+mat-card {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+@media (max-width: 768px) {
+  .results-table td button {
+    display: block;
+    width: 100%;
+    margin: 4px 0;
+  }
+}

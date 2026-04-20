@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="header">
+    <h1>Catálogo de Exámenes</h1>
+    <button mat-raised-button color="primary" (click)="createExam()">
+      <mat-icon>add</mat-icon>
+      Nuevo Examen
+    </button>
+  </div>
+
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Buscar examen</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Código, nombre, categoría...">
+    <mat-icon matPrefix>search</mat-icon>
+  </mat-form-field>
+
+  <div *ngIf="loading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let exam"> {{exam.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+        <td mat-cell *matCellDef="let exam"> {{exam.codigo}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+        <td mat-cell *matCellDef="let exam"> {{exam.nombre}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
+        <td mat-cell *matCellDef="let exam"> {{exam.categoria}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="precio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Precio </th>
+        <td mat-cell *matCellDef="let exam"> ${{exam.precio ? exam.precio.toFixed(2) : '0.00'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="activo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+        <td mat-cell *matCellDef="let exam">
+          <mat-chip [class.active]="exam.estado === 'ACTIVE'" [class.inactive]="exam.estado === 'INACTIVE'">
+            {{exam.estado === 'ACTIVE' ? 'Activo' : 'Inactivo'}}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let exam">
+          <button mat-icon-button color="accent" (click)="editExam(exam)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [color]="exam.estado === 'ACTIVE' ? 'warn' : 'primary'"
+            (click)="toggleActive(exam)"
+            [matTooltip]="exam.estado === 'ACTIVE' ? 'Desactivar' : 'Activar'"
+          >
+            <mat-icon>{{exam.estado === 'ACTIVE' ? 'toggle_on' : 'toggle_off'}}</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteExam(exam)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          No se encontraron exámenes con el filtro "{{dataSource.filter}}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[10, 25, 50, 100]"
+      showFirstLastButtons
+      aria-label="Seleccionar página de exámenes">
+    </mat-paginator>
+  </div>
+</div>

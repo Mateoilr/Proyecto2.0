@@ -1,0 +1,139 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>add_task</mat-icon>
+        Nueva Orden de Exámenes
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+
+        <!-- Búsqueda de Paciente -->
+        <div class="form-section">
+          <h3>Paciente</h3>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Buscar Paciente</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="patientSearch"
+              [matAutocomplete]="auto"
+              placeholder="Buscar por nombre o documento">
+            <mat-icon matSuffix>search</mat-icon>
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayPatient"
+              (optionSelected)="onPatientSelected($event.option.value)">
+              <mat-option *ngFor="let patient of filteredPatients$ | async" [value]="patient">
+                <div class="patient-option">
+                  <strong>{{ patient.nombres }} {{ patient.apellidos }}</strong>
+                  <span>{{ patient.documento }}</span>
+                </div>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="orderForm.get('patientSearch')?.hasError('required')">
+              Debe seleccionar un paciente
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Datos de la Orden -->
+        <div class="form-section">
+          <h3>Datos de la Orden</h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prioridad</mat-label>
+            <mat-select formControlName="prioridad">
+              <mat-option value="NORMAL">Normal</mat-option>
+              <mat-option value="URGENTE">Urgente</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Observaciones</mat-label>
+            <textarea
+              matInput
+              formControlName="observaciones"
+              rows="3"
+              placeholder="Observaciones adicionales (opcional)">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Selección de Exámenes -->
+        <div class="form-section">
+          <h3>Exámenes</h3>
+
+          <!-- Exámenes Seleccionados -->
+          <div class="selected-exams" *ngIf="selectedExams.length > 0">
+            <mat-chip-set>
+              <mat-chip *ngFor="let exam of selectedExams" (removed)="removeExam(exam)">
+                {{ exam.nombre }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <!-- Indicador de Carga -->
+          <div *ngIf="loading" class="loading-exams">
+            <mat-icon>hourglass_empty</mat-icon>
+            <p>Cargando exámenes disponibles...</p>
+          </div>
+
+          <!-- Mensaje sin exámenes -->
+          <div *ngIf="!loading && availableExams.length === 0" class="no-exams">
+            <mat-icon>info</mat-icon>
+            <p>No hay exámenes activos disponibles. Verifique que el backend esté corriendo en http://localhost:3000</p>
+          </div>
+
+          <!-- Lista de Exámenes Disponibles -->
+          <div class="exams-grid" *ngIf="!loading && availableExams.length > 0">
+            <div
+              *ngFor="let exam of availableExams"
+              class="exam-card"
+              [class.selected]="isExamSelected(exam)"
+              (click)="toggleExam(exam)">
+              <mat-checkbox
+                [checked]="isExamSelected(exam)"
+                (click)="$event.stopPropagation()"
+                (change)="toggleExam(exam)">
+              </mat-checkbox>
+              <div class="exam-info">
+                <div class="exam-name">{{ exam.nombre }}</div>
+                <div class="exam-code">{{ exam.codigo }}</div>
+                <div class="exam-price">${{ exam.precio }}</div>
+              </div>
+            </div>
+          </div>
+
+          <mat-error *ngIf="selectedExams.length === 0 && orderForm.touched">
+            Debe seleccionar al menos un examen
+          </mat-error>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="form-actions">
+          <button
+            mat-raised-button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading">
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="loading || orderForm.invalid || selectedExams.length === 0">
+            <mat-icon>save</mat-icon>
+            Crear Orden
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

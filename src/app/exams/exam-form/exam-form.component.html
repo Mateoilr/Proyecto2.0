@@ -1,0 +1,94 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>{{ isEditMode ? 'Editar Examen' : 'Nuevo Examen' }}</h1>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Código</mat-label>
+            <input matInput formControlName="codigo" placeholder="HEM001">
+            <mat-icon matPrefix>qr_code</mat-icon>
+            <mat-error *ngIf="examForm.get('codigo')?.touched">
+              {{getErrorMessage('codigo')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="categoria">
+              <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                {{cat.label}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="examForm.get('categoria')?.touched">
+              {{getErrorMessage('categoria')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del Examen</mat-label>
+          <input matInput formControlName="nombre" placeholder="Hemograma Completo">
+          <mat-icon matPrefix>science</mat-icon>
+          <mat-error *ngIf="examForm.get('nombre')?.touched">
+            {{getErrorMessage('nombre')}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="descripcion" rows="3"
+                    placeholder="Descripción detallada del examen"></textarea>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Precio (USD)</mat-label>
+            <input matInput type="number" step="0.01" formControlName="precio" placeholder="0.00">
+            <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-error *ngIf="examForm.get('precio')?.touched">
+              {{getErrorMessage('precio')}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tiempo de Resultado (días)</mat-label>
+            <input matInput type="number" formControlName="tiempoResultadoDias" placeholder="1">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <mat-error *ngIf="examForm.get('tiempoResultadoDias')?.touched">
+              {{getErrorMessage('tiempoResultadoDias')}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Preparación del Paciente</mat-label>
+          <textarea matInput formControlName="preparacion" rows="3"
+                    placeholder="Instrucciones de preparación (ej: 8 horas de ayuno)"></textarea>
+        </mat-form-field>
+
+        <div class="checkbox-container">
+          <mat-checkbox [checked]="examForm.get('estado')?.value === 'ACTIVE'"
+                        (change)="examForm.patchValue({ estado: $event.checked ? 'ACTIVE' : 'INACTIVE' })">
+            Examen activo
+          </mat-checkbox>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon>
+            {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

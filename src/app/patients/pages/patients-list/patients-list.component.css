@@ -1,0 +1,91 @@
+.patients-container {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.header-content h1 mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.header-content button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-bar {
+  margin-bottom: 24px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.patients-table {
+  width: 100%;
+  background: white;
+}
+
+.patients-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.patients-table td {
+  padding: 16px 12px;
+}
+
+.patients-table mat-chip {
+  font-size: 12px;
+  min-height: 24px;
+}
+
+.patients-table button {
+  margin: 0 4px;
+}
+
+mat-card {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .search-field {
+    max-width: 100%;
+  }
+}

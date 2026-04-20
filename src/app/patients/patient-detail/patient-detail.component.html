@@ -1,0 +1,92 @@
+<div class="container" *ngIf="!loading && patient">
+  <div class="header">
+    <div class="header-left">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ patient.nombres }} {{ patient.apellidos }}</h1>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="createOrder()">
+        <mat-icon>add</mat-icon>
+        Nueva Orden
+      </button>
+      <button mat-raised-button color="accent" (click)="editPatient()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    </div>
+  </div>
+
+  <mat-card class="patient-info-card">
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <mat-icon>badge</mat-icon>
+          <div>
+            <span class="label">{{ getTipoDocumentoLabel(patient.tipoDocumento) }}</span>
+            <span class="value">{{ patient.documento }}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>cake</mat-icon>
+          <div>
+            <span class="label">Fecha de Nacimiento</span>
+            <span class="value">{{ patient.fechaNacimiento | date:'dd/MM/yyyy' }} ({{ getAge(patient.fechaNacimiento) }} años)</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <mat-icon>wc</mat-icon>
+          <div>
+            <span class="label">Sexo</span>
+            <span class="value">{{ getSexoLabel(patient.sexo) }}</span>
+          </div>
+        </div>
+
+        <div class="info-item" *ngIf="patient.contacto">
+          <mat-icon>phone</mat-icon>
+          <div>
+            <span class="label">Teléfono</span>
+            <span class="value">{{ patient.contacto }}</span>
+          </div>
+        </div>
+
+        <div class="info-item" *ngIf="patient.email">
+          <mat-icon>email</mat-icon>
+          <div>
+            <span class="label">Email</span>
+            <span class="value">{{ patient.email }}</span>
+          </div>
+        </div>
+
+        <div class="info-item full-width" *ngIf="patient.direccion">
+          <mat-icon>home</mat-icon>
+          <div>
+            <span class="label">Dirección</span>
+            <span class="value">{{ patient.direccion }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-tab-group class="tabs-container">
+    <mat-tab label="Historial de Órdenes">
+      <div class="tab-content">
+        <p class="empty-message">El historial de órdenes se mostrará aquí cuando estén disponibles.</p>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Resultados">
+      <div class="tab-content">
+        <p class="empty-message">Los resultados de exámenes se mostrarán aquí cuando estén disponibles.</p>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div *ngIf="loading">
+  <app-loading-spinner></app-loading-spinner>
+</div>

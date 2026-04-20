@@ -1,0 +1,84 @@
+<div class="dashboard-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <h1>{{ greeting }}, {{ currentUser?.nombres }}!</h1>
+    <p>Bienvenido al Sistema de Gestión de Laboratorio Clínico</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <mat-card
+      *ngFor="let stat of stats"
+      class="stat-card"
+      [style.border-left]="'4px solid ' + stat.color"
+      (click)="navigateTo(stat.route)">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <p class="stat-title">{{ stat.title }}</p>
+            <h2 class="stat-value">{{ stat.value }}</h2>
+          </div>
+          <div class="stat-icon" [style.background-color]="stat.color">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <h2>Accesos Rápidos</h2>
+    <div class="actions-grid">
+      <mat-card class="action-card" (click)="navigateTo('/patients/new')">
+        <mat-card-content>
+          <mat-icon class="action-icon" color="primary">person_add</mat-icon>
+          <h3>Nuevo Paciente</h3>
+          <p>Registrar un nuevo paciente</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" (click)="navigateTo('/orders/new')">
+        <mat-card-content>
+          <mat-icon class="action-icon" color="accent">add_task</mat-icon>
+          <h3>Nueva Orden</h3>
+          <p>Crear una orden de exámenes</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" (click)="navigateTo('/orders')">
+        <mat-card-content>
+          <mat-icon class="action-icon" style="color: #ff9800;">search</mat-icon>
+          <h3>Ver Órdenes</h3>
+          <p>Consultar órdenes existentes</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card" (click)="navigateTo('/results')">
+        <mat-card-content>
+          <mat-icon class="action-icon" style="color: #4caf50;">assignment_turned_in</mat-icon>
+          <h3>Resultados</h3>
+          <p>Registrar y validar resultados</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="recent-activity-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>history</mat-icon>
+          Actividad Reciente
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <p>No hay actividad reciente para mostrar</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

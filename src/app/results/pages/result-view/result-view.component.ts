@@ -1,0 +1,12 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-result-view',
+  standalone: true,
+  imports: [],
+  templateUrl: './result-view.component.html',
+  styleUrl: './result-view.component.css'
+})
+export class ResultViewComponent {
+
+}

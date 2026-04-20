@@ -1,0 +1,119 @@
+<div class="list-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assignment_turned_in</mat-icon>
+        Resultados de Laboratorio
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Buscar por paciente, orden o examen...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Estado</mat-label>
+          <mat-select [formControl]="estadoControl">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="REGISTRADO">Registrado</mat-option>
+            <mat-option value="VALIDADO">Validado</mat-option>
+            <mat-option value="RECHAZADO">Rechazado</mat-option>
+            <mat-option value="ENTREGADO">Entregado</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Tabla de Resultados -->
+      <div class="table-container">
+        <table mat-table [dataSource]="results" class="full-width-table">
+
+          <ng-container matColumnDef="orden">
+            <th mat-header-cell *matHeaderCellDef>Orden</th>
+            <td mat-cell *matCellDef="let result">
+              {{ result.orderItem?.labOrder?.codigo || '-' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="paciente">
+            <th mat-header-cell *matHeaderCellDef>Paciente</th>
+            <td mat-cell *matCellDef="let result">
+              {{ result.orderItem?.labOrder?.patient?.nombres }}
+              {{ result.orderItem?.labOrder?.patient?.apellidos }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="examen">
+            <th mat-header-cell *matHeaderCellDef>Examen</th>
+            <td mat-cell *matCellDef="let result">
+              <div class="exam-cell">
+                <strong>{{ result.orderItem?.exam?.nombre }}</strong>
+                <span class="exam-code">{{ result.orderItem?.exam?.codigo }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <td mat-cell *matCellDef="let result">
+              <div class="valor-cell">
+                <span>{{ result.valor }}</span>
+                <span *ngIf="result.unidad" class="unidad">{{ result.unidad }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let result">
+              <mat-chip [style.background-color]="getEstadoColor(result.estado)" class="estado-chip">
+                {{ result.estado }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let result">
+              {{ result.createdAt | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let result">
+              <button mat-icon-button [matTooltip]="'Editar'" (click)="onEdit(result)" *ngIf="result.estado === 'REGISTRADO'">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button [matTooltip]="'Validar'" color="primary" (click)="onValidate(result)" *ngIf="result.estado === 'REGISTRADO'">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-icon-button [matTooltip]="'Rechazar'" color="warn" (click)="onReject(result)" *ngIf="result.estado === 'REGISTRADO'">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!loading && results.length === 0">
+          <mat-icon>inbox</mat-icon>
+          <p>No se encontraron resultados</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="loading">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>Cargando resultados...</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
