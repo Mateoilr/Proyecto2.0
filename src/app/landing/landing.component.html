@@ -1,0 +1,179 @@
+<header class="header">
+  <div class="header-content">
+    <div class="logo-and-login-container">
+      <img src="assets/logo.png" alt="Laboratorio Clínico AG" class="logo-img">
+
+      <button class="btn-toggle-login" (click)="toggleLoginMenu()">
+        <svg *ngIf="!isLoginMenuOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <svg *ngIf="isLoginMenuOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div class="mini-login-window" *ngIf="isLoginMenuOpen">
+        <h4>Acceso al Sistema</h4>
+        <p>Personal autorizado AG</p>
+        <button class="btn-primary" routerLink="/login">Iniciar Sesión</button>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <a (click)="scrollToSection('inicio')">Inicio</a>
+      <a (click)="scrollToSection('nosotros')">Nosotros</a>
+      <a (click)="scrollToSection('servicios')">Servicios</a>
+      <a (click)="scrollToSection('sucursal')">Sucursal</a>
+    </nav>
+  </div>
+</header>
+
+<div class="overlay-invisible" *ngIf="isLoginMenuOpen" (click)="toggleLoginMenu()"></div>
+
+<main>
+  <section id="inicio" class="hero-section">
+    <div class="hero-container">
+      <h2 class="hero-title">Confianza y precisión en tus resultados</h2>
+      
+      <div class="features-grid">
+        <div class="feature-item">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Tecnología Moderna</span>
+        </div>
+        <div class="feature-item">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Personal Certificado</span>
+        </div>
+        <div class="feature-item">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>35 años de experiencia</span>
+        </div>
+        <div class="feature-item">
+          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Resultados rápidos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="about-section">
+    <div class="container">
+      <h2 class="section-title">Nosotros</h2>
+      <p class="about-description">
+        En el Laboratorio Clínico AG nos dedicamos a cuidar tu salud mediante análisis clínicos de la más alta calidad. Nuestro compromiso es entregar diagnósticos certeros que respalden a los profesionales médicos y brinden tranquilidad a nuestros pacientes.
+      </p>
+
+      <div class="mission-vision-grid">
+        <div class="mv-card">
+          <h3>Misión</h3>
+          <p>Proporcionar servicios de análisis clínicos confiables, oportunos y confidenciales, utilizando tecnología de vanguardia y un equipo humano altamente capacitado.</p>
+        </div>
+        <div class="mv-card">
+          <h3>Visión</h3>
+          <p>Ser el laboratorio de referencia en la región, reconocidos por nuestra excelencia científica, calidad humana y constante innovación tecnológica.</p>
+        </div>
+      </div>
+
+      <h3 class="team-title">Nuestro Equipo Médico</h3>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="team-photo placeholder-photo"></div>
+          <h4>Dr. Juan Pérez</h4>
+          <p>Director Médico</p>
+        </div>
+        <div class="team-member">
+          <div class="team-photo placeholder-photo"></div>
+          <h4>Dra. Ana López</h4>
+          <p>Jefa de Hematología</p>
+        </div>
+        <div class="team-member">
+          <div class="team-photo placeholder-photo"></div>
+          <h4>Lic. Carlos Ruiz</h4>
+          <p>Especialista en Microbiología</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios" class="services-section">
+    <div class="container">
+      <h2 class="section-title">Nuestros Servicios</h2>
+      <div class="services-grid">
+        
+        <details class="service-card">
+          <summary>Hematología</summary>
+          <div class="service-content">
+            <p>Análisis de los componentes de la sangre (glóbulos rojos, blancos y plaquetas) para detectar anemias, infecciones y trastornos de coagulación.</p>
+          </div>
+        </details>
+
+        <details class="service-card">
+          <summary>Química Sanguínea</summary>
+          <div class="service-content">
+            <p>Evaluación del funcionamiento de órganos como riñones e hígado a través de la medición de glucosa, colesterol, triglicéridos, entre otros.</p>
+          </div>
+        </details>
+
+        <details class="service-card">
+          <summary>Orina</summary>
+          <div class="service-content">
+            <p>Exámenes generales y cultivos para identificar infecciones del tracto urinario, problemas renales y otras alteraciones metabólicas.</p>
+          </div>
+        </details>
+
+        <details class="service-card">
+          <summary>Pruebas Especiales</summary>
+          <div class="service-content">
+            <p>Análisis hormonales, marcadores tumorales y pruebas genéticas que requieren equipos especializados y alta precisión.</p>
+          </div>
+        </details>
+
+        <details class="service-card">
+          <summary>Microbiología</summary>
+          <div class="service-content">
+            <p>Aislamiento e identificación de microorganismos causantes de enfermedades para determinar el tratamiento antibiótico más efectivo.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="sucursal" class="location-section">
+    <div class="container">
+      <h2 class="section-title">Nuestra Sucursal</h2>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15915.178652030026!2d-79.01869854999999!3d-2.9015111999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cd1813476f5787%3A0xc3dd34bda7f5a287!2sCuenca%2C%20Ecuador!5e0!3m2!1ses!2s!4v1710000000000!5m2!1ses!2s" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <div class="address-info">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <p>Tomás Ordoñez y Simon Bolivar, Cuenca, Ecuador</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="main-footer">
+  <div class="footer-content">
+    <div class="footer-logo">
+      <h3>Laboratorio AG</h3>
+      <p>Precisión que da confianza</p>
+    </div>
+    
+    <div class="footer-contacts">
+      <a href="tel:+593999999999" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <span>+593 99 999 9999</span>
+      </a>
+      
+      <a href="https://facebook.com" target="_blank" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        <span>Facebook</span>
+      </a>
+      
+      <a href="https://instagram.com" target="_blank" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        <span>Instagram</span>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Laboratorio Clínico AG. Todos los derechos reservados.</p>
+  </div>
+</footer>

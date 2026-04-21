@@ -3,6 +3,9 @@ import { MainLayoutComponent } from './core/layout/main-layout/main-layout.compo
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
+//Landing
+import { LandingComponent } from './landing/landing.component';
+
 // Auth
 import { LoginComponent } from './auth/login/login.component';
 
@@ -33,9 +36,10 @@ import { UserFormComponent } from './admin/user-form/user-form.component';
 import { AuditLogComponent } from './admin/audit-log/audit-log.component';
 
 export const routes: Routes = [
+  // AHORA LA RUTA RAÍZ RENDERIZA EL COMPONENTE
   {
     path: '',
-    redirectTo: '/dashboard',
+    component: LandingComponent, // Cambiamos redirectTo por component
     pathMatch: 'full'
   },
 
