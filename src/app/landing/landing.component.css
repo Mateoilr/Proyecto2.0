@@ -7,6 +7,8 @@
   --bg-light: #f9f9f9;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   display: block;
+  /* Habilitar un scroll suave si el navegador lo soporta (opcional pero recomendado) */
+  scroll-behavior: smooth; 
 }
 
 /* ================= GLOBALES ================= */
@@ -18,6 +20,11 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+/* ESTA ES LA SOLUCIÓN AL CORTE DE LAS SECCIONES */
+section {
+  scroll-margin-top: 160px; /* Le dice al navegador que deje este espacio arriba al navegar a esta sección */
 }
 
 .section-title {
@@ -38,7 +45,7 @@
   border-radius: 2px;
 }
 
-/* ================= HEADER (Tu código original modificado) ================= */
+/* ================= HEADER ================= */
 .header {
   position: fixed;
   top: 0;
@@ -64,10 +71,11 @@
 }
 
 .logo-img {
-  height: 120px; /* Ajuste para mantener equilibrio con el nav */
+  height: 120px; 
   object-fit: contain;
 }
-/*Boton de iniciar sesion */
+
+/* Boton de iniciar sesion */
 .btn-toggle-login {
   background: var(--primary-color);
   color: var(--bg-white);
@@ -80,8 +88,8 @@
   justify-content: center;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
-  margin-bottom: 64px; /*Subir o bajar boton de plus */
-  margin-left: -24px; /* Derecha-izquierda boton de plus */
+  margin-bottom: 64px; 
+  margin-left: -24px; 
 }
 
 .btn-toggle-login:hover {
@@ -171,7 +179,7 @@
 
 /* ================= SECCIÓN INICIO ================= */
 .hero-section {
-  padding-top: 130px; /* Espacio para el header fijo */
+  padding-top: 130px; 
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -325,7 +333,7 @@
   color: var(--text-dark);
   background: var(--bg-white);
   cursor: pointer;
-  list-style: none; /* Oculta la flechita por defecto en algunos navs */
+  list-style: none; 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -441,17 +449,58 @@
   color: #888;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= RESPONSIVE (MEJORADO) ================= */
 @media (max-width: 768px) {
+  
+  /* Como en móvil el header se apila y es más alto, aumentamos el margen superior de las secciones */
+  section {
+    scroll-margin-top: 240px; 
+  }
+
   .header-content {
     flex-direction: column;
     gap: 15px;
+    padding: 15px;
+  }
+
+  /* Reducimos un poco el logo en móvil para ganar espacio */
+  .logo-img {
+    height: 80px; 
+  }
+
+  /* Reajustamos la posición del botón "+" con el nuevo tamaño del logo */
+  .btn-toggle-login {
+    margin-bottom: 40px; 
+    margin-left: -15px;
+  }
+
+  /* Centramos y adaptamos la ventanita de login para que no se salga de la pantalla */
+  .mini-login-window {
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%); /* Esto la centra perfectamente debajo del logo */
+    width: 200px;
+  }
+
+  /* Necesitamos resetear la animación si usamos transform para centrar */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
   }
 
   .main-nav {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .hero-section {
+    padding-top: 200px; /* Damos más espacio en el inicio porque el header es más alto */
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
   }
 
   .features-grid, .mission-vision-grid {
