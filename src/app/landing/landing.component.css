@@ -496,7 +496,7 @@ section {
   }
 
   .hero-section {
-    padding-top: 200px; /* Damos más espacio en el inicio porque el header es más alto */
+    padding-top: 180px; /* Damos más espacio en el inicio porque el header es más alto */
   }
 
   .hero-title {
