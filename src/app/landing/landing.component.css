@@ -265,14 +265,36 @@ section {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   border-bottom: 4px solid var(--accent-color);
+  text-align: left; /* Asegura alineación a la izquierda */
+}
+
+/* Contenedor Flexbox para alinear el ícono y el título horizontalmente */
+.mv-header {
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+  margin-bottom: 15px; 
+}
+
+.mv-icon {
+  width: 48px; 
+  height: 48px;
+  color: var(--primary-color);
+  flex-shrink: 0; 
 }
 
 .mv-card h3 {
   color: var(--primary-color);
-  margin-top: 0;
+  margin: 0; 
   font-size: 1.5rem;
 }
 
+.mv-card p {
+  text-align: left;
+  margin: 0;
+  line-height: 1.6;
+}
+/* EQUIPO */
 .team-title {
   text-align: center;
   font-size: 1.8rem;
@@ -310,16 +332,19 @@ section {
   color: var(--primary-color);
   font-weight: bold;
 }
-
 /* ================= SECCIÓN SERVICIOS ================= */
 .services-section {
   padding: 80px 0;
   background: var(--bg-light);
+  background-image: url('/assets/servicios.png');
+  background-size: cover;       /* Cubre todo el fondo disponible */
+  background-position: center;  /* Mantiene la imagen centrada */
+  background-repeat: no-repeat; /* Evita que se duplique como un mosaico */
 }
 
 /* Cambia el color solo del título dentro de la sección servicios */
 .services-section .section-title {
-  color: #309D9D;
+  color: rgb(255, 255, 255);
 }
 
 .services-grid {
@@ -337,6 +362,7 @@ section {
   overflow: hidden;
 }
 
+/*cada uno de los servicios */
 .service-card summary {
   padding: 20px;
   font-size: 1.2rem;
