@@ -27,30 +27,37 @@
 <div class="overlay-invisible" *ngIf="isLoginMenuOpen" (click)="toggleLoginMenu()"></div>
 
 <main>
-  <section id="inicio" class="hero-section">
-    <div class="hero-container">
-      <h2 class="hero-title">Confianza y precisión en tus resultados</h2>
-      
-      <div class="features-grid">
-        <div class="feature-item">
-          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>Tecnología Moderna</span>
+ <section id="inicio" class="hero-section">
+  
+  <div class="carousel-wrapper">
+    <div class="carousel-track">
+      <div class="carousel-slide" 
+           *ngFor="let slide of slides; let i = index" 
+           [class.active]="i === currentSlide">
+        
+        <div class="slide-bg" [ngStyle]="{'background-image': 'linear-gradient(to right, rgba(48, 157, 157, 0.7) 0%, rgba(48, 157, 157, 0.3) 40%, transparent 80%), url(' + slide.image + ')'}"></div>
+
+        <div class="hero-container pos-custom" [ngStyle]="{'top': slide.top, 'left': slide.left}">
+          <h2 class="hero-title">{{ slide.title }}</h2>
+          
+          <div class="features-grid">
+            <div class="feature-item" *ngFor="let feature of slide.features">
+              <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>{{ feature }}</span>
+            </div>
+          </div>
         </div>
-        <div class="feature-item">
-          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>Personal Certificado</span>
-        </div>
-        <div class="feature-item">
-          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>35 años de experiencia</span>
-        </div>
-        <div class="feature-item">
-          <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>Resultados rápidos</span>
-        </div>
+
       </div>
     </div>
-  </section>
+  </div>
+
+  <button class="carousel-btn prev-btn" (click)="prevSlide()">&#10094;</button>
+  <button class="carousel-btn next-btn" (click)="nextSlide()">&#10095;</button>
+
+</section>
 
   <section id="nosotros" class="about-section">
     <div class="container">
