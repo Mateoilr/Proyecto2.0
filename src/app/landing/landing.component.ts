@@ -21,22 +21,25 @@ export class LandingComponent implements OnInit, OnDestroy {
   slides = [
     {
       image: '/assets/inicio.png',
-      title: 'Confianza y precisión en tus resultados',
+      title: 'La mejor atención',         // <--- Letra GORDITA
+      subtitle: 'con calidad y calidez',  // <--- Letra DELGADA
       features: ['Personal Certificado', 'Resultados exactos'],
       top: '60%',  // Qué tan abajo empieza el texto (0% es arriba pegado, 100% es abajo)
       left: '10%'  // Qué tan a la izquierda empieza (0% es izquierda pegada)
     },
     {
       image: '/assets/inicio2.png',
-      title: 'Tecnología médica de última generación',
-      features: ['Diagnóstico Exacto', 'Procesos Automatizados', 'Equipos Philips'],
+      title: 'Tecnología médica ',
+      subtitle: 'de última generación',
+      features: ['Diagnóstico Exacto', 'Procesos Automatizados'],
       top: '60%',
       left: '10%'  // Más del 50% lo empuja hacia el lado derecho
     },
     {
       image: '/assets/inicio3.png',
-      title: 'Atención Profesional y Humana',
-      features: ['Personal Capacitado', 'Resultados Confiables', 'Ética Médica'],
+      title: 'Atención Profesional ',
+      subtitle: 'y Humana',
+      features: ['Resultados Confiables', 'Ética Médica'],
       top: '60%',
       left: '30%'
     },

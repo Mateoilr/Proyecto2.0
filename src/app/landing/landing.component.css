@@ -239,7 +239,7 @@ section {
   top: 50%;
   transform: translateY(25%);
   background: rgba(255, 255, 255, 0.1); 
-  color: #ffffff;
+  color: #309D9D;
   border: none;
   font-size: 2.5rem;
   padding: 10px 15px;
@@ -250,7 +250,7 @@ section {
 }
 
 .carousel-btn:hover {
-  background: rgba(48, 157, 157, 0.8); 
+  background: rgba(255, 255, 255, 0.8); 
   transform: translateY(25%) scale(1.1); 
 }
 
@@ -277,16 +277,26 @@ section {
 }
 
 .hero-title {
-  font-size: 2.5rem;
-  color: #ffffff; 
-  margin-bottom: 2.5rem;
-  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5rem;     /* Letra más grande */
+  font-weight: 700;      /* 700 = Mucho relleno (Bold) */
+  color: #329d9c; 
+  margin-bottom: 0;      /* Le quitamos el margen para que se pegue al subtítulo */
+  line-height: 1.1;      /* Ajusta el espacio entre líneas */
 }
 
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem;     /* Un poco más pequeña que el título */
+  font-weight: 300;      /* 300 = Sin relleno (Light) */
+  color: #329d9c;
+  margin-top: 0;         /* Pegado al título de arriba */
+  margin-bottom: 2.5rem; /* Espacio antes de los checks */
+}
 .features-grid {
   display: grid;
   grid-template-columns: 1fr 1fr; 
-  gap: 25px; 
+  gap: 25px;  /* espacio entre los checks*/
 }
 
 .feature-item {
@@ -294,7 +304,7 @@ section {
   align-items: center;
   gap: 12px;
   font-size: 0.9rem; 
-  color: #ffffff; 
+  color: #329d9c; 
   font-weight: 500;
   padding: 5px 0;
   background: transparent; 
@@ -305,7 +315,7 @@ section {
 .check-icon {
   width: 24px;
   height: 24px;
-  color: #ffffff; 
+  color: #329d9c; 
 }
 /* ================= SECCIÓN NOSOTROS ================= */
 .about-section {
