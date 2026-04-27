@@ -1,0 +1,56 @@
+<div class="chat-window">
+  <div class="chat-header">
+    <div class="header-info">
+      <div class="avatar">
+        <span>🤖</span>
+      </div>
+      <div class="title">
+        <div class="name">Asistente SysLab</div>
+        <div class="status">En línea</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" (click)="clearHistory()" title="Reiniciar conversación" type="button">
+        🗑️
+      </button>
+      <button class="icon-btn close-btn" (click)="close.emit()" title="Cerrar" type="button">
+        ✕
+      </button>
+    </div>
+  </div>
+
+  <app-message-list
+    [messages]="messages"
+    [isLoading]="isLoading"
+  ></app-message-list>
+
+  <app-typing-indicator *ngIf="isLoading"></app-typing-indicator>
+
+  <app-quick-replies
+    *ngIf="!isLoading && quickReplies.length > 0"
+    [replies]="quickReplies"
+    (selected)="onQuickReplySelected($event)"
+  ></app-quick-replies>
+
+  <div class="chat-footer">
+    <input
+      #messageInput
+      type="text"
+      [(ngModel)]="inputText"
+      (keydown)="onKeydown($event)"
+      placeholder="Escribe un mensaje..."
+      [disabled]="isLoading"
+      aria-label="Mensaje"
+    />
+    <button
+      class="send-btn"
+      (click)="sendMessage()"
+      [disabled]="isLoading || !inputText.trim()"
+      type="button"
+      aria-label="Enviar mensaje"
+    >
+      <span>➤</span>
+    </button>
+  </div>
+</div>
+

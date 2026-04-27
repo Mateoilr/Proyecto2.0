@@ -1,0 +1,7 @@
+<div class="message-list" #scrollContainer aria-live="polite" aria-atomic="false">
+  <app-message-bubble
+    *ngFor="let message of messages; trackBy: trackById"
+    [message]="message"
+  ></app-message-bubble>
+</div>
+

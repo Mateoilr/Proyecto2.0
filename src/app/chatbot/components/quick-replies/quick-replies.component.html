@@ -1,0 +1,11 @@
+<div class="quick-replies-container" *ngIf="replies.length > 0">
+  <button
+    *ngFor="let reply of replies"
+    class="quick-reply-chip"
+    (click)="onSelect(reply.value)"
+    type="button"
+  >
+    {{ reply.label }}
+  </button>
+</div>
+

@@ -1,0 +1,23 @@
+<div class="chat-widget-wrapper">
+  <div
+    class="chat-window-wrapper"
+    *ngIf="isOpen"
+  >
+    <app-chat-window (close)="close()"></app-chat-window>
+    <button class="mobile-close-btn" (click)="close()" type="button" aria-label="Cerrar chat">
+      ✕
+    </button>
+  </div>
+
+  <button
+    class="chat-fab"
+    (click)="toggle()"
+    [class.open]="isOpen"
+    type="button"
+    aria-label="Abrir asistente virtual"
+  >
+    <span *ngIf="!isOpen">💬</span>
+    <span *ngIf="isOpen">✕</span>
+  </button>
+</div>
+

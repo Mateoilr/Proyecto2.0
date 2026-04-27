@@ -1,0 +1,12 @@
+<div
+  class="bubble-container"
+  [class.user]="isUser"
+  [class.bot]="!isUser"
+  [class.error]="isError"
+>
+  <div class="bubble">
+    <div class="text" [innerHTML]="formattedText"></div>
+    <div class="timestamp">{{ timeString }}</div>
+  </div>
+</div>
+

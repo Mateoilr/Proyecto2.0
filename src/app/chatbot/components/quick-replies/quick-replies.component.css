@@ -1,0 +1,40 @@
+.quick-replies-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+  justify-content: flex-start;
+  animation: fadeInUp 0.25s ease-out;
+}
+
+.quick-reply-chip {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.quick-reply-chip:hover {
+  background-color: #bbdefb;
+  transform: translateY(-1px);
+}
+
+.quick-reply-chip:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
