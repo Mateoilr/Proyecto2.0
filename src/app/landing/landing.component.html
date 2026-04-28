@@ -35,7 +35,7 @@
            *ngFor="let slide of slides; let i = index" 
            [class.active]="i === currentSlide">
         
-        <div class="slide-bg" [ngStyle]="{'background-image': 'linear-gradient(to right, rgb(255, 255, 255) 20%, rgba(255, 247, 237, 0) 60%, transparent 100%), url(' + slide.image + ')'}"></div>
+        <div class="slide-bg" [ngStyle]="{'background-image': 'linear-gradient(to right, rgb(255, 255, 255, 4) 20%, rgba(255, 247, 237, 0.1) 60%, transparent 100%), url(' + slide.image + ')'}"></div>
 
         <div class="hero-container pos-custom" [ngStyle]="{'top': slide.top, 'left': slide.left}">
           <h2 class="hero-title">{{ slide.title }}</h2>

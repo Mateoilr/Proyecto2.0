@@ -24,7 +24,7 @@
 
 /* ESTA ES LA SOLUCIÓN AL CORTE DE LAS SECCIONES */
 section {
-  scroll-margin-top: 160px; /* Le dice al navegador que deje este espacio arriba al navegar a esta sección */
+  scroll-margin-top: 90px; /* Le dice al navegador que deje este espacio arriba al navegar a esta sección */
 }
 
 .section-title {
@@ -238,7 +238,7 @@ section {
   position: absolute;
   top: 50%;
   transform: translateY(25%);
-  background: rgba(255, 255, 255, 0.1); 
+  background: rgba(255, 255, 255, 0.8); 
   color: #309D9D;
   border: none;
   font-size: 2.5rem;
@@ -250,7 +250,7 @@ section {
 }
 
 .carousel-btn:hover {
-  background: rgba(255, 255, 255, 0.8); 
+  background: rgba(255, 255, 255, 6); 
   transform: translateY(25%) scale(1.1); 
 }
 
@@ -286,7 +286,7 @@ section {
 }
 
 .hero-subtitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 2.8rem;     /* Un poco más pequeña que el título */
   font-weight: 300;      /* 300 = Sin relleno (Light) */
   color: #329d9c;
@@ -571,7 +571,7 @@ section {
   
   /* Como en móvil el header se apila y es más alto, aumentamos el margen superior de las secciones */
   section {
-    scroll-margin-top: 240px; 
+    scroll-margin-top: 120px; 
   }
 
   .header-content {
