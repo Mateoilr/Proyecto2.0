@@ -250,7 +250,7 @@ section {
 }
 
 .carousel-btn:hover {
-  background: rgba(255, 255, 255, 6); 
+  background: rgba(255, 255, 255, 1); 
   transform: translateY(25%) scale(1.1); 
 }
 
@@ -317,6 +317,7 @@ section {
   height: 24px;
   color: #329d9c; 
 }
+
 /* ================= SECCIÓN NOSOTROS ================= */
 .about-section {
   padding: 80px 0;
@@ -374,6 +375,7 @@ section {
   margin: 0;
   line-height: 1.6;
 }
+
 /* EQUIPO */
 .team-title {
   text-align: center;
@@ -412,80 +414,137 @@ section {
   color: var(--primary-color);
   font-weight: bold;
 }
+
 /* ================= SECCIÓN SERVICIOS ================= */
 .services-section {
-  padding: 80px 0;
-  background: var(--bg-light);
-  background-image: url('/assets/servicios.png');
-  background-size: cover;       /* Cubre todo el fondo disponible */
-  background-position: center;  /* Mantiene la imagen centrada */
-  background-repeat: no-repeat; /* Evita que se duplique como un mosaico */
+  padding: 40px 0; /* ARREGLO 1: Bajamos el padding gigante que tenía (antes 80px) */
+  background: #ffffff;
+  background-size: cover;       
+  background-position: center;  
+  background-repeat: no-repeat; 
 }
 
-/* Cambia el color solo del título dentro de la sección servicios */
 .services-section .section-title {
-  color: rgb(255, 255, 255);
+  color: #309D9D;
+  text-align: center;
+  margin-bottom: 30px; /* Acerqué el título a las tarjetas */
 }
 
+/* LA CUADRÍCULA (GRID) - ARREGLO 2: 4 COLUMNAS EXACTAS */
 .services-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Fuerzas 4 columnas del mismo tamaño */
+  gap: 20px; /* Espacio uniforme entre tarjetas */
+  max-width: 1200px; /* Ancho máximo para que las 4 columnas tengan espacio de respirar */
   margin: 0 auto;
+  align-items: start; 
+  padding: 0 20px; /* Un pequeño margen lateral para que no toque los bordes del navegador */
 }
 
+/* LA TARJETA */
 .service-card {
-  background: var(--bg-white);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 12px; 
+  border: 1px solid #e0e0e0; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/*cada uno de los servicios */
+.service-card:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* EL BOTÓN (IMAGEN + TÍTULO) */
 .service-card summary {
-  padding: 20px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #309D9D; 
-  background: var(--bg-white);
   cursor: pointer;
   list-style: none; 
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background 0.3s;
+  flex-direction: column; 
 }
 
 .service-card summary::-webkit-details-marker {
-  display: none;
+  display: none; 
 }
 
-.service-card summary::after {
-  content: '+';
-  font-size: 1.5rem;
-  color: var(--primary-color);
-  transition: transform 0.3s;
+/* IMAGEN DE LA TARJETA */
+.service-img {
+  width: 100%;
+  height: 160px; /* Ligeramente más bajas para que no ocupen tanta pantalla vertical */
+  object-fit: cover; 
+  border-bottom: 2px solid #309D9D; 
 }
 
-.service-card[open] summary::after {
-  transform: rotate(45deg);
+/* CONTENEDOR DE TEXTO DEL TÍTULO */
+.summary-info {
+  padding: 15px;
+  text-align: center;
+  background: #ffffff;
 }
 
-.service-card[open] summary {
-  background: var(--primary-color);
-  color: var(--bg-white);
+.summary-info h3 {
+  font-size: 1.1rem;
+  color: #333333; 
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: 700;
 }
 
-.service-card[open] summary::after {
-  color: var(--bg-white);
+/* TEXTO DE "MÁS INFORMACIÓN" */
+.toggle-text {
+  font-size: 0.9rem;
+  color: #309D9D; 
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
+/* EL ÍCONO "+" - ARREGLO 3: CENTRADO ÓPTICO EXACTO */
+.toggle-icon {
+  background-color: #309D9D;
+  color: white;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; 
+  font-size: 1.4rem; /* Símbolo un poco más grande para llenar el círculo */
+  line-height: 0; /* Quita el espacio invisible que traen las letras por defecto */
+  padding-bottom: 6px; /* Empuja el "mas" sutilmente hacia arriba para un centrado perfecto */
+  transition: transform 0.3s ease;
+}
+
+/* ANIMACIÓN DEL ÍCONO AL ABRIR */
+.service-card[open] .toggle-icon {
+  transform: rotate(45deg); 
+  background-color: #e74c3c; 
+}
+
+/* CONTENIDO DESPLEGABLE */
 .service-content {
-  padding: 20px;
-  border-top: 1px solid var(--bg-light);
-  color: #444;
+  padding: 0 15px 15px 15px;
+  color: #555555;
+  font-size: 0.9rem;
   line-height: 1.5;
+  text-align: center;
+  background: #ffffff;
+  animation: fadeDown 0.3s ease-in-out; 
+}
+
+.service-content p {
+  margin: 0;
+  border-top: 1px solid #eeeeee;
+  padding-top: 12px;
+}
+
+/* Animación suave para el texto */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ================= SECCIÓN SUCURSAL ================= */
@@ -566,7 +625,14 @@ section {
   color: #888;
 }
 
-/* ================= RESPONSIVE (MEJORADO) ================= */
+/* ================= RESPONSIVE DE TABLETS (Extraído y ordenado) ================= */
+@media (max-width: 992px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr); /* En tablets se vuelve 2x4 */
+  }
+}
+
+/* ================= RESPONSIVE PRINCIPAL (Móviles) ================= */
 @media (max-width: 768px) {
   
   /* Como en móvil el header se apila y es más alto, aumentamos el margen superior de las secciones */
@@ -637,4 +703,80 @@ section {
     flex-direction: column;
     align-items: center;
   }
-}
+
+  /* ================= RESPONSIVE: SECCIÓN INICIO ================= */
+  
+  /* 1. Fondo alineado a la izquierda */
+  .slide-bg {
+    background-position: left center !important; 
+  }
+
+  /* 2. EL CENTRADO ABSOLUTO (El arreglo principal) */
+  .hero-container.pos-custom {
+    top: 55% !important;
+    left: 50% !important; 
+    transform: translate(-50%, -50%) !important; 
+    width: 90% !important; /* Subido a 90% para que entren las letras gigantes */
+    align-items: center !important; 
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 3. Textos centrados (LETRAS EXTRA GRANDES) */
+  .hero-title {
+    font-size: 2.8rem !important; /* ¡Al máximo! */
+    text-align: center !important; 
+    margin-bottom: 0.2rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem !important; /* Muy destacado */
+    text-align: center !important; 
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* 4. Lista de checks organizada y centrada */
+  /* NOTA: Eliminé la duplicidad que tenías arriba de .features-grid para evitar choques */
+  .features-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; 
+    gap: 15px !important; /* Un poco más de aire entre cada check */
+    width: 100% !important;
+  }
+
+  .feature-item {
+    justify-content: flex-start !important;
+    width: max-content !important; 
+    font-size: 1.2rem !important; /* Letra de los checks bien grande y legible */
+    padding: 0 !important;
+  }
+
+  /* 5. Flechas */
+  .carousel-btn {
+    font-size: 1.5rem !important;
+    padding: 8px 12px !important;
+  }
+  
+  .prev-btn { left: 2px !important; }
+  .next-btn { right: 2px !important; }
+
+  /* ================= RESPONSIVE DE SERVICIOS (Corregido y en su lugar correcto) ================= */
+  /* AQUÍ MATAMOS LOS MÁRGENES MOLESTOS EN CELULAR DE VERDAD */
+  .services-section {
+    padding: 10px 0 !important; /* Reducimos el espacio gigante arriba y abajo al máximo */
+    margin: 0 !important; /* Nos aseguramos de que no haya márgenes fantasma */
+  }
+  
+  .services-section .section-title {
+    margin-bottom: 20px !important; /* Acercamos el título a las tarjetas */
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr !important; /* 1 sola columna en celular */
+    padding: 0 15px !important; /* Margen lateral más pequeño */
+    gap: 15px !important; /* Tarjetas un poquito más juntas para no alargar tanto la pantalla */
+  }
+
+} /* <-- Esta llave cierra el bloque general de 768px de manera correcta */
