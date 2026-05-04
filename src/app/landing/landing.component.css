@@ -611,7 +611,7 @@ section {
 
 .footer-contacts {
   display: flex;
-  gap: 20px;
+  gap: 180px; /*separacion entre los dos bloques de contacto*/
 }
 
 .contact-link {
@@ -621,6 +621,7 @@ section {
   color: var(--bg-white);
   text-decoration: none;
   transition: color 0.3s;
+  font-size: 1 rem;
 }
 
 .contact-link:hover {
@@ -772,7 +773,7 @@ section {
   .next-btn { right: 2px !important; }
 
   /* ================= RESPONSIVE DE SERVICIOS (Corregido y en su lugar correcto) ================= */
-  /* AQUÍ MATAMOS LOS MÁRGENES MOLESTOS EN CELULAR DE VERDAD */
+
   .services-section {
     padding: 10px 0 !important; /* Reducimos el espacio gigante arriba y abajo al máximo */
     margin: 0 !important; /* Nos aseguramos de que no haya márgenes fantasma */
@@ -788,4 +789,4 @@ section {
     gap: 15px !important; /* Tarjetas un poquito más juntas para no alargar tanto la pantalla */
   }
 
-} /* <-- Esta llave cierra el bloque general de 768px de manera correcta */
+} 
