@@ -35,7 +35,7 @@
            *ngFor="let slide of slides; let i = index" 
            [class.active]="i === currentSlide">
         
-        <div class="slide-bg" [ngStyle]="{'background-image': 'linear-gradient(to right, rgb(255, 255, 255) 20%, rgba(255, 247, 237, 0) 60%, transparent 100%), url(' + slide.image + ')'}"></div>
+        <div class="slide-bg" [ngStyle]="{'background-image': 'linear-gradient(to right, rgb(255, 255, 255, 4) 20%, rgba(255, 247, 237, 0.1) 60%, transparent 100%), url(' + slide.image + ')'}"></div>
 
         <div class="hero-container pos-custom" [ngStyle]="{'top': slide.top, 'left': slide.left}">
           <h2 class="hero-title">{{ slide.title }}</h2>
@@ -114,48 +114,118 @@
   </section>
 
   <section id="servicios" class="services-section">
-    <div class="container">
-      <h2 class="section-title">Nuestros Servicios</h2>
-      <div class="services-grid">
-        
-        <details class="service-card">
-          <summary>Hematología</summary>
-          <div class="service-content">
-            <p>Análisis de los componentes de la sangre (glóbulos rojos, blancos y plaquetas) para detectar anemias, infecciones y trastornos de coagulación.</p>
-          </div>
-        </details>
+  <div class="container">
+    <h2 class="section-title">Nuestros Servicios</h2>
+    
+    <div class="services-grid">
 
-        <details class="service-card">
-          <summary>Química Sanguínea</summary>
-          <div class="service-content">
-            <p>Evaluación del funcionamiento de órganos como riñones e hígado a través de la medición de glucosa, colesterol, triglicéridos, entre otros.</p>
+      <details class="service-card">
+        <summary>
+          <img src="/assets/hema.png" alt="Hematología" class="service-img">
+          <div class="summary-info">
+            <h3>Hematología</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
           </div>
-        </details>
+        </summary>
+        <div class="service-content">
+          <p>Análisis de los componentes de la sangre (glóbulos rojos, blancos y plaquetas) para detectar anemias, infecciones y trastornos de coagulación.</p>
+        </div>
+      </details>
 
-        <details class="service-card">
-          <summary>Orina</summary>
-          <div class="service-content">
-            <p>Exámenes generales y cultivos para identificar infecciones del tracto urinario, problemas renales y otras alteraciones metabólicas.</p>
+      <details class="service-card">
+        <summary>
+          <img src="/assets/inmu.png" alt="Inmunología" class="service-img">
+          <div class="summary-info">
+            <h3>Inmunología</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
           </div>
-        </details>
+        </summary>
+        <div class="service-content">
+          <p>Evaluación del sistema inmunológico para detectar alergias, enfermedades autoinmunes y respuesta a infecciones virales o bacterianas.</p>
+        </div>
+      </details>
 
-        <details class="service-card">
-          <summary>Pruebas Especiales</summary>
-          <div class="service-content">
-            <p>Análisis hormonales, marcadores tumorales y pruebas genéticas que requieren equipos especializados y alta precisión.</p>
+      <details class="service-card">
+        <summary>
+          <img src="/assets/micro.jpg" alt="Microbiología" class="service-img">
+          <div class="summary-info">
+            <h3>Microbiología</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
           </div>
-        </details>
+        </summary>
+        <div class="service-content">
+          <p>Aislamiento e identificación de microorganismos causantes de enfermedades para determinar el tratamiento antibiótico más efectivo.</p>
+        </div>
+      </details>
 
-        <details class="service-card">
-          <summary>Microbiología</summary>
-          <div class="service-content">
-            <p>Aislamiento e identificación de microorganismos causantes de enfermedades para determinar el tratamiento antibiótico más efectivo.</p>
+      <details class="service-card">
+        <summary>
+          <img src="/assets/hormo.png" alt="Hormonas" class="service-img">
+          <div class="summary-info">
+            <h3>Hormonas</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
           </div>
-        </details>
+        </summary>
+        <div class="service-content">
+          <p>Medición de niveles hormonales para evaluar el funcionamiento de la tiroides, fertilidad, metabolismo y desarrollo.</p>
+        </div>
+      </details>
 
-      </div>
+      <details class="service-card">
+        <summary>
+          <img src="/assets/quim.png" alt="Químicos" class="service-img">
+          <div class="summary-info">
+            <h3>Químicos</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
+          </div>
+        </summary>
+        <div class="service-content">
+          <p>Evaluación del funcionamiento de órganos como riñones e hígado a través de la medición de glucosa, colesterol, triglicéridos, entre otros.</p>
+        </div>
+      </details>
+
+      <details class="service-card">
+        <summary>
+          <img src="/assets/ori.png" alt="Orina" class="service-img">
+          <div class="summary-info">
+            <h3>Orina</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
+          </div>
+        </summary>
+        <div class="service-content">
+          <p>Exámenes generales y cultivos para identificar infecciones del tracto urinario, problemas renales y otras alteraciones metabólicas.</p>
+        </div>
+      </details>
+
+      <details class="service-card">
+        <summary>
+          <img src="/assets/hec.png" alt="Heces" class="service-img">
+          <div class="summary-info">
+            <h3>Heces</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
+          </div>
+        </summary>
+        <div class="service-content">
+          <p>Análisis coprológicos para la detección de parásitos, sangre oculta y evaluación de la digestión y absorción intestinal.</p>
+        </div>
+      </details>
+
+      <details class="service-card">
+        <summary>
+          <img src="/assets/espe.png" alt="Pruebas Especiales" class="service-img">
+          <div class="summary-info">
+            <h3>Pruebas Especiales</h3>
+            <span class="toggle-text"><span class="toggle-icon">+</span> Más información</span>
+          </div>
+        </summary>
+        <div class="service-content">
+          <p>Análisis avanzados, marcadores tumorales y pruebas genéticas que requieren equipos especializados y alta precisión.</p>
+        </div>
+      </details>
+
     </div>
-  </section>
+  </div>
+</section>
 
   <section id="sucursal" class="location-section">
   <div class="container">
