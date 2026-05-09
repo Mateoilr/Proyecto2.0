@@ -37,12 +37,12 @@ export class LandingComponent implements OnInit, OnDestroy {
     },
     {
       image: '/assets/inicio4.png',
-      title: 'Experiencia',
-      subtitle: 'en cada análisis',
-      features: ['Profesionales con experiencia', 'Resultados confiables'],
+      
       top: '60%',
-      left: '5%'
+      left: '5%',
+      isPromo: true
     }
+    
   ];
 
   // Configuración del degradado para las imágenes del carrusel
