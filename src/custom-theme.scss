@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+
+$custom-primary: mat.define-palette(mat.$teal-palette, 700);  // Ajusta el tono para que sea cercano a #309D9D
+$custom-accent: mat.define-palette(mat.$amber-palette);
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+));
+
+@include mat.all-component-themes($custom-theme);

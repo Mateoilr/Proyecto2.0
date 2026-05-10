@@ -9,7 +9,7 @@
       </button>
 
       <div class="mini-login-window" *ngIf="isLoginMenuOpen">
-        <h4>Acceso al Sistema</h4>
+        <h4></h4>
         <p>Personal autorizado AG</p>
         <button class="btn-primary" routerLink="/login">Iniciar Sesión</button>
       </div>
@@ -20,6 +20,7 @@
       <a (click)="scrollToSection('nosotros')">Nosotros</a>
       <a (click)="scrollToSection('servicios')">Servicios</a>
       <a (click)="scrollToSection('sucursal')">Sucursal</a>
+      <a (click)="scrollToSection('contactos')">Contactos</a>
     </nav>
   </div>
 </header>
@@ -35,17 +36,15 @@
            *ngFor="let slide of slides; let i = index" 
            [class.active]="i === currentSlide">
         
-        <!-- 1. Fondo de la imagen (simplificado) -->
         <div class="slide-bg" [ngStyle]="{'background-image': 'url(' + slide.image + ')'}"></div>
-
-        <!-- 2. NUEVO: Capa oscura para que el texto blanco siempre resalte -->
         <div class="hero-overlay"></div>
 
-        <!-- 3. Contenedor de texto dinámico -->
-        <div class="hero-container pos-custom" [ngStyle]="{'top': slide.top, 'left': slide.left}">
+        <!-- LADO IZQUIERDO: Contenedor Normal (Se oculta si es la promo de 40 años) -->
+        <div class="hero-container pos-custom" *ngIf="!slide.isPromo" [ngStyle]="{'top': slide.top, 'left': slide.left}">
           <h2 class="hero-title">{{ slide.title }}</h2>
           <h3 class="hero-subtitle">{{ slide.subtitle }}</h3>
           
+          <!-- 1. PRIMERO LA LISTA DE CHECKS -->
           <div class="features-grid">
             <div class="feature-item" *ngFor="let feature of slide.features">
               <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -55,8 +54,35 @@
             </div>
           </div>
 
-          <!-- 4. NUEVO: El hashtag de tu código de inspiración -->
+          <!-- 2. DESPUÉS EL HASHTAG -->
           <p class="hero-hashtag">#LaboratorioClínicoAG</p>
+          
+        </div>
+
+        <!-- LADO IZQUIERDO: Diseño 40 Años (Solo aparece si isPromo es true) -->
+        <div class="hero-promo-badge" *ngIf="slide.isPromo" [ngStyle]="{'top': slide.top, 'left': slide.left}">
+          
+          <div class="promo-content">
+            <h3>Laboratorio AG</h3>
+            <h4></h4>
+            
+            <div class="promo-commitment">
+              <svg class="medal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="7"></circle>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor"></path>
+              </svg>
+              <p>Comprometidos con la precisión,<br>la confianza y tu bienestar.</p>
+            </div>
+            <!-- El hashtag también aquí para que no falte -->
+            <p class="hero-hashtag" style="margin-top: 15px;">#LaboratorioClínicoAG</p>
+          </div>
+
+          <div class="promo-number">
+            <span class="number">40</span>
+            <span class="years">A Ñ O S</span>
+          </div>
+
         </div>
 
       </div>
@@ -259,7 +285,7 @@
 </section>
 </main>
 
-<footer class="main-footer">
+<footer id="contactos" class="main-footer">
   <div class="footer-content">
     <div class="footer-logo">
       <h3>Laboratorio AG</h3>
@@ -268,19 +294,16 @@
     
     <div class="footer-contacts">
       
-      
       <a href="tel:+593967998878" class="contact-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
         <span>+593 967998878</span>
       </a>
 
-      <!-- ENLACE A FACEBOOK -->
       <a href="https://www.facebook.com/AGLABORATORIOCLINICO/" target="_blank" rel="noopener noreferrer" class="contact-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
         <span>Facebook</span>
       </a>
       
-      <!-- ENLACE A INSTAGRAM -->
       <a href="https://www.instagram.com/aglaboratorio/" target="_blank" rel="noopener noreferrer" class="contact-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
         <span> Instagram</span>
