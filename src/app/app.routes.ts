@@ -3,6 +3,9 @@ import { MainLayoutComponent } from './core/layout/main-layout/main-layout.compo
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
+const useRoleGuards = true;
+const roleGuardFor = () => useRoleGuards ? [roleGuard] : undefined;
+
 //Landing
 import { LandingComponent } from './landing/landing.component';
 
@@ -75,7 +78,7 @@ export const routes: Routes = [
       // Exámenes - Solo ADMINISTRADOR y RECEPCION
       {
         path: 'exams',
-        canActivate: [roleGuard],
+        canActivate: roleGuardFor(),
         data: { roles: ['ADMINISTRADOR', 'RECEPCION'] },
         children: [
           { path: '', component: ExamListComponent },
@@ -98,7 +101,7 @@ export const routes: Routes = [
       // Resultados - ADMINISTRADOR, LABORATORISTA, MEDICO, VALIDADOR
       {
         path: 'results',
-        canActivate: [roleGuard],
+        canActivate: roleGuardFor(),
         data: { roles: ['ADMINISTRADOR', 'LABORATORISTA', 'MEDICO', 'VALIDADOR'] },
         children: [
           { path: '', component: ResultListComponent },
@@ -109,7 +112,7 @@ export const routes: Routes = [
       // Admin - Solo ADMINISTRADOR
       {
         path: 'admin',
-        canActivate: [roleGuard],
+        canActivate: roleGuardFor(),
         data: { roles: ['ADMINISTRADOR'] },
         children: [
           { path: '', redirectTo: 'users', pathMatch: 'full' },

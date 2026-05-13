@@ -7,7 +7,7 @@
   --bg-light: #f9f9f9;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   display: block;
-  /* Habilitar un scroll suave si el navegador lo soporta (opcional pero recomendado) */
+  /* Habilitar un scroll suave si el navegador lo soporta xd */
   scroll-behavior: smooth; 
 }
 
@@ -22,7 +22,7 @@
   padding: 0 20px;
 }
 
-/* ESTA ES LA SOLUCIÓN AL CORTE DE LAS SECCIONES */
+/*SOLUCIÓN AL CORTE DE LAS SECCIONES */
 section {
   scroll-margin-top: 90px; /* Le dice al navegador que deje este espacio arriba al navegar a esta sección */
 }
@@ -393,11 +393,11 @@ section {
 }
 
 .promo-number .number {
-  font-size: 11rem; /*Tamaño del número 40 */
+  font-size: 14rem; /*Tamaño del número 40 */
   font-weight: 900;
   line-height: 0.8;
   color: transparent; 
-  -webkit-text-stroke: 6px #ffffff; /* El borde blanco espectacular */
+  -webkit-text-stroke: 8px #ffffff; /* El borde blanco espectacular */
 }
 
 .promo-number .years {
@@ -744,7 +744,7 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center; /* Centra todo perfectamente */
-    gap: 15px !important; /* Respiro entre los textos en el celular */
+    gap: 8px !important; /* Respiro entre los textos en el celular */
   }
 
   /* AQUÍ ESTÁ LA MAGIA: Ocultamos la medalla y su texto en pantallas pequeñas */

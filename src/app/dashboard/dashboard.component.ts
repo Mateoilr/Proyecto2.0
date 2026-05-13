@@ -32,31 +32,31 @@ export class DashboardComponent implements OnInit {
 
   stats: StatCard[] = [
     {
-      title: 'Órdenes Hoy',
+      title: 'Órdenes de Hoy',
       value: 0,
       icon: 'assignment',
-      color: '#2196f3',
+      color: '#329d9c', 
       route: '/orders'
     },
     {
       title: 'Resultados Pendientes',
       value: 0,
       icon: 'pending_actions',
-      color: '#ff9800',
+      color: '#F29C38', 
       route: '/results'
     },
     {
       title: 'Pacientes',
       value: 0,
       icon: 'people',
-      color: '#4caf50',
+      color: '#4A90E2', 
       route: '/patients'
     },
     {
       title: 'Exámenes Activos',
       value: 0,
       icon: 'science',
-      color: '#9c27b0',
+      color: '#748799', 
       route: '/exams'
     }
   ];

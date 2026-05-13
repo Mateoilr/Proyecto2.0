@@ -84,9 +84,16 @@ export class MainLayoutComponent {
   }
 
   shouldShowMenuItem(item: MenuItem): boolean {
+    const useRoleGuards = true;
+
     if (!item.roles || item.roles.length === 0) {
       return true;
     }
+
+    if (!useRoleGuards) {
+      return true;
+    }
+
     return item.roles.some(role => this.authService.hasRole(role));
   }
 

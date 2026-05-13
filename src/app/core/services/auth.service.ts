@@ -24,6 +24,20 @@ export class AuthService {
   private router = inject(Router);
   private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';
+  private readonly DEV_MODE = true; // CAMBIAR A false PARA REVERTIR
+
+  constructor() {
+    // BLOQUE DE DESARROLLO - Inyectar datos de prueba automáticamente
+    if (this.DEV_MODE && !this.getToken()) {
+      localStorage.setItem(this.TOKEN_KEY, 'dev-token-12345');
+      localStorage.setItem(this.USER_KEY, JSON.stringify({
+        id: '1',
+        nombres: 'Usuario Desarrollo',
+        email: 'dev@local',
+        roles: ['ADMINISTRADOR', 'RECEPCION', 'LABORATORISTA', 'MEDICO', 'VALIDADOR']
+      }));
+    }
+  }
 
   login(credentials: { email: string; password: string }): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials)
