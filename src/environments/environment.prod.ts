@@ -1,5 +1,5 @@
 // Producción - Vercel
 export const environment = {
   production: true,
-  apiUrl: 'https://syslab-backend-production.up.railway.app/api'
+  apiUrl: 'https://zqjbpp54-3000.use2.devtunnels.ms/api/docs'
 };
