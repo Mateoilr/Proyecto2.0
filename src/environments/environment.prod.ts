@@ -1,5 +1,5 @@
 // Producción - Vercel
 export const environment = {
   production: true,
-  apiUrl: (import.meta as any).env?.NG_APP_API_URL || ''
+  apiUrl: 'https://backendlaboratorioag-production.up.railway.app/api'
 };
