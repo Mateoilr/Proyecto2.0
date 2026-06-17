@@ -99,19 +99,26 @@ export class ExamListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const request = exam.estado === 'ACTIVE'
-          ? this.examsService.deactivate(exam.id)
-          : this.examsService.activate(exam.id);
+        const successHandler = () => {
+          this.snackBar.open(`Examen ${action}do correctamente`, 'Cerrar', { duration: 3000 });
+          this.loadExams();
+        };
 
-        request.subscribe({
-          next: () => {
-            this.snackBar.open(`Examen ${action}do correctamente`, 'Cerrar', { duration: 3000 });
-            this.loadExams();
-          },
-          error: (error) => {
-            this.snackBar.open(error.message || `Error al ${action} examen`, 'Cerrar', { duration: 3000 });
-          }
-        });
+        const errorHandler = (error: any) => {
+          this.snackBar.open(error.message || `Error al ${action} examen`, 'Cerrar', { duration: 3000 });
+        };
+
+        if (exam.estado === 'ACTIVE') {
+          this.examsService.delete(exam.id).subscribe({
+            next: successHandler,
+            error: errorHandler
+          });
+        } else {
+          this.examsService.update(exam.id, { estado: 'ACTIVE' }).subscribe({
+            next: successHandler,
+            error: errorHandler
+          });
+        }
       }
     });
   }

@@ -57,9 +57,7 @@ export class UsersService {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  create(data: CreateUserDto): Observable<User> {
-    return this.http.post<User>(this.apiUrl, data);
-  }
+
 
   update(id: string, data: UpdateUserDto): Observable<User> {
     return this.http.patch<User>(`${this.apiUrl}/${id}`, data);
@@ -69,16 +67,7 @@ export class UsersService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  activate(id: string): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}/activate`, {});
-  }
-
-  deactivate(id: string): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}/deactivate`, {});
-  }
-
-  // Roles disponibles
-  getRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(`${environment.apiUrl}/roles`);
+  updateStatus(id: string, estado: 'ACTIVE' | 'INACTIVE'): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}/status`, { estado });
   }
 }

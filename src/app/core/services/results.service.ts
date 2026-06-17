@@ -19,6 +19,8 @@ export interface UpdateResultDto {
   valorMin?: number;
   valorMax?: number;
   interpretacion?: string;
+  estado?: 'VALIDADO' | 'RECHAZADO' | 'PENDIENTE' | 'ENTREGADO';
+  validatedById?: string;
 }
 
 export interface Result {
@@ -58,8 +60,16 @@ export class ResultsService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(params?: { estado?: string }): Observable<Result[]> {
-    return this.http.get<Result[]>(this.apiUrl, { params });
+  // ADVERTENCIA:
+  // La nueva API en modulosfuncionales.md ya no describe un módulo /results.
+  // En su lugar, los flujos están en /order-items:
+  //  - PATCH /api/order-items/:id/sample
+  //  - POST  /api/order-items/:id/result
+  //
+  // Este servicio está conservado solo para compatibilidad temporal.
+
+  getAll(_params?: { estado?: string }): Observable<Result[]> {
+    return this.http.get<Result[]>(this.apiUrl);
   }
 
   getById(id: string): Observable<Result> {
@@ -77,27 +87,6 @@ export class ResultsService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
-  // Cambios de estado
-  deliver(id: string): Observable<Result> {
-    return this.http.post<Result>(`${this.apiUrl}/${id}/deliver`, {});
-  }
-
-  validate(id: string, validatedById: string): Observable<Result> {
-    return this.http.post<Result>(`${this.apiUrl}/${id}/validate`, { validatedById });
-  }
-
-  reject(id: string, reason: string): Observable<Result> {
-    return this.http.post<Result>(`${this.apiUrl}/${id}/reject`, { reason });
-  }
-
-  // Resultados pendientes
-  getPending(): Observable<Result[]> {
-    return this.http.get<Result[]>(`${this.apiUrl}/pending`);
-  }
-
-  // Resultados por orden
-  getByOrder(orderId: string): Observable<Result[]> {
-    return this.http.get<Result[]>(`${this.apiUrl}/order/${orderId}`);
-  }
 }
+
+

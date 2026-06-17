@@ -64,8 +64,4 @@ export class PatientsService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
-  searchByDocument(documento: string): Observable<Patient | null> {
-    return this.http.get<Patient>(`${this.apiUrl}/search/document/${documento}`);
-  }
 }

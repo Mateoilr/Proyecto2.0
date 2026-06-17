@@ -10,8 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { UsersService, CreateUserDto, UpdateUserDto, User, Role } from '../../core/services/users.service';
-
+import { UsersService, CreateUserDto, UpdateUserDto, User } from '../../core/services/users.service';
+import { RolesService, Role } from '../../core/services/roles.service';
+import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-user-form',
   standalone: true,
@@ -34,6 +35,8 @@ export class UserFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private usersService = inject(UsersService);
+  private rolesService = inject(RolesService);
+  private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
 
   userForm!: FormGroup;
@@ -68,11 +71,11 @@ export class UserFormComponent implements OnInit {
   }
 
   loadRoles(): void {
-    this.usersService.getRoles().subscribe({
-      next: (roles) => {
+    this.rolesService.getAll().subscribe({
+      next: (roles: Role[]) => {
         this.roles = roles;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.snackBar.open('Error al cargar roles', 'Cerrar', { duration: 3000 });
         console.error(error);
       }
@@ -140,12 +143,12 @@ export class UserFormComponent implements OnInit {
         roleIds: formValue.roleIds
       };
 
-      this.usersService.create(createDto).subscribe({
+      this.authService.register(createDto).subscribe({
         next: () => {
           this.snackBar.open('Usuario creado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/admin/users']);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.loading = false;
           this.snackBar.open('Error al crear el usuario', 'Cerrar', { duration: 3000 });
           console.error(error);

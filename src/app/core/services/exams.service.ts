@@ -60,12 +60,4 @@ export class ExamsService {
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
-  activate(id: string): Observable<Exam> {
-    return this.http.patch<Exam>(`${this.apiUrl}/${id}/activate`, {});
-  }
-
-  deactivate(id: string): Observable<Exam> {
-    return this.http.patch<Exam>(`${this.apiUrl}/${id}/deactivate`, {});
-  }
 }

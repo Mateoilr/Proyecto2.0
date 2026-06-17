@@ -108,25 +108,4 @@ export class OrdersService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Cambios de estado
-  startProcessing(id: string): Observable<LabOrder> {
-    return this.http.patch<LabOrder>(`${this.apiUrl}/${id}/start`, {});
-  }
-
-  complete(id: string): Observable<LabOrder> {
-    return this.http.patch<LabOrder>(`${this.apiUrl}/${id}/complete`, {});
-  }
-
-  close(id: string): Observable<LabOrder> {
-    return this.http.post<LabOrder>(`${this.apiUrl}/${id}/close`, {});
-  }
-
-  cancel(id: string): Observable<LabOrder> {
-    return this.http.patch<LabOrder>(`${this.apiUrl}/${id}/cancel`, {});
-  }
-
-  // Órdenes por paciente
-  getByPatient(patientId: string): Observable<LabOrder[]> {
-    return this.http.get<LabOrder[]>(`${this.apiUrl}/patient/${patientId}`);
-  }
 }

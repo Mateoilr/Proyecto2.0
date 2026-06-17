@@ -119,12 +119,12 @@ export class ResultListComponent implements OnInit {
         return;
       }
 
-      this.resultsService.validate(result.id, user.id).subscribe({
+      this.resultsService.update(result.id, { estado: 'VALIDADO', validatedById: user.id }).subscribe({
         next: () => {
           this.snackBar.open('Resultado validado exitosamente', 'Cerrar', { duration: 3000 });
           this.loadResults();
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open('Error al validar el resultado', 'Cerrar', { duration: 3000 });
           console.error(error);
         }
@@ -135,7 +135,7 @@ export class ResultListComponent implements OnInit {
   onReject(result: Result): void {
     const motivo = prompt('Ingrese el motivo del rechazo:');
     if (motivo) {
-      this.resultsService.reject(result.id, motivo).subscribe({
+      this.resultsService.update(result.id, { estado: 'RECHAZADO', interpretacion: motivo }).subscribe({
         next: () => {
           this.snackBar.open('Resultado rechazado', 'Cerrar', { duration: 3000 });
           this.loadResults();

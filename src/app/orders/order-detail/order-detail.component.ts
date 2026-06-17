@@ -182,12 +182,12 @@ export class OrderDetailComponent implements OnInit {
     if (!this.order) return;
 
     if (confirm('¿Está seguro de que desea cerrar esta orden? Después de cerrarla podrá enviar las notificaciones.')) {
-      this.ordersService.close(this.order.id).subscribe({
-        next: (closedOrder) => {
+      this.ordersService.update(this.order.id, { estado: 'CERRADA' }).subscribe({
+        next: (closedOrder: any) => {
           this.snackBar.open('Orden cerrada exitosamente', 'Cerrar', { duration: 3000 });
           this.order = closedOrder;
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open(
             error.error?.message || 'Error al cerrar la orden',
             'Cerrar',

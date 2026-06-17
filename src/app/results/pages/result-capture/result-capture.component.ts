@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './result-capture.component.css'
 })
 export class ResultCaptureComponent {
-
+  // Componente aún en adaptación al nuevo backend.
 }
+
