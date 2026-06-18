@@ -61,7 +61,7 @@ export class OrderItemsService {
   }
 
   sample(id: string, data: OrderItemSampleDto = {}): Observable<OrderItem> {
-    return this.http.patch<OrderItem>(`${this.apiUrl}/${id}/sample`, data);
+    return this.http.put<OrderItem>(`${this.apiUrl}/${id}/sample`, data);
   }
 
   result(id: string, data: RegisterOrderItemResultDto): Observable<OrderItem> {

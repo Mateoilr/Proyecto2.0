@@ -118,7 +118,7 @@ export class UserListComponent implements OnInit {
     const action = newStatus === 'ACTIVE' ? 'activar' : 'desactivar';
 
     if (confirm(`¿Está seguro de que desea ${action} este usuario?`)) {
-      this.usersService.update(user.id, { status: newStatus }).subscribe({
+      this.usersService.updateStatus(user.id, newStatus).subscribe({
         next: () => {
           this.snackBar.open(`Usuario ${action === 'activar' ? 'activado' : 'desactivado'} exitosamente`, 'Cerrar', { duration: 3000 });
           this.loadUsers();

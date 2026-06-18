@@ -63,11 +63,15 @@ export class UsersService {
     return this.http.patch<User>(`${this.apiUrl}/${id}`, data);
   }
 
+  replaceRoles(id: string, roleIds: string[]): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}/roles`, { roleIds });
+  }
+
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   updateStatus(id: string, estado: 'ACTIVE' | 'INACTIVE'): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}/status`, { estado });
+    return this.http.put<User>(`${this.apiUrl}/${id}/status`, { status: estado });
   }
 }

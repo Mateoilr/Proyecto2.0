@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -61,6 +62,7 @@ export class UserFormComponent implements OnInit {
   initForm(): void {
     this.userForm = this.fb.group({
       nombres: ['', Validators.required],
+      apellidos: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: [
         '',
@@ -89,6 +91,7 @@ export class UserFormComponent implements OnInit {
         this.user = user;
         this.userForm.patchValue({
           nombres: user.nombres,
+          apellidos: user.apellidos || '',
           email: user.email,
           roleIds: user.roles.map(ur => ur.roleId)
         });
@@ -116,28 +119,34 @@ export class UserFormComponent implements OnInit {
     if (this.isEditMode && this.userId) {
       const updateDto: UpdateUserDto = {
         nombres: formValue.nombres,
+        apellidos: formValue.apellidos,
         email: formValue.email,
         roleIds: formValue.roleIds
       };
 
       if (formValue.password) {
-        updateDto.password = formValue.password;
+        // Backend UpdateUserDto does not support password right now.
+        // We will ignore it for now or assume a separate endpoint will be built.
       }
 
-      this.usersService.update(this.userId, updateDto).subscribe({
+      forkJoin({
+        user: this.usersService.update(this.userId, updateDto),
+        roles: this.usersService.replaceRoles(this.userId, formValue.roleIds)
+      }).subscribe({
         next: () => {
-          this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', { duration: 3000 });
+          this.snackBar.open('Usuario y roles actualizados exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/admin/users']);
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open('Error al actualizar el usuario', 'Cerrar', { duration: 3000 });
+          this.snackBar.open('Error al actualizar el usuario o sus roles', 'Cerrar', { duration: 3000 });
           console.error(error);
         }
       });
     } else {
       const createDto: CreateUserDto = {
         nombres: formValue.nombres,
+        apellidos: formValue.apellidos,
         email: formValue.email,
         password: formValue.password,
         roleIds: formValue.roleIds

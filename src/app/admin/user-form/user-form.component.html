@@ -11,13 +11,24 @@
       <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre Completo *</mat-label>
+          <mat-label>Nombres *</mat-label>
           <input
             matInput
             formControlName="nombres"
-            placeholder="Ingrese el nombre completo">
+            placeholder="Ingrese los nombres">
           <mat-error *ngIf="userForm.get('nombres')?.hasError('required')">
-            El nombre es requerido
+            Los nombres son requeridos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Apellidos *</mat-label>
+          <input
+            matInput
+            formControlName="apellidos"
+            placeholder="Ingrese los apellidos">
+          <mat-error *ngIf="userForm.get('apellidos')?.hasError('required')">
+            Los apellidos son requeridos
           </mat-error>
         </mat-form-field>
 
