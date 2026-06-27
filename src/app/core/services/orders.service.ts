@@ -49,16 +49,10 @@ export interface LabOrder {
 
 export interface CreateOrderDto {
   patientId: string;
+  doctorId?: string;
   prioridad?: 'NORMAL' | 'URGENTE';
   observaciones?: string;
-  createdById: string;
-  items: CreateOrderItemDto[];
-}
-
-export interface CreateOrderItemDto {
-  examId: string;
-  sampleType?: string;
-  observaciones?: string;
+  examIds: string[];
 }
 
 export interface UpdateOrderDto {

@@ -31,35 +31,11 @@
     <h2>Accesos Rápidos</h2>
     <div class="actions-grid">
 
-      <mat-card class="action-card" (click)="navigateTo('/orders/new')">
+      <mat-card class="action-card" *ngFor="let action of quickActions" (click)="navigateTo(action.route)">
         <mat-card-content>
-          <mat-icon class="action-icon" style="color: #329d9c;">add_task</mat-icon>
-          <h3>Nueva Orden</h3>
-          <p>Crear una orden de exámenes</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="action-card" (click)="navigateTo('/orders')">
-        <mat-card-content>
-          <mat-icon class="action-icon" style="color: #ff9800;">search</mat-icon>
-          <h3>Ver Órdenes</h3>
-          <p>Consultar órdenes existentes</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="action-card" (click)="navigateTo('/patients/new')">
-        <mat-card-content>
-          <mat-icon class="action-icon" style="color: #4A90E2;">person_add</mat-icon>
-          <h3>Nuevo Paciente</h3>
-          <p>Registrar un nuevo paciente</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="action-card" (click)="navigateTo('/results')">
-        <mat-card-content>
-          <mat-icon class="action-icon" style="color: #64b567;">assignment_turned_in</mat-icon>
-          <h3>Resultados</h3>
-          <p>Registrar y validar resultados</p>
+          <mat-icon class="action-icon" [style.color]="action.color">{{ action.icon }}</mat-icon>
+          <h3>{{ action.title }}</h3>
+          <p>{{ action.description }}</p>
         </mat-card-content>
       </mat-card>
     </div>

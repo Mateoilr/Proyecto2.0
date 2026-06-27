@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -11,8 +11,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { OrdersService, LabOrder } from '../../core/services/orders.service';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
+
+import { NotificationsService } from '../../core/services/notifications.service';
 
 @Component({
   selector: 'app-order-list',
@@ -29,6 +33,7 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
     MatChipsModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatDialogModule,
     LoadingSpinnerComponent
   ],
   templateUrl: './order-list.component.html',
@@ -36,8 +41,10 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
 })
 export class OrderListComponent implements OnInit {
   private ordersService = inject(OrdersService);
+  private notificationsService = inject(NotificationsService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   displayedColumns: string[] = ['id', 'codigoOrden', 'paciente', 'fecha', 'estado', 'totalExamenes', 'actions'];
   dataSource = new MatTableDataSource<LabOrder>([]);
@@ -63,7 +70,7 @@ export class OrderListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.snackBar.open('Error al cargar órdenes', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al cargar Ã³rdenes', 'Cerrar', { duration: 3000 });
         this.loading = false;
       }
     });
@@ -111,4 +118,42 @@ export class OrderListComponent implements OnInit {
   getPacienteNombre(order: LabOrder): string {
     return `${order.patient?.nombres || ''} ${order.patient?.apellidos || ''}`.trim();
   }
+
+  sendWhatsApp(order: LabOrder, event: Event): void {
+    event.stopPropagation();
+    
+    // Only allow if order has a patient with a phone number
+    const phone = order.patient?.contacto;
+    if (!phone) {
+      this.snackBar.open('El paciente no tiene un nÃºmero de contacto registrado', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Enviar por WhatsApp',
+        message: `Â¿Desea enviar los resultados por WhatsApp al nÃºmero ${phone}?`,
+        confirmText: 'Enviar',
+        color: 'primary'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open('Enviando WhatsApp...', '', { duration: 2000 });
+        const formattedPhone = this.notificationsService.formatPhoneNumber(phone);
+        this.notificationsService.sendOrderByWhatsApp(order.id, formattedPhone).subscribe({
+          next: () => {
+            this.snackBar.open('WhatsApp enviado exitosamente', 'Cerrar', { duration: 3000 });
+          },
+          error: (error) => {
+            // console.error(error);
+            this.snackBar.open(error.error?.message || 'Error al enviar WhatsApp', 'Cerrar', { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
 }
+

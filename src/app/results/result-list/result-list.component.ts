@@ -11,10 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 
 import { ResultsService, Result } from '../../core/services/results.service';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
+import { ValidateResultDialogComponent } from '../../shared/components/validate-result-dialog.component';
 
 @Component({
   selector: 'app-result-list',
@@ -31,7 +34,8 @@ import { ResultsService, Result } from '../../core/services/results.service';
     MatInputModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   templateUrl: './result-list.component.html',
   styleUrls: ['./result-list.component.css']
@@ -40,6 +44,7 @@ export class ResultListComponent implements OnInit {
   private router = inject(Router);
   private resultsService = inject(ResultsService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   results: Result[] = [];
   loading = true;
@@ -85,7 +90,7 @@ export class ResultListComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         this.snackBar.open('Error al cargar resultados', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        // console.error(error);
       }
     });
   }
@@ -104,47 +109,37 @@ export class ResultListComponent implements OnInit {
     this.router.navigate(['/results', result.id, 'edit']);
   }
 
-  onValidate(result: Result): void {
-    if (confirm('¿Está seguro de que desea validar este resultado?')) {
-      // Obtener el usuario actual
-      const userStr = localStorage.getItem('user');
-      if (!userStr) {
-        this.snackBar.open('Error: Usuario no autenticado', 'Cerrar', { duration: 3000 });
-        return;
+  onReview(result: Result): void {
+    const dialogRef = this.dialog.open(ValidateResultDialogComponent, {
+      width: '500px',
+      data: { result }
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res?.action === 'validate') {
+        this.resultsService.validate(result.id).subscribe({
+          next: () => {
+            this.snackBar.open('Resultado validado exitosamente', 'Cerrar', { duration: 3000 });
+            this.loadResults();
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error al validar el resultado', 'Cerrar', { duration: 3000 });
+          }
+        });
+      } else if (res?.action === 'reject') {
+        // En un futuro, el comentario puede enviarse en un nuevo DTO para el endpoint de reject
+        // this.resultsService.reject(result.id, { motivo: res.comentario })...
+        this.resultsService.reject(result.id).subscribe({
+          next: () => {
+            this.snackBar.open('Resultado rechazado por inconsistencias', 'Cerrar', { duration: 3000 });
+            this.loadResults();
+          },
+          error: (error: any) => {
+            this.snackBar.open('Error al rechazar el resultado', 'Cerrar', { duration: 3000 });
+          }
+        });
       }
-
-      const user = JSON.parse(userStr);
-      if (!user.id) {
-        this.snackBar.open('Error: ID de usuario no válido', 'Cerrar', { duration: 3000 });
-        return;
-      }
-
-      this.resultsService.update(result.id, { estado: 'VALIDADO', validatedById: user.id }).subscribe({
-        next: () => {
-          this.snackBar.open('Resultado validado exitosamente', 'Cerrar', { duration: 3000 });
-          this.loadResults();
-        },
-        error: (error: any) => {
-          this.snackBar.open('Error al validar el resultado', 'Cerrar', { duration: 3000 });
-          console.error(error);
-        }
-      });
-    }
-  }
-
-  onReject(result: Result): void {
-    const motivo = prompt('Ingrese el motivo del rechazo:');
-    if (motivo) {
-      this.resultsService.update(result.id, { estado: 'RECHAZADO', interpretacion: motivo }).subscribe({
-        next: () => {
-          this.snackBar.open('Resultado rechazado', 'Cerrar', { duration: 3000 });
-          this.loadResults();
-        },
-        error: (error: any) => {
-          this.snackBar.open('Error al rechazar el resultado', 'Cerrar', { duration: 3000 });
-          console.error(error);
-        }
-      });
-    }
+    });
   }
 }
+

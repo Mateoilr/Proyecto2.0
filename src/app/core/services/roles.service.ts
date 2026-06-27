@@ -19,4 +19,20 @@ export class RolesService {
   getAll(): Observable<Role[]> {
     return this.http.get<Role[]>(this.apiUrl);
   }
+
+  getById(id: string): Observable<Role> {
+    return this.http.get<Role>(`${this.apiUrl}/${id}`);
+  }
+
+  create(data: any): Observable<Role> {
+    return this.http.post<Role>(this.apiUrl, data);
+  }
+
+  update(id: string, data: any): Observable<Role> {
+    return this.http.patch<Role>(`${this.apiUrl}/${id}`, data);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

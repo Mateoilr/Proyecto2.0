@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+﻿import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 
 export const roleGuard: CanActivateFn = (route, state) => {
@@ -20,12 +20,12 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
     // Verificar si el usuario tiene alguno de los roles requeridos
     const userRoles = user.roles?.map((r: any) => r.role?.name || r.name || r) || [];
-    console.log('User roles:', userRoles);
-    console.log('Required roles:', requiredRoles);
+    // console.log('User roles:', userRoles);
+    // console.log('Required roles:', requiredRoles);
     const hasRole = requiredRoles.some(role => userRoles.includes(role));
 
     if (!hasRole) {
-      console.log('Access denied - user does not have required role');
+      // console.log('Access denied - user does not have required role');
       router.navigate(['/dashboard']);
       return false;
     }
@@ -36,3 +36,4 @@ export const roleGuard: CanActivateFn = (route, state) => {
     return false;
   }
 };
+

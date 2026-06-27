@@ -10,7 +10,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ExamsService, Exam } from '../../core/services/exams.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { ExamsService, Exam, ExamReferenceRange, PredefinedValue } from '../../core/services/exams.service';
+import { CatalogsService, CatalogItem } from '../../core/services/catalogs.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-exam-form',
@@ -25,7 +30,10 @@ import { ExamsService, Exam } from '../../core/services/exams.service';
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatListModule,
+    MatDividerModule
   ],
   templateUrl: './exam-form.component.html',
   styleUrls: ['./exam-form.component.css']
@@ -33,33 +41,40 @@ import { ExamsService, Exam } from '../../core/services/exams.service';
 export class ExamFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private examsService = inject(ExamsService);
+  private catalogsService = inject(CatalogsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
 
   examForm!: FormGroup;
+  rangeForm!: FormGroup;
+  valueForm!: FormGroup;
+
   loading = false;
   isEditMode = false;
-  examId?: number;
+  examId?: string;
 
-  categorias = [
-    { value: 'HEMATOLOGIA', label: 'Hematología' },
-    { value: 'BIOQUIMICA', label: 'Bioquímica' },
-    { value: 'MICROBIOLOGIA', label: 'Microbiología' },
-    { value: 'INMUNOLOGIA', label: 'Inmunología' },
-    { value: 'HORMONAS', label: 'Hormonas' },
-    { value: 'CITOLOGIA', label: 'Citología' },
-    { value: 'ANATOMIA_PATOLOGICA', label: 'Anatomía Patológica' },
-    { value: 'OTROS', label: 'Otros' }
-  ];
+  categorias: CatalogItem[] = [];
+  tiposMuestra: CatalogItem[] = [];
+  unidades: CatalogItem[] = [];
+  tecnicas: CatalogItem[] = [];
+
+  // Configuration items
+  referenceRanges: ExamReferenceRange[] = [];
+  predefinedValues: PredefinedValue[] = [];
+
+  // Table columns
+  rangeColumns: string[] = ['sexo', 'edades', 'valores', 'texto', 'actions'];
 
   ngOnInit(): void {
     this.initForm();
+    this.initConfigForms();
+    this.loadCatalogs();
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id && id !== 'new') {
       this.isEditMode = true;
-      this.examId = parseInt(id);
+      this.examId = id;
       this.loadExam(this.examId);
     }
   }
@@ -69,19 +84,70 @@ export class ExamFormComponent implements OnInit {
       codigo: ['', [Validators.required, Validators.minLength(2)]],
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       descripcion: [''],
-      categoria: ['', Validators.required],
+      categoriaId: ['', Validators.required],
       precio: [0, [Validators.required, Validators.min(0)]],
-      tiempoResultadoDias: [1, [Validators.required, Validators.min(1)]],
-      preparacion: [''],
+      esCualitativo: [false],
+      unidadId: [''],
+      muestraId: [''],
+      tecnicaId: [''],
       estado: ['ACTIVE']
     });
   }
 
-  loadExam(id: number): void {
+  initConfigForms(): void {
+    this.rangeForm = this.fb.group({
+      sexo: [''],
+      edadMin: [null, [Validators.min(0)]],
+      edadMax: [null, [Validators.min(0)]],
+      valorMin: [null],
+      valorMax: [null],
+      textoReferencia: ['']
+    });
+
+    this.valueForm = this.fb.group({
+      valor: ['', Validators.required]
+    });
+  }
+
+  loadCatalogs(): void {
+    forkJoin({
+      categorias: this.catalogsService.getCategories(),
+      tiposMuestra: this.catalogsService.getSampleTypes(),
+      unidades: this.catalogsService.getMeasurementUnits(),
+      tecnicas: this.catalogsService.getTechniques()
+    }).subscribe({
+      next: (results) => {
+        this.categorias = results.categorias;
+        this.tiposMuestra = results.tiposMuestra;
+        this.unidades = results.unidades;
+        this.tecnicas = results.tecnicas;
+      },
+      error: () => {
+        this.snackBar.open('Error al cargar catálogos', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
+
+  loadExam(id: string): void {
     this.loading = true;
-    this.examsService.getById(id.toString()).subscribe({
+    this.examsService.getById(id).subscribe({
       next: (exam) => {
-        this.examForm.patchValue(exam);
+        this.examForm.patchValue({
+          codigo: exam.codigo,
+          nombre: exam.nombre,
+          descripcion: exam.descripcion,
+          categoriaId: exam.categoryId,
+          precio: exam.precio,
+          esCualitativo: exam.esCualitativo,
+          unidadId: exam.unitId,
+          muestraId: exam.sampleTypeId,
+          tecnicaId: exam.tecnicaId,
+          estado: exam.estado
+        });
+        
+        this.referenceRanges = exam.referenceRanges || [];
+        this.predefinedValues = exam.predefinedValues || [];
+        
         this.loading = false;
       },
       error: (error) => {
@@ -97,26 +163,110 @@ export class ExamFormComponent implements OnInit {
       this.loading = true;
 
       const request = this.isEditMode && this.examId
-        ? this.examsService.update(this.examId.toString(), this.examForm.value)
+        ? this.examsService.update(this.examId, this.examForm.value)
         : this.examsService.create(this.examForm.value);
 
       request.subscribe({
-        next: () => {
+        next: (savedExam) => {
           this.snackBar.open(
             `Examen ${this.isEditMode ? 'actualizado' : 'creado'} correctamente`,
             'Cerrar',
             { duration: 3000 }
           );
-          this.router.navigate(['/exams']);
+          
+          if (!this.isEditMode) {
+            // Si acabamos de crearlo, redirigimos a la vista de edición para que pueda configurar los valores de referencia.
+            this.router.navigate(['/exams', savedExam.id, 'edit']);
+          } else {
+            this.router.navigate(['/exams']);
+          }
         },
         error: (error) => {
-          this.snackBar.open(error.message || 'Error al guardar examen', 'Cerrar', { duration: 3000 });
+          this.snackBar.open(error.error?.message || error.message || 'Error al guardar examen', 'Cerrar', { duration: 3000 });
           this.loading = false;
         }
       });
     } else {
       this.markFormGroupTouched(this.examForm);
     }
+  }
+
+  // ---- Reference Ranges Configuration ----
+
+  onAddReferenceRange(): void {
+    if (!this.examId || this.rangeForm.invalid) return;
+
+    const values = this.rangeForm.value;
+    // Basic validation
+    if (values.valorMin == null && values.valorMax == null && !values.textoReferencia) {
+      this.snackBar.open('Debe proveer valor Min/Max o un texto de referencia', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    this.loading = true;
+    this.examsService.addReferenceRange(this.examId, values).subscribe({
+      next: (range) => {
+        this.referenceRanges = [...this.referenceRanges, range];
+        this.rangeForm.reset();
+        this.snackBar.open('Rango agregado', 'Cerrar', { duration: 2000 });
+        this.loading = false;
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.message || 'Error al agregar rango', 'Cerrar', { duration: 3000 });
+        this.loading = false;
+      }
+    });
+  }
+
+  onRemoveReferenceRange(rangeId: string): void {
+    if (!this.examId) return;
+    this.loading = true;
+    this.examsService.removeReferenceRange(this.examId, rangeId).subscribe({
+      next: () => {
+        this.referenceRanges = this.referenceRanges.filter(r => r.id !== rangeId);
+        this.snackBar.open('Rango eliminado', 'Cerrar', { duration: 2000 });
+        this.loading = false;
+      },
+      error: (err) => {
+        this.snackBar.open('Error al eliminar rango', 'Cerrar', { duration: 3000 });
+        this.loading = false;
+      }
+    });
+  }
+
+  // ---- Predefined Values Configuration ----
+
+  onAddPredefinedValue(): void {
+    if (!this.examId || this.valueForm.invalid) return;
+    this.loading = true;
+    this.examsService.addPredefinedValue(this.examId, this.valueForm.value).subscribe({
+      next: (val) => {
+        this.predefinedValues = [...this.predefinedValues, val];
+        this.valueForm.reset();
+        this.snackBar.open('Valor agregado', 'Cerrar', { duration: 2000 });
+        this.loading = false;
+      },
+      error: (err) => {
+        this.snackBar.open(err.error?.message || 'Error al agregar valor', 'Cerrar', { duration: 3000 });
+        this.loading = false;
+      }
+    });
+  }
+
+  onRemovePredefinedValue(valueId: string): void {
+    if (!this.examId) return;
+    this.loading = true;
+    this.examsService.removePredefinedValue(this.examId, valueId).subscribe({
+      next: () => {
+        this.predefinedValues = this.predefinedValues.filter(v => v.id !== valueId);
+        this.snackBar.open('Valor eliminado', 'Cerrar', { duration: 2000 });
+        this.loading = false;
+      },
+      error: (err) => {
+        this.snackBar.open('Error al eliminar valor', 'Cerrar', { duration: 3000 });
+        this.loading = false;
+      }
+    });
   }
 
   onCancel(): void {

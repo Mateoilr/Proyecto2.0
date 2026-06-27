@@ -12,7 +12,7 @@
       <div class="filters">
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar</mat-label>
-          <input matInput [formControl]="searchControl" placeholder="Buscar por usuario o entidad...">
+          <input matInput [formControl]="searchControl" placeholder="Buscar por entidad o nombre de usuario...">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -44,7 +44,7 @@
             <th mat-header-cell *matHeaderCellDef>Usuario</th>
             <td mat-cell *matCellDef="let log">
               <div class="user-cell">
-                <strong>{{ log.user?.nombres || 'N/A' }}</strong>
+                <strong>{{ log.user?.nombres || 'N/A' }} {{ log.user?.apellidos || '' }}</strong>
                 <span class="user-email">{{ log.user?.email || '-' }}</span>
               </div>
             </td>
@@ -53,8 +53,8 @@
           <ng-container matColumnDef="accion">
             <th mat-header-cell *matHeaderCellDef>Acción</th>
             <td mat-cell *matCellDef="let log">
-              <mat-chip [style.background-color]="getActionColor(log.action)" class="action-chip">
-                {{ log.action }}
+              <mat-chip [style.background-color]="getActionColor(log.accion)" class="action-chip">
+                {{ log.accion }}
               </mat-chip>
             </td>
           </ng-container>
@@ -62,14 +62,14 @@
           <ng-container matColumnDef="entidad">
             <th mat-header-cell *matHeaderCellDef>Entidad</th>
             <td mat-cell *matCellDef="let log">
-              {{ log.entity }}
+              {{ log.entidad }}
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="entityId">
+          <ng-container matColumnDef="entidadId">
             <th mat-header-cell *matHeaderCellDef>ID Entidad</th>
             <td mat-cell *matCellDef="let log">
-              <code>{{ log.entityId }}</code>
+              <code>{{ log.entidadId }}</code>
             </td>
           </ng-container>
 

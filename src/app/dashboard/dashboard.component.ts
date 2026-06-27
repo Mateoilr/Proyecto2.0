@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
+import { DashboardService } from '../core/services/dashboard.service';
 
 interface StatCard {
   title: string;
@@ -12,6 +13,14 @@ interface StatCard {
   icon: string;
   color: string;
   route?: string;
+}
+
+interface QuickAction {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  route: string;
 }
 
 @Component({
@@ -29,37 +38,10 @@ interface StatCard {
 export class DashboardComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  private dashboardService = inject(DashboardService);
 
-  stats: StatCard[] = [
-    {
-      title: 'Órdenes de Hoy',
-      value: 0,
-      icon: 'assignment',
-      color: '#329d9c', 
-      route: '/orders'
-    },
-    {
-      title: 'Resultados Pendientes',
-      value: 0,
-      icon: 'pending_actions',
-      color: '#F29C38', 
-      route: '/results'
-    },
-    {
-      title: 'Pacientes',
-      value: 0,
-      icon: 'people',
-      color: '#4A90E2', 
-      route: '/patients'
-    },
-    {
-      title: 'Exámenes Activos',
-      value: 0,
-      icon: 'science',
-      color: '#748799', 
-      route: '/exams'
-    }
-  ];
+  stats: StatCard[] = [];
+  quickActions: QuickAction[] = [];
 
   get currentUser() {
     return this.authService.getUser();
@@ -67,19 +49,106 @@ export class DashboardComponent implements OnInit {
 
   get greeting(): string {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Buenos días';
+    if (hour < 12) return 'Buenos dÃ­as';
     if (hour < 18) return 'Buenas tardes';
     return 'Buenas noches';
   }
 
   ngOnInit(): void {
-    // TODO: Cargar estadísticas reales desde el backend
-    this.loadStats();
+    this.setupDashboardByRole();
   }
 
-  loadStats(): void {
-    // Simulación de datos - reemplazar con llamadas reales al backend
-    // this.ordersService.getStats().subscribe(...)
+  setupDashboardByRole(): void {
+    const roles = this.authService.getRoles();
+    const isAdmin = roles.includes('ADMINISTRADOR');
+    const isSecretario = roles.includes('SECRETARIO') || roles.includes('RECEPCION');
+    const isLaboratorista = roles.includes('LABORATORISTA');
+    const isMedico = roles.includes('MEDICO') || roles.includes('VALIDADOR');
+
+    // 1. Configurar Tarjetas de MÃ©tricas (Stats)
+    if (isAdmin) {
+      this.stats = [
+        { title: 'Ã“rdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Resultados Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' },
+        { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' },
+        { title: 'ExÃ¡menes Activos', value: 0, icon: 'science', color: '#748799', route: '/exams' }
+      ];
+      this.quickActions = [
+        { title: 'Nueva Orden', description: 'Crear una orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
+        { title: 'Ver Usuarios', description: 'GestiÃ³n de sistema', icon: 'manage_accounts', color: '#F29C38', route: '/admin/users' },
+        { title: 'AuditorÃ­a', description: 'Log de actividades', icon: 'history', color: '#4A90E2', route: '/admin/audit' },
+        { title: 'ExÃ¡menes', description: 'GestiÃ³n de exÃ¡menes', icon: 'science', color: '#748799', route: '/exams' }
+      ];
+    } else if (isSecretario) {
+      this.stats = [
+        { title: 'Ã“rdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' }
+      ];
+      this.quickActions = [
+        { title: 'Nueva Orden', description: 'Crear una orden de exÃ¡menes', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
+        { title: 'Ver Ã“rdenes', description: 'Consultar Ã³rdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
+        { title: 'Nuevo Paciente', description: 'Registrar un paciente', icon: 'person_add', color: '#4A90E2', route: '/patients/new' }
+      ];
+    } else if (isLaboratorista) {
+      this.stats = [
+        { title: 'ExÃ¡menes en Proceso', value: 0, icon: 'science', color: '#329d9c', route: '/orders' },
+        { title: 'Resultados Ptes.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' }
+      ];
+      this.quickActions = [
+        { title: 'Ver Ã“rdenes', description: 'Consultar Ã³rdenes', icon: 'search', color: '#329d9c', route: '/orders' },
+        { title: 'Ingresar Resultados', description: 'Registrar anÃ¡lisis', icon: 'biotech', color: '#F29C38', route: '/results' }
+      ];
+    } else if (isMedico) {
+      this.stats = [
+        { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
+        { title: 'Ã“rdenes', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
+      ];
+      this.quickActions = [
+        { title: 'Validar Resultados', description: 'Aprobar o rechazar resultados', icon: 'fact_check', color: '#F29C38', route: '/results' },
+        { title: 'Ver Ã“rdenes', description: 'Consultar informaciÃ³n', icon: 'search', color: '#329d9c', route: '/orders' }
+      ];
+    }
+
+    // 2. Cargar datos reales usando el nuevo endpoint
+    this.loadRealStats(isAdmin, isSecretario, isLaboratorista, isMedico);
+  }
+
+  private loadRealStats(isAdmin: boolean, isSecretario: boolean, isLaboratorista: boolean, isMedico: boolean): void {
+    this.dashboardService.getStats().subscribe({
+      next: (data) => {
+        if (isAdmin) {
+          this.updateStat('Ã“rdenes Totales', data.ordersToday || 0); // Asumiendo que el backend retorna todo, si return ordersToday es el nombre, dependemos de lo q mande el back. Nota: backend devuelve ordersToday.
+          this.updateStat('Resultados Pend.', data.pendingResults || 0);
+          this.updateStat('Pacientes', data.registeredPatients || 0);
+          this.updateStat('ExÃ¡menes Activos', data.activeExams || 0);
+        }
+        
+        if (isSecretario) {
+          this.updateStat('Ã“rdenes Hoy', data.ordersToday || 0);
+          this.updateStat('Pacientes', data.registeredPatients || 0);
+        }
+        
+        if (isLaboratorista) {
+          this.updateStat('ExÃ¡menes en Proceso', data.ordersToday || 0); // Mapeo temporal si el back no provee "en proceso"
+          this.updateStat('Resultados Ptes.', data.pendingResults || 0);
+        }
+        
+        if (isMedico) {
+          this.updateStat('Por Validar', data.pendingResults || 0);
+          this.updateStat('Ã“rdenes', data.ordersToday || 0);
+        }
+      },
+      error: (error) => {
+        // console.error('Error fetching dashboard stats:', error);
+      }
+    });
+  }
+
+  private updateStat(title: string, value: number) {
+    const stat = this.stats.find(s => s.title === title);
+    if (stat) {
+      stat.value = value;
+    }
   }
 
   navigateTo(route?: string): void {
@@ -88,3 +157,4 @@ export class DashboardComponent implements OnInit {
     }
   }
 }
+

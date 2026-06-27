@@ -15,7 +15,7 @@ export class ReportsService {
    * Descargar hoja de petición de análisis en PDF
    */
   downloadOrdenPeticion(orderId: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/orden-peticion/${orderId}/pdf`, {
+    return this.http.get(`${this.apiUrl}/order/${orderId}/request-sheet`, {
       responseType: 'blob'
     });
   }

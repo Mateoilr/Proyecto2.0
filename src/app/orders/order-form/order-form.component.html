@@ -2,8 +2,8 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <mat-icon>add_task</mat-icon>
-        Nueva Orden de Exámenes
+        <mat-icon>{{ isEditMode ? 'edit' : 'add_task' }}</mat-icon>
+        {{ isEditMode ? 'Editar Orden ' + (orderStatus ? '(' + orderStatus + ')' : '') : 'Nueva Orden de Exámenes' }}
       </mat-card-title>
     </mat-card-header>
 
@@ -37,6 +37,9 @@
               Debe seleccionar un paciente
             </mat-error>
           </mat-form-field>
+          <div *ngIf="isEditMode" class="edit-warning">
+            <small>* El paciente no puede ser modificado una vez creada la orden.</small>
+          </div>
         </div>
 
         <!-- Datos de la Orden -->
@@ -65,13 +68,16 @@
         <!-- Selección de Exámenes -->
         <div class="form-section">
           <h3>Exámenes</h3>
+          <div *ngIf="isEditMode" class="edit-warning" style="margin-bottom: 10px;">
+            <small>* Los exámenes solicitados no pueden ser modificados una vez creada la orden.</small>
+          </div>
 
           <!-- Exámenes Seleccionados -->
           <div class="selected-exams" *ngIf="selectedExams.length > 0">
             <mat-chip-set>
-              <mat-chip *ngFor="let exam of selectedExams" (removed)="removeExam(exam)">
+              <mat-chip *ngFor="let exam of selectedExams" (removed)="removeExam(exam)" [removable]="!isEditMode">
                 {{ exam.nombre }}
-                <button matChipRemove>
+                <button matChipRemove *ngIf="!isEditMode">
                   <mat-icon>cancel</mat-icon>
                 </button>
               </mat-chip>
@@ -91,7 +97,7 @@
           </div>
 
           <!-- Lista de Exámenes Disponibles -->
-          <div class="exams-grid" *ngIf="!loading && availableExams.length > 0">
+          <div class="exams-grid" *ngIf="!loading && availableExams.length > 0 && !isEditMode">
             <div
               *ngFor="let exam of availableExams"
               class="exam-card"
@@ -100,7 +106,8 @@
               <mat-checkbox
                 [checked]="isExamSelected(exam)"
                 (click)="$event.stopPropagation()"
-                (change)="toggleExam(exam)">
+                (change)="toggleExam(exam)"
+                [disabled]="isEditMode">
               </mat-checkbox>
               <div class="exam-info">
                 <div class="exam-name">{{ exam.nombre }}</div>
@@ -110,7 +117,7 @@
             </div>
           </div>
 
-          <mat-error *ngIf="selectedExams.length === 0 && orderForm.touched">
+          <mat-error *ngIf="selectedExams.length === 0 && orderForm.touched && !isEditMode">
             Debe seleccionar al menos un examen
           </mat-error>
         </div>
@@ -128,9 +135,9 @@
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="loading || orderForm.invalid || selectedExams.length === 0">
+            [disabled]="loading || orderForm.invalid || (selectedExams.length === 0 && !isEditMode)">
             <mat-icon>save</mat-icon>
-            Crear Orden
+            {{ isEditMode ? 'Guardar Cambios' : 'Crear Orden' }}
           </button>
         </div>
       </form>

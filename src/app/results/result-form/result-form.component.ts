@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { ResultsService, CreateResultDto, UpdateResultDto, Result } from '../../core/services/results.service';
+import { ResultsService, CreateResultDto, Result } from '../../core/services/results.service';
 
 @Component({
   selector: 'app-result-form',
@@ -68,17 +68,14 @@ export class ResultFormComponent implements OnInit {
         this.result = result;
         this.resultForm.patchValue({
           valor: result.valor,
-          unidad: result.unidad || '',
-          valorMin: result.valorMin || '',
-          valorMax: result.valorMax || '',
           interpretacion: result.interpretacion || ''
         });
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.loading = false;
         this.snackBar.open('Error al cargar el resultado', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        // console.error(error);
         this.router.navigate(['/results']);
       }
     });
@@ -86,33 +83,25 @@ export class ResultFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.resultForm.invalid) {
-      this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('Complete los campos requeridos', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    this.loading = true;
-
-    const formValue = this.resultForm.value;
-    const data: UpdateResultDto = {
-      valor: formValue.valor,
-      unidad: formValue.unidad || undefined,
-      valorMin: formValue.valorMin ? Number(formValue.valorMin) : undefined,
-      valorMax: formValue.valorMax ? Number(formValue.valorMax) : undefined,
-      interpretacion: formValue.interpretacion || undefined
-    };
-
     if (this.isEditMode && this.resultId) {
-      this.resultsService.update(this.resultId, data).subscribe({
+      this.loading = true;
+      this.resultsService.update(this.resultId, this.resultForm.value).subscribe({
         next: () => {
           this.snackBar.open('Resultado actualizado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/results']);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.loading = false;
-          this.snackBar.open('Error al actualizar el resultado', 'Cerrar', { duration: 3000 });
-          console.error(error);
+          this.snackBar.open(error.error?.message || 'Error al actualizar resultado', 'Cerrar', { duration: 3000 });
+          // console.error(error);
         }
       });
+    } else {
+      this.snackBar.open('La creaciÃ³n directa de resultados no estÃ¡ permitida', 'Cerrar', { duration: 3000 });
     }
   }
 
@@ -120,3 +109,4 @@ export class ResultFormComponent implements OnInit {
     this.router.navigate(['/results']);
   }
 }
+

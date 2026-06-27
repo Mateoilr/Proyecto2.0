@@ -60,6 +60,12 @@
           <button mat-icon-button color="primary" (click)="viewOrder(order)" matTooltip="Ver detalle">
             <mat-icon>visibility</mat-icon>
           </button>
+          <button mat-icon-button style="color: #25D366" 
+                  *ngIf="order.estado === 'VALIDADA' || order.estado === 'ENTREGADA'" 
+                  (click)="sendWhatsApp(order, $event)" 
+                  matTooltip="Enviar por WhatsApp">
+            <mat-icon>chat</mat-icon>
+          </button>
         </td>
       </ng-container>
 

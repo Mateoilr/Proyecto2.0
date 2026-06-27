@@ -5,33 +5,16 @@ import { environment } from '../../../environments/environment';
 
 export interface CreateResultDto {
   orderItemId: string;
-  valor: string;
-  unidad?: string;
-  valorMin?: number;
-  valorMax?: number;
-  interpretacion?: string;
-  createdById: string;
-}
-
-export interface UpdateResultDto {
-  valor?: string;
-  unidad?: string;
-  valorMin?: number;
-  valorMax?: number;
-  interpretacion?: string;
-  estado?: 'VALIDADO' | 'RECHAZADO' | 'PENDIENTE' | 'ENTREGADO';
-  validatedById?: string;
+  valorGenerado: string;
+  observaciones?: string;
 }
 
 export interface Result {
   id: string;
   orderItemId: string;
   valor: string;
-  unidad?: string;
-  valorMin?: number;
-  valorMax?: number;
   interpretacion?: string;
-  estado: 'PENDIENTE' | 'ENTREGADO' | 'VALIDADO';
+  estado: 'REGISTRADO' | 'VALIDADO' | 'RECHAZADO' | 'ENTREGADO';
   createdById?: string;
   validatedById?: string;
   validatedAt?: Date | string;
@@ -44,7 +27,9 @@ export interface Result {
     };
     labOrder: {
       codigo: string;
+      prioridad: string;
       patient: {
+        id: string;
         nombres: string;
         apellidos: string;
       };
@@ -60,16 +45,12 @@ export class ResultsService {
 
   constructor(private http: HttpClient) {}
 
-  // ADVERTENCIA:
-  // La nueva API en modulosfuncionales.md ya no describe un módulo /results.
-  // En su lugar, los flujos están en /order-items:
-  //  - PATCH /api/order-items/:id/sample
-  //  - POST  /api/order-items/:id/result
-  //
-  // Este servicio está conservado solo para compatibilidad temporal.
+  getAll(params?: { estado?: string; orderId?: string }): Observable<Result[]> {
+    return this.http.get<Result[]>(this.apiUrl, { params: params || {} });
+  }
 
-  getAll(_params?: { estado?: string }): Observable<Result[]> {
-    return this.http.get<Result[]>(this.apiUrl);
+  getPendingValidation(): Observable<Result[]> {
+    return this.http.get<Result[]>(`${this.apiUrl}/pending-validation`);
   }
 
   getById(id: string): Observable<Result> {
@@ -80,12 +61,20 @@ export class ResultsService {
     return this.http.post<Result>(this.apiUrl, data);
   }
 
-  update(id: string, data: UpdateResultDto): Observable<Result> {
-    return this.http.patch<Result>(`${this.apiUrl}/${id}`, data);
+  validate(id: string): Observable<Result> {
+    return this.http.patch<Result>(`${this.apiUrl}/${id}/validate`, {});
   }
 
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  reject(id: string): Observable<Result> {
+    return this.http.patch<Result>(`${this.apiUrl}/${id}/reject`, {});
+  }
+
+  deliver(id: string): Observable<Result> {
+    return this.http.patch<Result>(`${this.apiUrl}/${id}/deliver`, {});
+  }
+
+  update(id: string, data: Partial<CreateResultDto> & { interpretacion?: string }): Observable<Result> {
+    return this.http.patch<Result>(`${this.apiUrl}/${id}`, data);
   }
 }
 

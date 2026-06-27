@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -13,18 +13,20 @@ import { debounceTime } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-interface AuditLog {
+export interface AuditLog {
   id: string;
+  entidad: string;
+  entidadId: string;
+  accion: string;
+  metadata?: any;
   userId: string;
   user?: {
+    id: string;
     nombres: string;
+    apellidos: string;
     email: string;
   };
-  action: string;
-  entity: string;
-  entityId: string;
-  changes?: any;
-  createdAt: Date | string;
+  createdAt: string | Date;
 }
 
 @Component({
@@ -52,7 +54,7 @@ export class AuditLogComponent implements OnInit {
 
   logs: AuditLog[] = [];
   loading = true;
-  displayedColumns = ['fecha', 'usuario', 'accion', 'entidad', 'entityId'];
+  displayedColumns = ['fecha', 'usuario', 'accion', 'entidad', 'entidadId'];
 
   searchControl = new FormControl('');
   actionControl = new FormControl('');
@@ -83,7 +85,7 @@ export class AuditLogComponent implements OnInit {
     }
 
     if (this.actionControl.value) {
-      params.action = this.actionControl.value;
+      params.accion = this.actionControl.value;
     }
 
     this.http.get<AuditLog[]>(this.apiUrl, { params }).subscribe({
@@ -93,13 +95,13 @@ export class AuditLogComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        this.snackBar.open('Error al cargar logs de auditoría', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        this.snackBar.open('Error al cargar logs de auditorÃ­a', 'Cerrar', { duration: 3000 });
+        // console.error(error);
       }
     });
   }
 
-  getActionColor(action: string): string {
+  getActionColor(accion: string): string {
     const colors: Record<string, string> = {
       'CREATE': '#4caf50',
       'UPDATE': '#2196f3',
@@ -107,6 +109,7 @@ export class AuditLogComponent implements OnInit {
       'LOGIN': '#9c27b0',
       'LOGOUT': '#ff9800'
     };
-    return colors[action] || '#666';
+    return colors[accion] || '#666';
   }
 }
+

@@ -86,14 +86,11 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let result">
-              <button mat-icon-button [matTooltip]="'Editar'" (click)="onEdit(result)" *ngIf="result.estado === 'REGISTRADO'">
+              <button mat-icon-button matTooltip="Editar Resultado" color="primary" (click)="onEdit(result)" *ngIf="result.estado === 'REGISTRADO' || result.estado === 'RECHAZADO'">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button [matTooltip]="'Validar'" color="primary" (click)="onValidate(result)" *ngIf="result.estado === 'REGISTRADO'">
-                <mat-icon>check_circle</mat-icon>
-              </button>
-              <button mat-icon-button [matTooltip]="'Rechazar'" color="warn" (click)="onReject(result)" *ngIf="result.estado === 'REGISTRADO'">
-                <mat-icon>cancel</mat-icon>
+              <button mat-icon-button matTooltip="Revisar Resultado" color="accent" (click)="onReview(result)" *ngIf="result.estado === 'REGISTRADO'">
+                <mat-icon>plagiarism</mat-icon>
               </button>
             </td>
           </ng-container>

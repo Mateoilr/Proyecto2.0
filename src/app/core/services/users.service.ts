@@ -9,14 +9,9 @@ export interface User {
   apellidos?: string;
   email: string;
   status: 'ACTIVE' | 'INACTIVE';
-  roles: UserRole[];
+  roles: string[];
   createdAt: Date | string;
   updatedAt: Date | string;
-}
-
-export interface UserRole {
-  roleId: string;
-  role: Role;
 }
 
 export interface Role {
@@ -73,5 +68,9 @@ export class UsersService {
 
   updateStatus(id: string, estado: 'ACTIVE' | 'INACTIVE'): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${id}/status`, { status: estado });
+  }
+
+  updatePassword(id: string, newPassword: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${id}/password`, { newPassword });
   }
 }

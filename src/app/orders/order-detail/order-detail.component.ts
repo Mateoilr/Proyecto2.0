@@ -15,8 +15,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { OrdersService, LabOrder } from '../../core/services/orders.service';
 import { ResultsService } from '../../core/services/results.service';
 import { NotificationsService } from '../../core/services/notifications.service';
+import { ReportsService } from '../../core/services/reports.service';
 import { EmailDialogComponent } from '../../shared/components/email-dialog.component';
 import { WhatsAppDialogComponent } from '../../shared/components/whatsapp-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
+import { RegisterResultDialogComponent } from '../../shared/components/register-result-dialog.component';
 
 @Component({
   selector: 'app-order-detail',
@@ -43,6 +46,7 @@ export class OrderDetailComponent implements OnInit {
   private ordersService = inject(OrdersService);
   private resultsService = inject(ResultsService);
   private notificationsService = inject(NotificationsService);
+  private reportsService = inject(ReportsService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
 
@@ -67,7 +71,7 @@ export class OrderDetailComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         this.snackBar.open('Error al cargar la orden', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        // console.error(error);
         this.router.navigate(['/orders']);
       }
     });
@@ -126,54 +130,55 @@ export class OrderDetailComponent implements OnInit {
   onDelete(): void {
     if (!this.order) return;
 
-    if (confirm('¿Está seguro de que desea eliminar esta orden?')) {
-      this.ordersService.delete(this.order.id).subscribe({
-        next: () => {
-          this.snackBar.open('Orden eliminada exitosamente', 'Cerrar', { duration: 3000 });
-          this.router.navigate(['/orders']);
-        },
-        error: (error) => {
-          this.snackBar.open('Error al eliminar la orden', 'Cerrar', { duration: 3000 });
-          console.error(error);
-        }
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar EliminaciÃ³n',
+        message: 'Â¿EstÃ¡ seguro de que desea eliminar esta orden?',
+        color: 'warn'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ordersService.delete(this.order!.id).subscribe({
+          next: () => {
+            this.snackBar.open('Orden eliminada exitosamente', 'Cerrar', { duration: 3000 });
+            this.router.navigate(['/orders']);
+          },
+          error: (error) => {
+            this.snackBar.open('Error al eliminar la orden', 'Cerrar', { duration: 3000 });
+            // console.error(error);
+          }
+        });
+      }
+    });
   }
 
-  onRegisterResult(orderItemId: string): void {
-    const valor = prompt('Ingrese el valor del resultado:');
-    if (!valor) return;
+  onRegisterResult(orderItemId: string, examName: string): void {
+    const dialogRef = this.dialog.open(RegisterResultDialogComponent, {
+      width: '400px',
+      data: { examName }
+    });
 
-    const unidad = prompt('Ingrese la unidad (opcional):');
-
-    // Obtener el usuario actual
-    const userStr = localStorage.getItem('user');
-    if (!userStr) {
-      this.snackBar.open('Error: Usuario no autenticado', 'Cerrar', { duration: 3000 });
-      return;
-    }
-
-    const user = JSON.parse(userStr);
-    if (!user.id) {
-      this.snackBar.open('Error: ID de usuario no válido', 'Cerrar', { duration: 3000 });
-      return;
-    }
-
-    this.resultsService.create({
-      orderItemId,
-      valor,
-      unidad: unidad || undefined,
-      createdById: user.id
-    }).subscribe({
-      next: () => {
-        this.snackBar.open('Resultado registrado exitosamente', 'Cerrar', { duration: 3000 });
-        if (this.order) {
-          this.loadOrder(this.order.id);
-        }
-      },
-      error: (error: any) => {
-        this.snackBar.open(error.error?.message || 'Error al registrar el resultado', 'Cerrar', { duration: 3000 });
-        console.error(error);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.resultsService.create({
+          orderItemId,
+          valorGenerado: result.valorGenerado,
+          observaciones: result.observaciones
+        }).subscribe({
+          next: () => {
+            this.snackBar.open('Resultado registrado exitosamente', 'Cerrar', { duration: 3000 });
+            if (this.order) {
+              this.loadOrder(this.order.id);
+            }
+          },
+          error: (error: any) => {
+            this.snackBar.open(error.error?.message || 'Error al registrar el resultado', 'Cerrar', { duration: 3000 });
+            // console.error(error);
+          }
+        });
       }
     });
   }
@@ -181,21 +186,32 @@ export class OrderDetailComponent implements OnInit {
   onCloseOrder(): void {
     if (!this.order) return;
 
-    if (confirm('¿Está seguro de que desea cerrar esta orden? Después de cerrarla podrá enviar las notificaciones.')) {
-      this.ordersService.update(this.order.id, { estado: 'CERRADA' }).subscribe({
-        next: (closedOrder: any) => {
-          this.snackBar.open('Orden cerrada exitosamente', 'Cerrar', { duration: 3000 });
-          this.order = closedOrder;
-        },
-        error: (error: any) => {
-          this.snackBar.open(
-            error.error?.message || 'Error al cerrar la orden',
-            'Cerrar',
-            { duration: 3000 }
-          );
-        }
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Cerrar Orden',
+        message: 'Â¿EstÃ¡ seguro de que desea cerrar esta orden? DespuÃ©s de cerrarla podrÃ¡ enviar las notificaciones.',
+        color: 'primary'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ordersService.update(this.order!.id, { estado: 'CERRADA' }).subscribe({
+          next: (closedOrder: any) => {
+            this.snackBar.open('Orden cerrada exitosamente', 'Cerrar', { duration: 3000 });
+            this.order = closedOrder;
+          },
+          error: (error: any) => {
+            this.snackBar.open(
+              error.error?.message || 'Error al cerrar la orden',
+              'Cerrar',
+              { duration: 3000 }
+            );
+          }
+        });
+      }
+    });
   }
 
   onSendEmail(): void {
@@ -203,7 +219,7 @@ export class OrderDetailComponent implements OnInit {
 
     if (!this.canSendNotifications()) {
       this.snackBar.open(
-        'Solo se pueden enviar notificaciones de órdenes en estado CERRADA',
+        'Solo se pueden enviar notificaciones de Ã³rdenes en estado CERRADA',
         'Cerrar',
         { duration: 5000 }
       );
@@ -241,7 +257,7 @@ export class OrderDetailComponent implements OnInit {
 
     if (!this.canSendNotifications()) {
       this.snackBar.open(
-        'Solo se pueden enviar notificaciones de órdenes en estado CERRADA',
+        'Solo se pueden enviar notificaciones de Ã³rdenes en estado CERRADA',
         'Cerrar',
         { duration: 5000 }
       );
@@ -273,4 +289,50 @@ export class OrderDetailComponent implements OnInit {
       }
     });
   }
+
+  // ============ REPORTES PDF ============
+
+  downloadRequestSheet(): void {
+    if (!this.order) return;
+    
+    this.snackBar.open('Generando Hoja de PeticiÃ³n...', 'Cerrar', { duration: 2000 });
+    this.reportsService.downloadOrdenPeticion(this.order.id).subscribe({
+      next: (blob) => {
+        this.reportsService.downloadFile(blob, `peticion-${this.order!.codigo}.pdf`);
+      },
+      error: (error) => {
+        this.snackBar.open('Error al generar la hoja de peticiÃ³n', 'Cerrar', { duration: 3000 });
+        // console.error(error);
+      }
+    });
+  }
+
+  downloadFullReport(): void {
+    if (!this.order) return;
+    
+    this.snackBar.open('Generando Reporte Completo...', 'Cerrar', { duration: 2000 });
+    this.reportsService.downloadReporteOrden(this.order.id).subscribe({
+      next: (blob) => {
+        this.reportsService.downloadFile(blob, `reporte-${this.order!.codigo}.pdf`);
+      },
+      error: (error) => {
+        this.snackBar.open('Error al generar el reporte completo', 'Cerrar', { duration: 3000 });
+        // console.error(error);
+      }
+    });
+  }
+
+  downloadResultReport(resultId: string, examName: string): void {
+    this.snackBar.open('Generando Reporte de Resultado...', 'Cerrar', { duration: 2000 });
+    this.reportsService.downloadReporteResultado(resultId).subscribe({
+      next: (blob) => {
+        this.reportsService.downloadFile(blob, `resultado-${examName}.pdf`);
+      },
+      error: (error) => {
+        this.snackBar.open('Error al generar el reporte individual (Â¿AÃºn no validado?)', 'Cerrar', { duration: 4000 });
+        // console.error(error);
+      }
+    });
+  }
 }
+

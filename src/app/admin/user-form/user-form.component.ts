@@ -53,10 +53,6 @@ export class UserFormComponent implements OnInit {
 
     this.initForm();
     this.loadRoles();
-
-    if (this.isEditMode && this.userId) {
-      this.loadUser(this.userId);
-    }
   }
 
   initForm(): void {
@@ -76,10 +72,13 @@ export class UserFormComponent implements OnInit {
     this.rolesService.getAll().subscribe({
       next: (roles: Role[]) => {
         this.roles = roles;
+        if (this.isEditMode && this.userId) {
+          this.loadUser(this.userId);
+        }
       },
       error: (error: any) => {
         this.snackBar.open('Error al cargar roles', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        // console.error(error);
       }
     });
   }
@@ -89,18 +88,25 @@ export class UserFormComponent implements OnInit {
     this.usersService.getById(id).subscribe({
       next: (user) => {
         this.user = user;
+        const mappedRoleIds = user.roles
+          .map(roleName => {
+            const foundRole = this.roles.find(r => r.name === roleName);
+            return foundRole ? foundRole.id : null;
+          })
+          .filter(id => id !== null);
+
         this.userForm.patchValue({
           nombres: user.nombres,
           apellidos: user.apellidos || '',
           email: user.email,
-          roleIds: user.roles.map(ur => ur.roleId)
+          roleIds: mappedRoleIds
         });
         this.loading = false;
       },
       error: (error) => {
         this.loading = false;
         this.snackBar.open('Error al cargar el usuario', 'Cerrar', { duration: 3000 });
-        console.error(error);
+        // console.error(error);
         this.router.navigate(['/admin/users']);
       }
     });
@@ -117,30 +123,30 @@ export class UserFormComponent implements OnInit {
     const formValue = this.userForm.value;
 
     if (this.isEditMode && this.userId) {
-      const updateDto: UpdateUserDto = {
+      const updateDto: Partial<UpdateUserDto> = {
         nombres: formValue.nombres,
         apellidos: formValue.apellidos,
-        email: formValue.email,
-        roleIds: formValue.roleIds
+        email: formValue.email
       };
 
-      if (formValue.password) {
-        // Backend UpdateUserDto does not support password right now.
-        // We will ignore it for now or assume a separate endpoint will be built.
-      }
-
-      forkJoin({
+      const observables: any = {
         user: this.usersService.update(this.userId, updateDto),
         roles: this.usersService.replaceRoles(this.userId, formValue.roleIds)
-      }).subscribe({
+      };
+
+      if (formValue.password && formValue.password.length >= 6) {
+        observables.password = this.usersService.updatePassword(this.userId, formValue.password);
+      }
+
+      forkJoin(observables).subscribe({
         next: () => {
-          this.snackBar.open('Usuario y roles actualizados exitosamente', 'Cerrar', { duration: 3000 });
+          this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/admin/users']);
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open('Error al actualizar el usuario o sus roles', 'Cerrar', { duration: 3000 });
-          console.error(error);
+          this.snackBar.open('Error al actualizar el usuario', 'Cerrar', { duration: 3000 });
+          // console.error(error);
         }
       });
     } else {
@@ -160,7 +166,7 @@ export class UserFormComponent implements OnInit {
         error: (error: any) => {
           this.loading = false;
           this.snackBar.open('Error al crear el usuario', 'Cerrar', { duration: 3000 });
-          console.error(error);
+          // console.error(error);
         }
       });
     }
@@ -170,3 +176,4 @@ export class UserFormComponent implements OnInit {
     this.router.navigate(['/admin/users']);
   }
 }
+

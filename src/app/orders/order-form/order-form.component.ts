@@ -52,11 +52,22 @@ export class OrderFormComponent implements OnInit {
   availableExams: Exam[] = [];
   selectedExams: Exam[] = [];
   loading = false;
+  isEditMode = false;
+  orderId?: string;
+  orderStatus?: string;
 
   ngOnInit(): void {
     this.initForm();
-    this.loadExams();
     this.setupPatientAutocomplete();
+
+    this.orderId = this.route.snapshot.paramMap.get('id') || undefined;
+    this.isEditMode = !!this.orderId;
+
+    if (this.isEditMode && this.orderId) {
+      this.loadOrderForEdit(this.orderId);
+    } else {
+      this.loadExams();
+    }
   }
 
   initForm(): void {
@@ -92,27 +103,23 @@ export class OrderFormComponent implements OnInit {
   }
 
   onPatientSelected(patient: Patient): void {
+    if (this.isEditMode) return;
     this.orderForm.patchValue({
       patientId: patient.id
     });
   }
 
   loadExams(): void {
-    console.log('Iniciando carga de exámenes...');
     this.loading = true;
     this.examsService.getAll().subscribe({
       next: (exams) => {
-        console.log('Respuesta del backend:', exams);
-        // Filtrar solo exámenes activos en el cliente
         this.availableExams = exams.filter(exam => exam.estado === 'ACTIVE');
-        console.log('Exámenes activos disponibles:', this.availableExams);
         this.loading = false;
         if (this.availableExams.length === 0) {
           this.snackBar.open('No hay exámenes activos disponibles', 'Cerrar', { duration: 5000 });
         }
       },
       error: (error) => {
-        console.error('Error completo:', error);
         this.loading = false;
         this.snackBar.open(
           error.error?.message || 'Error al cargar exámenes. Verifique que el backend esté corriendo',
@@ -123,11 +130,48 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
+  loadOrderForEdit(id: string): void {
+    this.loading = true;
+    this.ordersService.getById(id).subscribe({
+      next: (order) => {
+        this.orderStatus = order.estado;
+        
+        // Disable non-editable fields
+        this.orderForm.get('patientSearch')?.disable();
+        this.orderForm.get('patientId')?.disable();
+        
+        // Patch editable fields
+        this.orderForm.patchValue({
+          patientSearch: order.patient,
+          patientId: order.patientId,
+          prioridad: order.prioridad,
+          observaciones: order.observaciones
+        });
+
+        // Set selected exams purely for visual representation (we won't submit them)
+        this.availableExams = order.items.map(item => item.exam);
+        order.items.forEach(item => {
+          this.selectedExams.push(item.exam);
+          this.examIdsArray.push(this.fb.control(item.exam.id));
+        });
+        
+        this.loading = false;
+      },
+      error: (error) => {
+        this.loading = false;
+        this.snackBar.open('Error al cargar la orden para edición', 'Cerrar', { duration: 3000 });
+        this.router.navigate(['/orders']);
+      }
+    });
+  }
+
   isExamSelected(exam: Exam): boolean {
     return this.selectedExams.some(e => e.id === exam.id);
   }
 
   toggleExam(exam: Exam): void {
+    if (this.isEditMode) return; // Prevent changing exams in edit mode
+
     const index = this.selectedExams.findIndex(e => e.id === exam.id);
 
     if (index >= 0) {
@@ -140,6 +184,8 @@ export class OrderFormComponent implements OnInit {
   }
 
   removeExam(exam: Exam): void {
+    if (this.isEditMode) return; // Prevent changing exams in edit mode
+    
     const index = this.selectedExams.findIndex(e => e.id === exam.id);
     if (index >= 0) {
       this.selectedExams.splice(index, 1);
@@ -148,12 +194,12 @@ export class OrderFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.orderForm.invalid) {
+    if (this.orderForm.invalid && !this.isEditMode) {
       this.snackBar.open('Por favor complete todos los campos requeridos', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    if (this.selectedExams.length === 0) {
+    if (this.selectedExams.length === 0 && !this.isEditMode) {
       this.snackBar.open('Debe seleccionar al menos un examen', 'Cerrar', { duration: 3000 });
       return;
     }
@@ -174,30 +220,48 @@ export class OrderFormComponent implements OnInit {
 
     this.loading = true;
 
-    const createDto: CreateOrderDto = {
-      patientId: this.orderForm.value.patientId,
-      prioridad: this.orderForm.value.prioridad,
-      observaciones: this.orderForm.value.observaciones || undefined,
-      createdById: user.id,
-      items: this.selectedExams.map(exam => ({
-        examId: exam.id
-      }))
-    };
+    if (this.isEditMode && this.orderId) {
+      const updateDto = {
+        prioridad: this.orderForm.get('prioridad')?.value,
+        observaciones: this.orderForm.get('observaciones')?.value
+      };
 
-    this.ordersService.create(createDto).subscribe({
-      next: (order) => {
-        this.snackBar.open('Orden creada exitosamente', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/orders', order.id]);
-      },
-      error: (error) => {
-        this.loading = false;
-        this.snackBar.open('Error al crear la orden', 'Cerrar', { duration: 3000 });
-        console.error(error);
-      }
-    });
+      this.ordersService.update(this.orderId, updateDto).subscribe({
+        next: (order) => {
+          this.snackBar.open('Orden actualizada exitosamente', 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/orders', order.id]);
+        },
+        error: (error) => {
+          this.loading = false;
+          this.snackBar.open('Error al actualizar la orden', 'Cerrar', { duration: 3000 });
+        }
+      });
+    } else {
+      const createDto: CreateOrderDto = {
+        patientId: this.orderForm.get('patientId')?.value,
+        prioridad: this.orderForm.get('prioridad')?.value,
+        observaciones: this.orderForm.get('observaciones')?.value || undefined,
+        examIds: this.selectedExams.map(exam => exam.id)
+      };
+
+      this.ordersService.create(createDto).subscribe({
+        next: (order) => {
+          this.snackBar.open('Orden creada exitosamente', 'Cerrar', { duration: 3000 });
+          this.router.navigate(['/orders', order.id]);
+        },
+        error: (error) => {
+          this.loading = false;
+          this.snackBar.open('Error al crear la orden', 'Cerrar', { duration: 3000 });
+        }
+      });
+    }
   }
 
   onCancel(): void {
-    this.router.navigate(['/orders']);
+    if (this.isEditMode && this.orderId) {
+      this.router.navigate(['/orders', this.orderId]);
+    } else {
+      this.router.navigate(['/orders']);
+    }
   }
 }

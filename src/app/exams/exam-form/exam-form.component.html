@@ -20,13 +20,13 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Categoría</mat-label>
-            <mat-select formControlName="categoria">
-              <mat-option *ngFor="let cat of categorias" [value]="cat.value">
-                {{cat.label}}
+            <mat-select formControlName="categoriaId">
+              <mat-option *ngFor="let cat of categorias" [value]="cat.id">
+                {{cat.name}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="examForm.get('categoria')?.touched">
-              {{getErrorMessage('categoria')}}
+            <mat-error *ngIf="examForm.get('categoriaId')?.touched">
+              {{getErrorMessage('categoriaId')}}
             </mat-error>
           </mat-form-field>
         </div>
@@ -57,23 +57,46 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Tiempo de Resultado (días)</mat-label>
-            <input matInput type="number" formControlName="tiempoResultadoDias" placeholder="1">
-            <mat-icon matPrefix>schedule</mat-icon>
-            <mat-error *ngIf="examForm.get('tiempoResultadoDias')?.touched">
-              {{getErrorMessage('tiempoResultadoDias')}}
-            </mat-error>
+            <mat-label>Unidad de Medida</mat-label>
+            <mat-select formControlName="unidadId">
+              <mat-option>Ninguna</mat-option>
+              <mat-option *ngFor="let unit of unidades" [value]="unit.id">
+                {{unit.name}} ({{unit.code}})
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Preparación del Paciente</mat-label>
-          <textarea matInput formControlName="preparacion" rows="3"
-                    placeholder="Instrucciones de preparación (ej: 8 horas de ayuno)"></textarea>
-        </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Muestra</mat-label>
+            <mat-select formControlName="muestraId">
+              <mat-option>Ninguna</mat-option>
+              <mat-option *ngFor="let m of tiposMuestra" [value]="m.id">
+                {{m.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Técnica</mat-label>
+            <mat-select formControlName="tecnicaId">
+              <mat-option>Ninguna</mat-option>
+              <mat-option *ngFor="let t of tecnicas" [value]="t.id">
+                {{t.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <div class="checkbox-container">
-          <mat-checkbox [checked]="examForm.get('estado')?.value === 'ACTIVE'"
+          <mat-checkbox formControlName="esCualitativo">
+            Examen Cualitativo (solo arroja un texto, sin medidas cuantitativas)
+          </mat-checkbox>
+        </div>
+
+        <div class="checkbox-container">
+          <mat-checkbox formControlName="estado" [checked]="examForm.get('estado')?.value === 'ACTIVE'"
                         (change)="examForm.patchValue({ estado: $event.checked ? 'ACTIVE' : 'INACTIVE' })">
             Examen activo
           </mat-checkbox>
@@ -89,6 +112,144 @@
           </button>
         </div>
       </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Configuración de Valores (Solo en Edición) -->
+  <mat-card *ngIf="isEditMode" class="config-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h2>{{ examForm.get('esCualitativo')?.value ? 'Valores Predefinidos (Cualitativo)' : 'Rangos de Referencia (Cuantitativo)' }}</h2>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <!-- SECCIÓN CUALITATIVA -->
+      <div *ngIf="examForm.get('esCualitativo')?.value" class="qualitative-section">
+        <form [formGroup]="valueForm" (ngSubmit)="onAddPredefinedValue()" class="add-value-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Nuevo Valor Predefinido</mat-label>
+            <input matInput formControlName="valor" placeholder="Ej: Positivo, Reactivo, Normal">
+          </mat-form-field>
+          <button mat-mini-fab color="primary" type="submit" [disabled]="valueForm.invalid || loading" matTooltip="Agregar Valor">
+            <mat-icon>add</mat-icon>
+          </button>
+        </form>
+
+        <mat-list>
+          <div mat-subheader>Valores Existentes</div>
+          <mat-list-item *ngFor="let val of predefinedValues">
+            <span matListItemTitle>{{ val.valor }}</span>
+            <button mat-icon-button matListItemMeta color="warn" (click)="onRemovePredefinedValue(val.id)" matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+          <mat-list-item *ngIf="predefinedValues.length === 0">
+            <span matListItemTitle class="empty-text">No hay valores predefinidos configurados.</span>
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+      <!-- SECCIÓN CUANTITATIVA -->
+      <div *ngIf="!examForm.get('esCualitativo')?.value" class="quantitative-section">
+        
+        <form [formGroup]="rangeForm" (ngSubmit)="onAddReferenceRange()" class="add-range-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Sexo</mat-label>
+              <mat-select formControlName="sexo">
+                <mat-option [value]="null">Ambos</mat-option>
+                <mat-option value="M">Masculino</mat-option>
+                <mat-option value="F">Femenino</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Edad Min (Años)</mat-label>
+              <input matInput type="number" formControlName="edadMin">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Edad Max (Años)</mat-label>
+              <input matInput type="number" formControlName="edadMax">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Valor Min</mat-label>
+              <input matInput type="number" step="0.01" formControlName="valorMin">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="small-field">
+              <mat-label>Valor Max</mat-label>
+              <input matInput type="number" step="0.01" formControlName="valorMax">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row align-end">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Texto de Referencia (Opcional)</mat-label>
+              <input matInput formControlName="textoReferencia" placeholder="Ej: < 100 mg/dL">
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="add-range-btn">
+              <mat-icon>add</mat-icon> Agregar Rango
+            </button>
+          </div>
+        </form>
+
+        <mat-divider style="margin: 20px 0;"></mat-divider>
+
+        <table mat-table [dataSource]="referenceRanges" class="mat-elevation-z1 ranges-table">
+          <!-- Sexo Column -->
+          <ng-container matColumnDef="sexo">
+            <th mat-header-cell *matHeaderCellDef> Sexo </th>
+            <td mat-cell *matCellDef="let r"> {{ r.sexo || 'Ambos' }} </td>
+          </ng-container>
+
+          <!-- Edades Column -->
+          <ng-container matColumnDef="edades">
+            <th mat-header-cell *matHeaderCellDef> Edades </th>
+            <td mat-cell *matCellDef="let r"> 
+              {{ r.edadMin != null ? r.edadMin : '0' }} - {{ r.edadMax != null ? r.edadMax : '∞' }} años
+            </td>
+          </ng-container>
+
+          <!-- Valores Column -->
+          <ng-container matColumnDef="valores">
+            <th mat-header-cell *matHeaderCellDef> Rango Normal </th>
+            <td mat-cell *matCellDef="let r"> 
+              <span *ngIf="r.valorMin != null || r.valorMax != null">
+                {{ r.valorMin != null ? r.valorMin : '-∞' }} a {{ r.valorMax != null ? r.valorMax : '∞' }}
+              </span>
+              <span *ngIf="r.valorMin == null && r.valorMax == null">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Texto Column -->
+          <ng-container matColumnDef="texto">
+            <th mat-header-cell *matHeaderCellDef> Texto Libre </th>
+            <td mat-cell *matCellDef="let r"> {{ r.textoReferencia || '-' }} </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-col"></th>
+            <td mat-cell *matCellDef="let r" class="actions-col">
+              <button mat-icon-button color="warn" (click)="onRemoveReferenceRange(r.id)" matTooltip="Eliminar rango">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="rangeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: rangeColumns;"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-text" colspan="5">No se han configurado rangos de referencia.</td>
+          </tr>
+        </table>
+      </div>
+
     </mat-card-content>
   </mat-card>
 </div>

@@ -67,5 +67,9 @@ export class OrderItemsService {
   result(id: string, data: RegisterOrderItemResultDto): Observable<OrderItem> {
     return this.http.post<OrderItem>(`${this.apiUrl}/${id}/result`, data);
   }
+
+  updateStatus(id: string, data: { status: string }): Observable<OrderItem> {
+    return this.http.put<OrderItem>(`${this.apiUrl}/${id}/status`, data);
+  }
 }
 

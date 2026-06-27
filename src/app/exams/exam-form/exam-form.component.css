@@ -66,3 +66,67 @@ mat-form-field {
     font-size: 1.5rem;
   }
 }
+
+/* Config Section Styles */
+.config-card {
+  margin-top: 24px;
+  border-left: 4px solid #329d9c;
+}
+
+.qualitative-section,
+.quantitative-section {
+  margin-top: 16px;
+}
+
+.add-value-form {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.add-value-form mat-form-field {
+  flex: 1;
+  max-width: 400px;
+}
+
+.add-range-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.small-field {
+  flex: 1;
+  min-width: 120px;
+}
+
+.align-end {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-range-btn {
+  height: 48px;
+  margin-bottom: 22px;
+}
+
+.ranges-table {
+  width: 100%;
+}
+
+.actions-col {
+  width: 60px;
+  text-align: right;
+}
+
+.empty-text {
+  text-align: center;
+  color: #757575;
+  font-style: italic;
+  padding: 24px !important;
+}
+

@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ExamsService, Exam } from '../../core/services/exams.service';
+import { CatalogsService } from '../../core/services/catalogs.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 
@@ -39,6 +40,7 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
 })
 export class ExamListComponent implements OnInit {
   private examsService = inject(ExamsService);
+  private catalogsService = inject(CatalogsService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
@@ -46,12 +48,13 @@ export class ExamListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'codigo', 'nombre', 'categoria', 'precio', 'activo', 'actions'];
   dataSource = new MatTableDataSource<Exam>([]);
   loading = true;
+  categoryMap: { [key: string]: string } = {};
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    this.loadExams();
+    this.loadCatalogsAndExams();
   }
 
   ngAfterViewInit(): void {
@@ -59,8 +62,21 @@ export class ExamListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  loadExams(): void {
+  loadCatalogsAndExams(): void {
     this.loading = true;
+    this.catalogsService.getCategories().subscribe({
+      next: (categories) => {
+        categories.forEach(c => this.categoryMap[c.id] = c.name);
+        this.loadExams();
+      },
+      error: () => {
+        this.snackBar.open('Error al cargar catálogos', 'Cerrar', { duration: 3000 });
+        this.loadExams(); // Fallback
+      }
+    });
+  }
+
+  loadExams(): void {
     this.examsService.getAll().subscribe({
       next: (exams) => {
         this.dataSource.data = exams;
@@ -71,6 +87,10 @@ export class ExamListComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  getCategoryName(categoryId: string): string {
+    return this.categoryMap[categoryId] || 'Sin categoría';
   }
 
   applyFilter(event: Event): void {

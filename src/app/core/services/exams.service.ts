@@ -3,14 +3,38 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+export interface ExamReferenceRange {
+  id: string;
+  examId: string;
+  sexo?: 'M' | 'F' | 'OTRO';
+  edadMin?: number;
+  edadMax?: number;
+  valorMin?: number;
+  valorMax?: number;
+  textoReferencia?: string;
+}
+
+export interface PredefinedValue {
+  id: string;
+  examId: string;
+  valor: string;
+}
+
 export interface Exam {
   id: string;
   codigo: string;
   nombre: string;
   descripcion?: string;
   precio: number;
-  tipoMuestra?: string;
+  esCualitativo: boolean;
+  categoryId: string;
+  unitId?: string;
+  sampleTypeId?: string;
+  tecnicaId?: string;
+  tipoResultado: string;
   estado: 'ACTIVE' | 'INACTIVE';
+  referenceRanges?: ExamReferenceRange[];
+  predefinedValues?: PredefinedValue[];
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -20,7 +44,11 @@ export interface CreateExamDto {
   nombre: string;
   descripcion?: string;
   precio: number;
-  tipoMuestra?: string;
+  esCualitativo?: boolean;
+  categoriaId: string;
+  unidadId?: string;
+  muestraId?: string;
+  tecnicaId?: string;
 }
 
 export interface UpdateExamDto extends Partial<CreateExamDto> {
@@ -59,5 +87,26 @@ export class ExamsService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  addReferenceRange(examId: string, range: any): Observable<ExamReferenceRange> {
+    const payload = {
+      ...range,
+      edadMinAnios: range.edadMin,
+      edadMaxAnios: range.edadMax
+    };
+    return this.http.post<ExamReferenceRange>(`${this.apiUrl}/${examId}/reference-ranges`, payload);
+  }
+
+  removeReferenceRange(examId: string, rangeId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${examId}/reference-ranges/${rangeId}`);
+  }
+
+  addPredefinedValue(examId: string, value: { valor: string }): Observable<PredefinedValue> {
+    return this.http.post<PredefinedValue>(`${this.apiUrl}/${examId}/predefined-values`, value);
+  }
+
+  removePredefinedValue(examId: string, valueId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${examId}/predefined-values/${valueId}`);
   }
 }
