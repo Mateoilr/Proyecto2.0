@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +30,7 @@ import { ValidateResultDialogComponent } from '../../shared/components/validate-
     MatButtonModule,
     MatIconModule,
     MatTableModule,
+    MatExpansionModule,
     MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -47,8 +49,9 @@ export class ResultListComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   results: Result[] = [];
+  groupedResults: { examName: string; examCode: string; results: Result[] }[] = [];
   loading = true;
-  displayedColumns = ['orden', 'paciente', 'examen', 'valor', 'estado', 'fecha', 'acciones'];
+  displayedColumns = ['orden', 'paciente', 'valor', 'estado', 'fecha', 'acciones'];
 
   searchControl = new FormControl('');
   estadoControl = new FormControl('');
@@ -85,6 +88,7 @@ export class ResultListComponent implements OnInit {
     this.resultsService.getAll(params).subscribe({
       next: (results) => {
         this.results = results;
+        this.groupResultsByExam();
         this.loading = false;
       },
       error: (error) => {
@@ -103,6 +107,22 @@ export class ResultListComponent implements OnInit {
       'ENTREGADO': '#2196f3'
     };
     return colors[estado] || '#666';
+  }
+
+  groupResultsByExam(): void {
+    const map = new Map<string, { examName: string; examCode: string; results: Result[] }>();
+
+    for (const result of this.results) {
+      const examName = result.orderItem?.exam?.nombre || 'Desconocido';
+      const examCode = result.orderItem?.exam?.codigo || '';
+
+      if (!map.has(examName)) {
+        map.set(examName, { examName, examCode, results: [] });
+      }
+      map.get(examName)!.results.push(result);
+    }
+
+    this.groupedResults = Array.from(map.values());
   }
 
   onEdit(result: Result): void {
