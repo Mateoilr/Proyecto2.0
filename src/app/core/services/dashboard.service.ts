@@ -9,6 +9,7 @@ export interface DashboardStats {
   activeExams?: number;
   registeredPatients?: number;
   recentActivity?: any[];
+}
 
 @Injectable({
   providedIn: 'root'
