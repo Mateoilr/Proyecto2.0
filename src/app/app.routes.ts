@@ -51,6 +51,10 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent
   },
+  {
+    path: 'download/:type/:id',
+    loadComponent: () => import('./reports/download-report/download-report.component').then(m => m.DownloadReportComponent)
+  },
 
   // RUTAS PROTEGIDAS CON LAYOUT
   {

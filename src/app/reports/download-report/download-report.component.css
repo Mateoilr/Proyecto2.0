@@ -1,0 +1,96 @@
+.download-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20px;
+}
+
+.download-card {
+  max-width: 500px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+mat-card-header {
+  background-color: #1a3a5c;
+  color: white;
+  padding: 24px;
+}
+
+.header-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.header-icon mat-icon {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-card-title {
+  color: white !important;
+  font-size: 1.2rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
+}
+
+::ng-deep .mat-mdc-card-subtitle {
+  color: #a8c4e0 !important;
+}
+
+.content-body {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.loading-state, .error-state, .action-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loading-state p, .error-state p, .action-state p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.small-text {
+  font-size: 0.9rem !important;
+  color: #7f8c8d !important;
+  margin-top: 8px !important;
+}
+
+.error-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+}
+
+.success-icon {
+  color: #27ae60;
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+}
+
+.actions-container {
+  padding: 0 24px 32px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.actions-container button {
+  width: 100%;
+  padding: 8px 0;
+  font-size: 1.1rem;
+}
