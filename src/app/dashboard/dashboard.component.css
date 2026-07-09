@@ -184,3 +184,61 @@
     grid-template-columns: 1fr;
   }
 }
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  gap: 1.5rem;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.activity-icon.create { background-color: #4CAF50; }
+.activity-icon.update { background-color: #FF9800; }
+.activity-icon.delete { background-color: #F44336; }
+.activity-icon.login { background-color: #2196F3; }
+.activity-icon.logout { background-color: #9E9E9E; }
+
+.activity-details {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-desc {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.activity-time {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+@media (max-width: 600px) {
+  .activity-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+

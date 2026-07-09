@@ -51,9 +51,33 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="empty-state">
+        <div class="empty-state" *ngIf="!recentActivity || recentActivity.length === 0">
           <mat-icon>inbox</mat-icon>
           <p>No hay actividad reciente para mostrar</p>
+        </div>
+        
+        <div class="activity-list" *ngIf="recentActivity && recentActivity.length > 0">
+          <div class="activity-item" *ngFor="let activity of recentActivity">
+            <div class="activity-icon" [ngClass]="activity.accion.toLowerCase()">
+              <mat-icon *ngIf="activity.accion === 'CREATE'">add_circle</mat-icon>
+              <mat-icon *ngIf="activity.accion === 'UPDATE'">edit</mat-icon>
+              <mat-icon *ngIf="activity.accion === 'DELETE'">delete</mat-icon>
+              <mat-icon *ngIf="activity.accion === 'LOGIN'">login</mat-icon>
+              <mat-icon *ngIf="activity.accion === 'LOGOUT'">logout</mat-icon>
+            </div>
+            <div class="activity-details">
+              <p class="activity-desc">
+                <strong>{{ activity.user.nombres }} {{ activity.user.apellidos }}</strong> 
+                <span *ngIf="activity.accion === 'CREATE'">creó</span>
+                <span *ngIf="activity.accion === 'UPDATE'">actualizó</span>
+                <span *ngIf="activity.accion === 'DELETE'">eliminó</span>
+                <span *ngIf="activity.accion === 'LOGIN'">inició sesión</span>
+                <span *ngIf="activity.accion === 'LOGOUT'">cerró sesión</span>
+                un registro en <strong>{{ activity.entidad }}</strong>
+              </p>
+              <span class="activity-time">{{ activity.createdAt | date:'medium' }}</span>
+            </div>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>

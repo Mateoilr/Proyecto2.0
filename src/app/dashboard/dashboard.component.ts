@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
 
   stats: StatCard[] = [];
   quickActions: QuickAction[] = [];
+  recentActivity: any[] = [];
 
   get currentUser() {
     return this.authService.getUser();
@@ -136,6 +137,10 @@ export class DashboardComponent implements OnInit {
         if (isMedico) {
           this.updateStat('Por Validar', data.pendingResults || 0);
           this.updateStat('Órdenes', data.ordersToday || 0);
+        }
+
+        if (data.recentActivity) {
+          this.recentActivity = data.recentActivity;
         }
       },
       error: (error) => {
