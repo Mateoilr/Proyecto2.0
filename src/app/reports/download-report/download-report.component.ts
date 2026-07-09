@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-download-report',
@@ -16,38 +18,60 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class DownloadReportComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  private snackBar = inject(MatSnackBar);
 
   type: string | null = null;
   id: string | null = null;
   token: string | null = null;
   pdfUrl: string | null = null;
   isRedirecting = true;
+  blobUrl: string | null = null;
 
   ngOnInit(): void {
-    this.type = this.route.snapshot.paramMap.get('type'); // 'order' o 'result'
+    this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
     this.token = this.route.snapshot.queryParamMap.get('token');
 
     if (this.type && this.id && this.token) {
       this.pdfUrl = `${environment.apiUrl}/reports/public/${this.type}/${this.id}/pdf?token=${this.token}`;
-      
-      // Auto redirect
-      setTimeout(() => {
-        window.location.href = this.pdfUrl!;
-        
-        // Mostrar botón si no cambia de página
-        setTimeout(() => {
-          this.isRedirecting = false;
-        }, 2000);
-      }, 1000);
+      this.fetchAndDownloadPdf();
     } else {
       this.isRedirecting = false;
     }
   }
 
+  fetchAndDownloadPdf(): void {
+    if (!this.pdfUrl) return;
+
+    this.http.get(this.pdfUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        this.blobUrl = URL.createObjectURL(blob);
+        this.triggerDownload(this.blobUrl);
+        this.isRedirecting = false;
+      },
+      error: (err) => {
+        console.error('Error downloading PDF', err);
+        this.isRedirecting = false;
+        this.snackBar.open('Error al descargar el PDF. El enlace puede haber expirado.', 'Cerrar', { duration: 5000 });
+      }
+    });
+  }
+
   downloadPdf(): void {
-    if (this.pdfUrl) {
-      window.location.href = this.pdfUrl;
+    if (this.blobUrl) {
+      this.triggerDownload(this.blobUrl);
+    } else {
+      this.fetchAndDownloadPdf();
     }
+  }
+
+  private triggerDownload(url: string): void {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Reporte_${this.type === 'order' ? 'Orden' : 'Resultado'}_${new Date().getTime()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 }
