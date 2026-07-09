@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit {
     // 1. Configurar Tarjetas de Métricas (Stats)
     if (isAdmin) {
       this.stats = [
-        { title: 'Ã“rdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Órdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
         { title: 'Resultados Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' },
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' },
         { title: 'Exámenes Activos', value: 0, icon: 'science', color: '#748799', route: '/exams' }
@@ -81,12 +81,12 @@ export class DashboardComponent implements OnInit {
       ];
     } else if (isSecretario) {
       this.stats = [
-        { title: 'Ã“rdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' }
       ];
       this.quickActions = [
         { title: 'Nueva Orden', description: 'Crear una orden de exámenes', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
-        { title: 'Ver Ã“rdenes', description: 'Consultar órdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
+        { title: 'Ver Órdenes', description: 'Consultar órdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
         { title: 'Nuevo Paciente', description: 'Registrar un paciente', icon: 'person_add', color: '#4A90E2', route: '/patients/new' }
       ];
     } else if (isLaboratorista) {
@@ -95,17 +95,17 @@ export class DashboardComponent implements OnInit {
         { title: 'Resultados Ptes.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' }
       ];
       this.quickActions = [
-        { title: 'Ver Ã“rdenes', description: 'Consultar órdenes', icon: 'search', color: '#329d9c', route: '/orders' },
+        { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'search', color: '#329d9c', route: '/orders' },
         { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#F29C38', route: '/results' }
       ];
     } else if (isMedico) {
       this.stats = [
         { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
-        { title: 'Ã“rdenes', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
+        { title: 'Órdenes', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
       ];
       this.quickActions = [
         { title: 'Validar Resultados', description: 'Aprobar o rechazar resultados', icon: 'fact_check', color: '#F29C38', route: '/results' },
-        { title: 'Ver Ã“rdenes', description: 'Consultar información', icon: 'search', color: '#329d9c', route: '/orders' }
+        { title: 'Ver Órdenes', description: 'Consultar información', icon: 'search', color: '#329d9c', route: '/orders' }
       ];
     }
 
@@ -117,14 +117,14 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getStats().subscribe({
       next: (data) => {
         if (isAdmin) {
-          this.updateStat('Ã“rdenes Totales', data.ordersToday || 0); // Asumiendo que el backend retorna todo, si return ordersToday es el nombre, dependemos de lo q mande el back. Nota: backend devuelve ordersToday.
+          this.updateStat('Órdenes Totales', data.ordersToday || 0); // Asumiendo que el backend retorna todo, si return ordersToday es el nombre, dependemos de lo q mande el back. Nota: backend devuelve ordersToday.
           this.updateStat('Resultados Pend.', data.pendingResults || 0);
           this.updateStat('Pacientes', data.registeredPatients || 0);
           this.updateStat('Exámenes Activos', data.activeExams || 0);
         }
         
         if (isSecretario) {
-          this.updateStat('Ã“rdenes Hoy', data.ordersToday || 0);
+          this.updateStat('Órdenes Hoy', data.ordersToday || 0);
           this.updateStat('Pacientes', data.registeredPatients || 0);
         }
         
@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit {
         
         if (isMedico) {
           this.updateStat('Por Validar', data.pendingResults || 0);
-          this.updateStat('Ã“rdenes', data.ordersToday || 0);
+          this.updateStat('Órdenes', data.ordersToday || 0);
         }
       },
       error: (error) => {
