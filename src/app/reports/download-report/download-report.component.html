@@ -1,14 +1,14 @@
-<div class="download-container">
-  <mat-card class="download-card">
+<div class="download-container" [ngClass]="{'pdf-mode': !!blobUrl}">
+  <mat-card class="download-card" [ngClass]="{'expanded-card': !!blobUrl}">
     <mat-card-header>
       <div mat-card-avatar class="header-icon">
         <mat-icon color="primary">science</mat-icon>
       </div>
       <mat-card-title>Laboratorio Clínico AG</mat-card-title>
-      <mat-card-subtitle>Descarga de Resultados</mat-card-subtitle>
+      <mat-card-subtitle>Resultados de Laboratorio</mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content class="content-body">
+    <mat-card-content class="content-body" [ngClass]="{'no-padding': !!blobUrl}">
       <ng-container *ngIf="!pdfUrl">
         <div class="error-state">
           <mat-icon color="warn">error_outline</mat-icon>
@@ -18,20 +18,20 @@
       </ng-container>
 
       <ng-container *ngIf="pdfUrl">
-        <div *ngIf="isRedirecting" class="loading-state">
+        <div *ngIf="isRedirecting && !blobUrl" class="loading-state">
           <mat-spinner diameter="48"></mat-spinner>
-          <p>Preparando su documento...</p>
-          <p class="small-text">Si la descarga no inicia automáticamente en un momento, haga clic en el botón inferior.</p>
+          <p>Obteniendo su documento...</p>
         </div>
 
-        <div *ngIf="!isRedirecting" class="action-state">
-          <mat-icon class="success-icon">check_circle</mat-icon>
-          <p>Su documento está listo para descargar.</p>
+        <div *ngIf="blobUrl" class="pdf-viewer-container">
+          <object [data]="safeBlobUrl" type="application/pdf" width="100%" height="100%">
+            <p>Su navegador no soporta la previsualización de PDFs. Puede descargarlo haciendo clic en el botón inferior.</p>
+          </object>
         </div>
       </ng-container>
     </mat-card-content>
 
-    <mat-card-actions *ngIf="pdfUrl && !isRedirecting" class="actions-container">
+    <mat-card-actions *ngIf="blobUrl" class="actions-container">
       <button mat-raised-button color="primary" (click)="downloadPdf()">
         <mat-icon>download</mat-icon>
         Descargar PDF

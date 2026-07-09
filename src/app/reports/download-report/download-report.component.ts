@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-download-report',
@@ -20,6 +21,7 @@ export class DownloadReportComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private snackBar = inject(MatSnackBar);
+  private sanitizer = inject(DomSanitizer);
 
   type: string | null = null;
   id: string | null = null;
@@ -27,6 +29,7 @@ export class DownloadReportComponent implements OnInit {
   pdfUrl: string | null = null;
   isRedirecting = true;
   blobUrl: string | null = null;
+  safeBlobUrl: SafeResourceUrl | null = null;
 
   ngOnInit(): void {
     this.type = this.route.snapshot.paramMap.get('type');
@@ -47,13 +50,13 @@ export class DownloadReportComponent implements OnInit {
     this.http.get(this.pdfUrl, { responseType: 'blob' }).subscribe({
       next: (blob) => {
         this.blobUrl = URL.createObjectURL(blob);
-        this.triggerDownload(this.blobUrl);
+        this.safeBlobUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.blobUrl);
         this.isRedirecting = false;
       },
       error: (err) => {
         console.error('Error downloading PDF', err);
         this.isRedirecting = false;
-        this.snackBar.open('Error al descargar el PDF. El enlace puede haber expirado.', 'Cerrar', { duration: 5000 });
+        this.snackBar.open('Error al obtener el PDF. El enlace puede haber expirado.', 'Cerrar', { duration: 5000 });
       }
     });
   }
