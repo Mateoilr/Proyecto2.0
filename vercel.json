@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build -- --configuration production",
-  "outputDirectory": "dist/syslab-frontend/browser",
+  "outputDirectory": "dist/laboratorioag-frontend/browser",
   "framework": "angular",
   "rewrites": [
     {
