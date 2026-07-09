@@ -161,5 +161,17 @@ export class DashboardComponent implements OnInit {
       this.router.navigate([route]);
     }
   }
+
+  translateEntity(entity: string): string {
+    const translations: { [key: string]: string } = {
+      'LabOrder': 'Orden de Laboratorio',
+      'Patient': 'Paciente',
+      'Result': 'Resultado',
+      'User': 'Usuario',
+      'Exam': 'Examen',
+      'OrderItem': 'Muestra/Prueba'
+    };
+    return translations[entity] || entity;
+  }
 }
 

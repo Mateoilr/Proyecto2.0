@@ -68,12 +68,12 @@
             <div class="activity-details">
               <p class="activity-desc">
                 <strong>{{ activity.user.nombres }} {{ activity.user.apellidos }}</strong> 
-                <span *ngIf="activity.accion === 'CREATE'">creó</span>
-                <span *ngIf="activity.accion === 'UPDATE'">actualizó</span>
-                <span *ngIf="activity.accion === 'DELETE'">eliminó</span>
-                <span *ngIf="activity.accion === 'LOGIN'">inició sesión</span>
-                <span *ngIf="activity.accion === 'LOGOUT'">cerró sesión</span>
-                un registro en <strong>{{ activity.entidad }}</strong>
+                <span *ngIf="activity.accion === 'CREATE'"> creó </span>
+                <span *ngIf="activity.accion === 'UPDATE'"> actualizó </span>
+                <span *ngIf="activity.accion === 'DELETE'"> eliminó </span>
+                <span *ngIf="activity.accion === 'LOGIN'"> inició sesión</span>
+                <span *ngIf="activity.accion === 'LOGOUT'"> cerró sesión</span>
+                <span *ngIf="activity.accion !== 'LOGIN' && activity.accion !== 'LOGOUT'"> un registro en <strong>{{ translateEntity(activity.entidad) }}</strong></span>
               </p>
               <span class="activity-time">{{ activity.createdAt | date:'medium' }}</span>
             </div>
