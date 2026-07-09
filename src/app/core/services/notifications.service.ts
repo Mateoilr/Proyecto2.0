@@ -12,9 +12,12 @@ export interface SendWhatsAppDto {
 }
 
 export interface NotificationResponse {
-  success: boolean;
+  success?: boolean;
   message: string;
   auditLogId?: string;
+  url?: string;
+  destinatario?: string;
+  orden?: string;
 }
 
 @Injectable({

@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
 
   get greeting(): string {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Buenos dÃ­as';
+    if (hour < 12) return 'Buenos días';
     if (hour < 18) return 'Buenas tardes';
     return 'Buenas noches';
   }
@@ -65,19 +65,19 @@ export class DashboardComponent implements OnInit {
     const isLaboratorista = roles.includes('LABORATORISTA');
     const isMedico = roles.includes('MEDICO') || roles.includes('VALIDADOR');
 
-    // 1. Configurar Tarjetas de MÃ©tricas (Stats)
+    // 1. Configurar Tarjetas de Métricas (Stats)
     if (isAdmin) {
       this.stats = [
         { title: 'Ã“rdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
         { title: 'Resultados Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' },
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' },
-        { title: 'ExÃ¡menes Activos', value: 0, icon: 'science', color: '#748799', route: '/exams' }
+        { title: 'Exámenes Activos', value: 0, icon: 'science', color: '#748799', route: '/exams' }
       ];
       this.quickActions = [
         { title: 'Nueva Orden', description: 'Crear una orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
-        { title: 'Ver Usuarios', description: 'GestiÃ³n de sistema', icon: 'manage_accounts', color: '#F29C38', route: '/admin/users' },
-        { title: 'AuditorÃ­a', description: 'Log de actividades', icon: 'history', color: '#4A90E2', route: '/admin/audit' },
-        { title: 'ExÃ¡menes', description: 'GestiÃ³n de exÃ¡menes', icon: 'science', color: '#748799', route: '/exams' }
+        { title: 'Ver Usuarios', description: 'Gestión de sistema', icon: 'manage_accounts', color: '#F29C38', route: '/admin/users' },
+        { title: 'Auditoría', description: 'Log de actividades', icon: 'history', color: '#4A90E2', route: '/admin/audit' },
+        { title: 'Exámenes', description: 'Gestión de exámenes', icon: 'science', color: '#748799', route: '/exams' }
       ];
     } else if (isSecretario) {
       this.stats = [
@@ -85,18 +85,18 @@ export class DashboardComponent implements OnInit {
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' }
       ];
       this.quickActions = [
-        { title: 'Nueva Orden', description: 'Crear una orden de exÃ¡menes', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
-        { title: 'Ver Ã“rdenes', description: 'Consultar Ã³rdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
+        { title: 'Nueva Orden', description: 'Crear una orden de exámenes', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
+        { title: 'Ver Ã“rdenes', description: 'Consultar órdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
         { title: 'Nuevo Paciente', description: 'Registrar un paciente', icon: 'person_add', color: '#4A90E2', route: '/patients/new' }
       ];
     } else if (isLaboratorista) {
       this.stats = [
-        { title: 'ExÃ¡menes en Proceso', value: 0, icon: 'science', color: '#329d9c', route: '/orders' },
+        { title: 'Exámenes en Proceso', value: 0, icon: 'science', color: '#329d9c', route: '/orders' },
         { title: 'Resultados Ptes.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' }
       ];
       this.quickActions = [
-        { title: 'Ver Ã“rdenes', description: 'Consultar Ã³rdenes', icon: 'search', color: '#329d9c', route: '/orders' },
-        { title: 'Ingresar Resultados', description: 'Registrar anÃ¡lisis', icon: 'biotech', color: '#F29C38', route: '/results' }
+        { title: 'Ver Ã“rdenes', description: 'Consultar órdenes', icon: 'search', color: '#329d9c', route: '/orders' },
+        { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#F29C38', route: '/results' }
       ];
     } else if (isMedico) {
       this.stats = [
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
       ];
       this.quickActions = [
         { title: 'Validar Resultados', description: 'Aprobar o rechazar resultados', icon: 'fact_check', color: '#F29C38', route: '/results' },
-        { title: 'Ver Ã“rdenes', description: 'Consultar informaciÃ³n', icon: 'search', color: '#329d9c', route: '/orders' }
+        { title: 'Ver Ã“rdenes', description: 'Consultar información', icon: 'search', color: '#329d9c', route: '/orders' }
       ];
     }
 
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
           this.updateStat('Ã“rdenes Totales', data.ordersToday || 0); // Asumiendo que el backend retorna todo, si return ordersToday es el nombre, dependemos de lo q mande el back. Nota: backend devuelve ordersToday.
           this.updateStat('Resultados Pend.', data.pendingResults || 0);
           this.updateStat('Pacientes', data.registeredPatients || 0);
-          this.updateStat('ExÃ¡menes Activos', data.activeExams || 0);
+          this.updateStat('Exámenes Activos', data.activeExams || 0);
         }
         
         if (isSecretario) {
@@ -129,7 +129,7 @@ export class DashboardComponent implements OnInit {
         }
         
         if (isLaboratorista) {
-          this.updateStat('ExÃ¡menes en Proceso', data.ordersToday || 0); // Mapeo temporal si el back no provee "en proceso"
+          this.updateStat('Exámenes en Proceso', data.ordersToday || 0); // Mapeo temporal si el back no provee "en proceso"
           this.updateStat('Resultados Ptes.', data.pendingResults || 0);
         }
         

@@ -20,7 +20,7 @@ import { MessageListComponent } from '../message-list/message-list.component';
 import { TypingIndicatorComponent } from '../typing-indicator/typing-indicator.component';
 import { QuickRepliesComponent, QuickReply } from '../quick-replies/quick-replies.component';
 
-const STORAGE_KEY = 'syslab_chat_history';
+const STORAGE_KEY = 'laboratorioag_chat_history';
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -92,7 +92,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.loadHistory();
     if (this.messages.length === 0) {
-      this.addBotMessage('¡Hola! Soy el asistente virtual de SysLab. ¿En qué puedo ayudarte?\n\n1️⃣ Horarios de atención\n2️⃣ Precios y cotización\n3️⃣ Requisitos y ayuno\n\nEscribe el número o tu consulta.');
+      this.addBotMessage('¡Hola! Soy el asistente virtual de Laboratorioag. ¿En qué puedo ayudarte?\n\n1️⃣ Horarios de atención\n2️⃣ Precios y cotización\n3️⃣ Requisitos y ayuno\n\nEscribe el número o tu consulta.');
     }
   }
 
@@ -214,7 +214,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
   clearHistory(): void {
     this.messages = [];
     localStorage.removeItem(STORAGE_KEY);
-    this.addBotMessage('¡Hola! Soy el asistente virtual de SysLab. ¿En qué puedo ayudarte?\n\n1️⃣ Horarios de atención\n2️⃣ Precios y cotización\n3️⃣ Requisitos y ayuno\n\nEscribe el número o tu consulta.');
+    this.addBotMessage('¡Hola! Soy el asistente virtual de Laboratorioag. ¿En qué puedo ayudarte?\n\n1️⃣ Horarios de atención\n2️⃣ Precios y cotización\n3️⃣ Requisitos y ayuno\n\nEscribe el número o tu consulta.');
   }
 }
 

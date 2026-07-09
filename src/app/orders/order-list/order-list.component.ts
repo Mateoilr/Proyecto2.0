@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -70,7 +70,7 @@ export class OrderListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.snackBar.open('Error al cargar Ã³rdenes', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al cargar órdenes', 'Cerrar', { duration: 3000 });
         this.loading = false;
       }
     });
@@ -125,7 +125,7 @@ export class OrderListComponent implements OnInit {
     // Only allow if order has a patient with a phone number
     const phone = order.patient?.contacto;
     if (!phone) {
-      this.snackBar.open('El paciente no tiene un nÃºmero de contacto registrado', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('El paciente no tiene un número de contacto registrado', 'Cerrar', { duration: 3000 });
       return;
     }
 
@@ -133,7 +133,7 @@ export class OrderListComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Enviar por WhatsApp',
-        message: `Â¿Desea enviar los resultados por WhatsApp al nÃºmero ${phone}?`,
+        message: `Â¿Desea enviar los resultados por WhatsApp al número ${phone}?`,
         confirmText: 'Enviar',
         color: 'primary'
       }
@@ -144,8 +144,13 @@ export class OrderListComponent implements OnInit {
         this.snackBar.open('Enviando WhatsApp...', '', { duration: 2000 });
         const formattedPhone = this.notificationsService.formatPhoneNumber(phone);
         this.notificationsService.sendOrderByWhatsApp(order.id, formattedPhone).subscribe({
-          next: () => {
-            this.snackBar.open('WhatsApp enviado exitosamente', 'Cerrar', { duration: 3000 });
+          next: (response: any) => {
+            if (response.url) {
+              window.open(response.url, '_blank');
+              this.snackBar.open('Abriendo WhatsApp...', 'Cerrar', { duration: 3000 });
+            } else {
+              this.snackBar.open('WhatsApp enviado exitosamente', 'Cerrar', { duration: 3000 });
+            }
           },
           error: (error) => {
             // console.error(error);

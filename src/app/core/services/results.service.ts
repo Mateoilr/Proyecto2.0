@@ -73,7 +73,7 @@ export class ResultsService {
     return this.http.patch<Result>(`${this.apiUrl}/${id}/deliver`, {});
   }
 
-  update(id: string, data: Partial<CreateResultDto> & { interpretacion?: string }): Observable<Result> {
+  update(id: string, data: { valorGenerado?: string; observaciones?: string }): Observable<Result> {
     return this.http.patch<Result>(`${this.apiUrl}/${id}`, data);
   }
 }

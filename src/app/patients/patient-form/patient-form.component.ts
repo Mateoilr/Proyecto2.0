@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PatientsService, Patient } from '../../core/services/patients.service';
+import { documentValidator } from '../../shared/validators/document.validator';
 
 @Component({
   selector: 'app-patient-form',
@@ -69,14 +70,18 @@ export class PatientFormComponent implements OnInit {
   initForm(): void {
     this.patientForm = this.fb.group({
       tipoDocumento: ['CEDULA', Validators.required],
-      documento: ['', [Validators.required, Validators.pattern(/^[0-9]{10,13}$/)]],
+      documento: ['', [Validators.required, documentValidator('tipoDocumento')]],
       nombres: ['', [Validators.required, Validators.minLength(2)]],
       apellidos: ['', [Validators.required, Validators.minLength(2)]],
       fechaNacimiento: ['', Validators.required],
       sexo: ['', Validators.required],
       direccion: [''],
-      contacto: ['', Validators.pattern(/^[0-9]{9,10}$/)],
+      contacto: ['', [Validators.pattern(/^[0-9]{10}$/)]],
       email: ['', Validators.email]
+    });
+
+    this.patientForm.get('tipoDocumento')?.valueChanges.subscribe(() => {
+      this.patientForm.get('documento')?.updateValueAndValidity();
     });
   }
 
@@ -121,7 +126,11 @@ export class PatientFormComponent implements OnInit {
           this.router.navigate(['/patients']);
         },
         error: (error) => {
-          this.snackBar.open(error.message || 'Error al guardar paciente', 'Cerrar', { duration: 3000 });
+          if (error.status === 409) {
+            this.snackBar.open('Ya existe un paciente con ese documento (creado simultáneamente). Por favor, recargue la página o revise la lista.', 'Cerrar', { duration: 5000 });
+          } else {
+            this.snackBar.open(error.error?.message || error.message || 'Error al guardar paciente', 'Cerrar', { duration: 3000 });
+          }
           this.loading = false;
         }
       });
@@ -151,12 +160,15 @@ export class PatientFormComponent implements OnInit {
     if (control?.hasError('minlength')) {
       return `Mínimo ${control.getError('minlength').requiredLength} caracteres`;
     }
+    if (control?.hasError('invalidDocument')) {
+      const tipo = this.patientForm.get('tipoDocumento')?.value;
+      if (tipo === 'CEDULA') return 'La cédula ingresada es inválida';
+      if (tipo === 'RUC') return 'El RUC ingresado es inválido';
+      return 'Formato de documento inválido';
+    }
     if (control?.hasError('pattern')) {
-      if (fieldName === 'documento') {
-        return 'Documento inválido (10-13 dígitos)';
-      }
       if (fieldName === 'contacto') {
-        return 'Teléfono inválido (9-10 dígitos)';
+        return 'El teléfono debe tener exactamente 10 dígitos';
       }
     }
     return '';

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -54,10 +54,10 @@ export class ResultFormComponent implements OnInit {
   initForm(): void {
     this.resultForm = this.fb.group({
       valor: ['', Validators.required],
-      unidad: [''],
-      valorMin: [''],
-      valorMax: [''],
-      interpretacion: ['']
+      unidad: [{ value: '', disabled: true }],
+      valorMin: [{ value: '', disabled: true }],
+      valorMax: [{ value: '', disabled: true }],
+      interpretacion: [{ value: '', disabled: true }]
     });
   }
 
@@ -66,8 +66,25 @@ export class ResultFormComponent implements OnInit {
     this.resultsService.getById(id).subscribe({
       next: (result) => {
         this.result = result;
+        
+        let min = '';
+        let max = '';
+        let unit = '';
+        
+        if (result.orderItem?.exam) {
+           unit = (result.orderItem.exam as any).unit?.simbolo || '';
+           const ranges = (result.orderItem.exam as any).referenceRanges || [];
+           if (ranges.length > 0) {
+             min = ranges[0].valorMin ?? '';
+             max = ranges[0].valorMax ?? '';
+           }
+        }
+
         this.resultForm.patchValue({
           valor: result.valor,
+          unidad: unit,
+          valorMin: min,
+          valorMax: max,
           interpretacion: result.interpretacion || ''
         });
         this.loading = false;
@@ -75,7 +92,6 @@ export class ResultFormComponent implements OnInit {
       error: (error: any) => {
         this.loading = false;
         this.snackBar.open('Error al cargar el resultado', 'Cerrar', { duration: 3000 });
-        // console.error(error);
         this.router.navigate(['/results']);
       }
     });
@@ -89,19 +105,23 @@ export class ResultFormComponent implements OnInit {
 
     if (this.isEditMode && this.resultId) {
       this.loading = true;
-      this.resultsService.update(this.resultId, this.resultForm.value).subscribe({
+      const updateDto = {
+        valorGenerado: this.resultForm.get('valor')?.value
+      };
+      
+      this.resultsService.update(this.resultId, updateDto).subscribe({
         next: () => {
+          this.loading = false;
           this.snackBar.open('Resultado actualizado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/results']);
         },
         error: (error: any) => {
           this.loading = false;
           this.snackBar.open(error.error?.message || 'Error al actualizar resultado', 'Cerrar', { duration: 3000 });
-          // console.error(error);
         }
       });
     } else {
-      this.snackBar.open('La creaciÃ³n directa de resultados no estÃ¡ permitida', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('La creación directa de resultados no está permitida', 'Cerrar', { duration: 3000 });
     }
   }
 

@@ -17,19 +17,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Error del lado del servidor
         switch (error.status) {
           case 401:
-            errorMessage = 'No autorizado. Por favor inicia sesiÃ³n nuevamente.';
+            errorMessage = 'No autorizado. Por favor inicia sesión nuevamente.';
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             router.navigate(['/login']);
             break;
           case 403:
-            errorMessage = 'No tienes permisos para realizar esta acciÃ³n.';
+            errorMessage = 'No tienes permisos para realizar esta acción.';
             break;
           case 404:
             errorMessage = 'Recurso no encontrado.';
             break;
           case 500:
-            errorMessage = 'Error del servidor. Por favor intenta mÃ¡s tarde.';
+            errorMessage = 'Error del servidor. Por favor intenta más tarde.';
             break;
           default:
             errorMessage = error.error?.message || `Error: ${error.status}`;

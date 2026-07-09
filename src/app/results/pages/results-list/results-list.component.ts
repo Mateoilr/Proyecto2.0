@@ -30,12 +30,12 @@ export class ResultsListComponent implements OnInit {
   displayedColumns: string[] = ['orden', 'paciente', 'examen', 'valor', 'estado', 'fecha', 'acciones'];
 
   pendingResults = [
-    { id: 1, orden: 'ORD-001', paciente: 'Juan PÃ©rez', examen: 'Hemograma', valor: '14.5 g/dL', estado: 'REGISTRADO', fecha: '2026-01-16 10:30' },
-    { id: 2, orden: 'ORD-002', paciente: 'MarÃ­a GarcÃ­a', examen: 'Glucosa', valor: '95 mg/dL', estado: 'REGISTRADO', fecha: '2026-01-16 11:00' }
+    { id: 1, orden: 'ORD-001', paciente: 'Juan Pérez', examen: 'Hemograma', valor: '14.5 g/dL', estado: 'REGISTRADO', fecha: '2026-01-16 10:30' },
+    { id: 2, orden: 'ORD-002', paciente: 'María García', examen: 'Glucosa', valor: '95 mg/dL', estado: 'REGISTRADO', fecha: '2026-01-16 11:00' }
   ];
 
   validatedResults = [
-    { id: 3, orden: 'ORD-003', paciente: 'Pedro LÃ³pez', examen: 'TSH', valor: '2.5 mU/L', estado: 'VALIDADO', fecha: '2026-01-16 09:00' },
+    { id: 3, orden: 'ORD-003', paciente: 'Pedro López', examen: 'TSH', valor: '2.5 mU/L', estado: 'VALIDADO', fecha: '2026-01-16 09:00' },
     { id: 4, orden: 'ORD-004', paciente: 'Ana Torres', examen: 'Creatinina', valor: '0.9 mg/dL', estado: 'VALIDADO', fecha: '2026-01-15 15:30' }
   ];
 

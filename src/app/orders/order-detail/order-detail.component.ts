@@ -133,8 +133,8 @@ export class OrderDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        title: 'Confirmar EliminaciÃ³n',
-        message: 'Â¿EstÃ¡ seguro de que desea eliminar esta orden?',
+        title: 'Confirmar Eliminación',
+        message: '¿Estás seguro? Se borrarán todos los resultados vinculados a esta orden.',
         color: 'warn'
       }
     });
@@ -190,7 +190,7 @@ export class OrderDetailComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Cerrar Orden',
-        message: 'Â¿EstÃ¡ seguro de que desea cerrar esta orden? DespuÃ©s de cerrarla podrÃ¡ enviar las notificaciones.',
+        message: 'Â¿Está seguro de que desea cerrar esta orden? Después de cerrarla podrá enviar las notificaciones.',
         color: 'primary'
       }
     });
@@ -219,7 +219,7 @@ export class OrderDetailComponent implements OnInit {
 
     if (!this.canSendNotifications()) {
       this.snackBar.open(
-        'Solo se pueden enviar notificaciones de Ã³rdenes en estado CERRADA',
+        'Solo se pueden enviar notificaciones de órdenes en estado CERRADA',
         'Cerrar',
         { duration: 5000 }
       );
@@ -257,7 +257,7 @@ export class OrderDetailComponent implements OnInit {
 
     if (!this.canSendNotifications()) {
       this.snackBar.open(
-        'Solo se pueden enviar notificaciones de Ã³rdenes en estado CERRADA',
+        'Solo se pueden enviar notificaciones de órdenes en estado CERRADA',
         'Cerrar',
         { duration: 5000 }
       );
@@ -275,8 +275,13 @@ export class OrderDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(phoneNumber => {
       if (phoneNumber && this.order) {
         this.notificationsService.sendOrderByWhatsApp(this.order.id, phoneNumber).subscribe({
-          next: (response) => {
-            this.snackBar.open('Orden enviada por WhatsApp exitosamente', 'Cerrar', { duration: 3000 });
+          next: (response: any) => {
+            if (response.url) {
+              window.open(response.url, '_blank');
+              this.snackBar.open('Abriendo WhatsApp...', 'Cerrar', { duration: 3000 });
+            } else {
+              this.snackBar.open('Orden enviada por WhatsApp exitosamente', 'Cerrar', { duration: 3000 });
+            }
           },
           error: (error) => {
             this.snackBar.open(
@@ -295,13 +300,13 @@ export class OrderDetailComponent implements OnInit {
   downloadRequestSheet(): void {
     if (!this.order) return;
     
-    this.snackBar.open('Generando Hoja de PeticiÃ³n...', 'Cerrar', { duration: 2000 });
+    this.snackBar.open('Generando Hoja de Petición...', 'Cerrar', { duration: 2000 });
     this.reportsService.downloadOrdenPeticion(this.order.id).subscribe({
       next: (blob) => {
         this.reportsService.downloadFile(blob, `peticion-${this.order!.codigo}.pdf`);
       },
       error: (error) => {
-        this.snackBar.open('Error al generar la hoja de peticiÃ³n', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al generar la hoja de petición', 'Cerrar', { duration: 3000 });
         // console.error(error);
       }
     });
@@ -329,7 +334,7 @@ export class OrderDetailComponent implements OnInit {
         this.reportsService.downloadFile(blob, `resultado-${examName}.pdf`);
       },
       error: (error) => {
-        this.snackBar.open('Error al generar el reporte individual (Â¿AÃºn no validado?)', 'Cerrar', { duration: 4000 });
+        this.snackBar.open('Error al generar el reporte individual (Â¿Aún no validado?)', 'Cerrar', { duration: 4000 });
         // console.error(error);
       }
     });

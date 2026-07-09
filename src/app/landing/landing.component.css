@@ -592,7 +592,7 @@ section {
 }
 
 .toggle-icon {
-  background-color: #309D9D;
+  background-color: var(--primary-color);
   color: white;
   width: 20px;
   height: 20px;

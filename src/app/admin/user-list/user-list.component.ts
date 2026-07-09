@@ -140,7 +140,7 @@ export class UserListComponent implements OnInit {
       width: '400px',
       data: {
         title: `Confirmar ${action}`,
-        message: `Â¿EstÃ¡ seguro de que desea ${action} este usuario?`,
+        message: `Â¿Está seguro de que desea ${action} este usuario?`,
         color: newStatus === 'ACTIVE' ? 'primary' : 'warn'
       }
     });
@@ -165,8 +165,8 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        title: 'Confirmar EliminaciÃ³n',
-        message: 'Â¿EstÃ¡ seguro de que desea eliminar este usuario?',
+        title: 'Confirmar Eliminación',
+        message: 'Â¿Está seguro de que desea eliminar este usuario?',
         color: 'warn'
       }
     });

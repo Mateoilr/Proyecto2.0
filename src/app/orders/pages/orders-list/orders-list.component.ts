@@ -34,9 +34,9 @@ export class OrdersListComponent implements OnInit {
   displayedColumns: string[] = ['codigo', 'paciente', 'examenes', 'estado', 'prioridad', 'fecha', 'acciones'];
 
   orders = [
-    { id: 1, codigo: 'ORD-2026-001', paciente: 'Juan PÃ©rez', examenes: 3, estado: 'EN_PROCESO', prioridad: 'NORMAL', fecha: '2026-01-16 08:30' },
-    { id: 2, codigo: 'ORD-2026-002', paciente: 'MarÃ­a GarcÃ­a', examenes: 2, estado: 'VALIDADO', prioridad: 'URGENTE', fecha: '2026-01-16 09:15' },
-    { id: 3, codigo: 'ORD-2026-003', paciente: 'Pedro LÃ³pez', examenes: 5, estado: 'CREADA', prioridad: 'NORMAL', fecha: '2026-01-16 10:00' },
+    { id: 1, codigo: 'ORD-2026-001', paciente: 'Juan Pérez', examenes: 3, estado: 'EN_PROCESO', prioridad: 'NORMAL', fecha: '2026-01-16 08:30' },
+    { id: 2, codigo: 'ORD-2026-002', paciente: 'María García', examenes: 2, estado: 'VALIDADO', prioridad: 'URGENTE', fecha: '2026-01-16 09:15' },
+    { id: 3, codigo: 'ORD-2026-003', paciente: 'Pedro López', examenes: 5, estado: 'CREADA', prioridad: 'NORMAL', fecha: '2026-01-16 10:00' },
     { id: 4, codigo: 'ORD-2026-004', paciente: 'Ana Torres', examenes: 1, estado: 'ENTREGADO', prioridad: 'NORMAL', fecha: '2026-01-15 14:20' }
   ];
 

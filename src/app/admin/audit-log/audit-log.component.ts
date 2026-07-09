@@ -95,7 +95,7 @@ export class AuditLogComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        this.snackBar.open('Error al cargar logs de auditorÃ­a', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al cargar logs de auditoría', 'Cerrar', { duration: 3000 });
         // console.error(error);
       }
     });

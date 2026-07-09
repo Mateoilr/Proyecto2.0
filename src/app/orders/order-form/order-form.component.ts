@@ -228,6 +228,7 @@ export class OrderFormComponent implements OnInit {
 
       this.ordersService.update(this.orderId, updateDto).subscribe({
         next: (order) => {
+          this.loading = false;
           this.snackBar.open('Orden actualizada exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/orders', order.id]);
         },
@@ -246,6 +247,7 @@ export class OrderFormComponent implements OnInit {
 
       this.ordersService.create(createDto).subscribe({
         next: (order) => {
+          this.loading = false;
           this.snackBar.open('Orden creada exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/orders', order.id]);
         },

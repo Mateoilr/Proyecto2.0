@@ -2,7 +2,40 @@
 
 @include mat.core();
 
-$custom-primary: mat.define-palette(mat.$teal-palette, 700);  // Ajusta el tono para que sea cercano a #309D9D
+$ag-primary-palette: (
+  50: #e6f3f3,
+  100: #c1e2e1,
+  200: #97cecc,
+  300: #6dbab7,
+  400: #4ea9a7,
+  500: #329d9c,
+  600: #2d9594,
+  700: #268b8a,
+  800: #208180,
+  900: #146f6e,
+  A100: #9affff,
+  A200: #67ffff,
+  A400: #34ffff,
+  A700: #1bffff,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: rgba(black, 0.87),
+  )
+);
+
+$custom-primary: mat.define-palette($ag-primary-palette, 500);
 $custom-accent: mat.define-palette(mat.$amber-palette);
 $custom-warn: mat.define-palette(mat.$red-palette);
 

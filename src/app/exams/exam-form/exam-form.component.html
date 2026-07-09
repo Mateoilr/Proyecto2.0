@@ -22,7 +22,7 @@
             <mat-label>Categoría</mat-label>
             <mat-select formControlName="categoriaId">
               <mat-option *ngFor="let cat of categorias" [value]="cat.id">
-                {{cat.name}}
+                {{ $any(cat).nombre }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="examForm.get('categoriaId')?.touched">
@@ -61,7 +61,7 @@
             <mat-select formControlName="unidadId">
               <mat-option>Ninguna</mat-option>
               <mat-option *ngFor="let unit of unidades" [value]="unit.id">
-                {{unit.name}} ({{unit.code}})
+                {{ $any(unit).descripcion ? $any(unit).descripcion + ' (' + $any(unit).simbolo + ')' : $any(unit).simbolo }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -73,7 +73,7 @@
             <mat-select formControlName="muestraId">
               <mat-option>Ninguna</mat-option>
               <mat-option *ngFor="let m of tiposMuestra" [value]="m.id">
-                {{m.name}}
+                {{ $any(m).nombre }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -83,7 +83,7 @@
             <mat-select formControlName="tecnicaId">
               <mat-option>Ninguna</mat-option>
               <mat-option *ngFor="let t of tecnicas" [value]="t.id">
-                {{t.name}}
+                {{ $any(t).nombre }}
               </mat-option>
             </mat-select>
           </mat-form-field>
