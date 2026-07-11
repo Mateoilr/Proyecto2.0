@@ -36,7 +36,7 @@ mat-card-title {
 
 .full-width-table {
   width: 100%;
-  background: white;
+  background: var(--card-bg);
 }
 
 .user-cell {
@@ -47,7 +47,7 @@ mat-card-title {
 
 .user-email {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .role-chip,
@@ -83,10 +83,12 @@ mat-card-title {
 
 .empty-state p,
 .loading-state p {
-  color: #999;
+  color: var(--text-color-muted);
   font-size: 16px;
 }
 
 button[mat-icon-button] {
   margin-right: 4px;
 }
+
+

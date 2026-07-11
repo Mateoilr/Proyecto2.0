@@ -33,8 +33,14 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: 'Administración',
+    icon: 'manage_accounts',
+    route: '/admin/users',
+    roles: ['ADMIN']
+  },
+  {
+    label: 'Configuración',
     icon: 'settings',
-    route: '/admin',
+    route: '/admin/settings',
     roles: ['ADMIN']
   }
 ];

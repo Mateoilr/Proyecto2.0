@@ -15,7 +15,7 @@ mat-card-header {
 mat-card-title h1 {
   margin: 0;
   font-size: 1.8rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .form-row {
@@ -94,7 +94,7 @@ mat-form-field {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
   padding: 16px;
   border-radius: 8px;
 }
@@ -125,8 +125,10 @@ mat-form-field {
 
 .empty-text {
   text-align: center;
-  color: #757575;
+  color: var(--text-color-muted);
   font-style: italic;
   padding: 24px !important;
 }
+
+
 

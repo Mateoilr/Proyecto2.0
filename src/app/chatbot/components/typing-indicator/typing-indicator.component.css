@@ -19,7 +19,7 @@
   display: inline-block;
   width: 7px;
   height: 7px;
-  background-color: #999;
+  background-color: var(--text-color-muted);
   border-radius: 50%;
   animation: bounce 1.4s infinite ease-in-out both;
 }
@@ -51,4 +51,6 @@
     transform: translateY(0);
   }
 }
+
+
 

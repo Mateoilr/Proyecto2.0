@@ -47,4 +47,16 @@ $custom-theme: mat.define-light-theme((
   ),
 ));
 
+$custom-dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+));
+
 @include mat.all-component-themes($custom-theme);
+
+.dark-theme {
+  @include mat.all-component-colors($custom-dark-theme);
+}

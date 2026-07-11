@@ -1,0 +1,59 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Configuración General del Sistema</h1>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="isLoading" style="display: flex; justify-content: center; padding: 2rem;">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <form *ngIf="!isLoading" [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del Laboratorio / Empresa</mat-label>
+            <input matInput formControlName="nombreEmpresa" placeholder="Ej. Laboratorio Clínico AG">
+            <mat-icon matPrefix>business</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono de Contacto</mat-label>
+            <input matInput formControlName="telefono" placeholder="Ej. +593 98 765 4321">
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Correo Electrónico (Remitente)</mat-label>
+            <input matInput type="email" formControlName="correoRemitente" placeholder="Ej. labagcue@gmail.com">
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Sitio Web</mat-label>
+            <input matInput formControlName="sitioWeb" placeholder="Ej. www.laboratorioag.com">
+            <mat-icon matPrefix>language</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección Física</mat-label>
+          <textarea matInput formControlName="direccion" rows="3" placeholder="Av. Principal 123 y Calle Secundaria, Cuenca"></textarea>
+          <mat-icon matPrefix>location_on</mat-icon>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid || isSaving">
+            <mat-icon>save</mat-icon>
+            {{ isSaving ? 'Guardando...' : 'Guardar Configuración' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

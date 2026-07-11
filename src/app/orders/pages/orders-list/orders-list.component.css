@@ -1,6 +1,6 @@
 .orders-container {
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
   min-height: 100vh;
 }
 
@@ -21,7 +21,7 @@
   margin: 0;
   font-size: 28px;
   font-weight: 500;
-  color: #1f2937;
+  color: var(--text-color);
 }
 
 .header-content h1 mat-icon {
@@ -47,13 +47,13 @@
 
 .orders-table {
   width: 100%;
-  background: white;
+  background: var(--card-bg);
 }
 
 .orders-table th {
-  background-color: #f9fafb;
+  background-color: var(--app-bg);
   font-weight: 600;
-  color: #374151;
+  color: var(--text-color-muted);
 }
 
 .orders-table td {
@@ -83,3 +83,5 @@ mat-card {
     width: 100%;
   }
 }
+
+

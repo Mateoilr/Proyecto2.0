@@ -76,18 +76,18 @@ mat-card-header mat-icon {
 
 .info-row .label {
   font-weight: 500;
-  color: #666;
+  color: var(--text-color-muted);
   min-width: 140px;
 }
 
 .info-row .value {
   flex: 1;
-  color: #333;
+  color: var(--text-color);
 }
 
 .full-width-table {
   width: 100%;
-  background: white;
+  background: var(--card-bg);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -99,11 +99,11 @@ mat-card-header mat-icon {
 
 .exam-code {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .text-muted {
-  color: #999;
+  color: var(--text-color-muted);
   font-style: italic;
 }
 
@@ -126,3 +126,5 @@ mat-card-header mat-icon {
 mat-divider {
   margin: 20px 0;
 }
+
+

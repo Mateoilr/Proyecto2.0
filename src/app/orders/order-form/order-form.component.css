@@ -37,13 +37,13 @@ mat-card-title {
 
 .patient-option span {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .selected-exams {
   margin-bottom: 20px;
   padding: 16px;
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
   border-radius: 8px;
 }
 
@@ -67,7 +67,7 @@ mat-card-title {
 
 .exam-card:hover {
   border-color: #1976d2;
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
 }
 
 .exam-card.selected {
@@ -86,7 +86,7 @@ mat-card-title {
 
 .exam-code {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
   margin-bottom: 8px;
 }
 
@@ -124,7 +124,7 @@ mat-error {
   justify-content: center;
   padding: 40px 20px;
   text-align: center;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .loading-exams mat-icon,
@@ -151,3 +151,5 @@ mat-error {
 .no-exams mat-icon {
   color: #ffc107;
 }
+
+

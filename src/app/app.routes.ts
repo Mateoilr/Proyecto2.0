@@ -123,7 +123,8 @@ export const routes: Routes = [
           { path: 'users', component: UserListComponent },
           { path: 'users/new', component: UserFormComponent },
           { path: 'users/:id/edit', component: UserFormComponent },
-          { path: 'audit', component: AuditLogComponent }
+          { path: 'audit', component: AuditLogComponent },
+          { path: 'settings', loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent) }
         ]
       }
     ]

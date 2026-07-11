@@ -33,7 +33,7 @@ mat-card-title {
 
 .full-width-table {
   width: 100%;
-  background: white;
+  background: var(--card-bg);
 }
 
 .exam-cell {
@@ -44,7 +44,7 @@ mat-card-title {
 
 .exam-code {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .valor-cell {
@@ -55,7 +55,7 @@ mat-card-title {
 
 .unidad {
   font-size: 12px;
-  color: #666;
+  color: var(--text-color-muted);
 }
 
 .estado-chip {
@@ -86,7 +86,7 @@ mat-card-title {
 }
 
 .loading-state p {
-  color: #666;
+  color: var(--text-color-muted);
   margin: 0;
 }
 
@@ -107,9 +107,11 @@ mat-card-title {
 }
 
 .mat-expansion-panel-header.mat-expanded {
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
 }
 
 button[mat-icon-button] {
   margin-right: 4px;
 }
+
+

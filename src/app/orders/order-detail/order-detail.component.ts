@@ -230,7 +230,7 @@ export class OrderDetailComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Enviar Orden por Email',
-        defaultEmail: this.order.patient.contacto || ''
+        defaultEmail: this.order.patient.email || ''
       }
     });
 

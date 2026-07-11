@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--app-bg);
   padding: 20px;
 }
 
@@ -88,12 +88,12 @@ mat-card-header {
 .loading-state p, .error-state p, .action-state p {
   margin: 0;
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: var(--text-color);
 }
 
 .small-text {
   font-size: 0.9rem !important;
-  color: #7f8c8d !important;
+  color: var(--text-color-muted) !important;
   margin-top: 8px !important;
 }
 
@@ -114,7 +114,7 @@ mat-card-header {
   padding: 16px 24px;
   display: flex;
   justify-content: center;
-  background-color: white;
+  background-color: var(--card-bg);
   border-top: 1px solid #eaeaea;
 }
 
@@ -124,3 +124,5 @@ mat-card-header {
   padding: 8px 0;
   font-size: 1.1rem;
 }
+
+

@@ -11,9 +11,9 @@
 }
 
 .sidenav {
-  width: 260px;
-  background: #fafafa;
-  border-right: 1px solid #e0e0e0;
+  width: 310px;
+  background: var(--sidenav-bg);
+  border-right: 1px solid var(--border-color);
   overflow-x: hidden;
 }
 
@@ -71,8 +71,8 @@ mat-nav-list a.active mat-icon {
   z-index: 100;
   
   /* Sobrescribimos el color primary por defecto de Angular Material */
-  background-color: #ffffff !important;
-  color: #333333 !important;
+  background-color: var(--toolbar-bg) !important;
+  color: var(--text-color) !important;
   
   /* Sombra más amplia, suave y moderna para separar del contenido */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
@@ -89,9 +89,9 @@ mat-nav-list a.active mat-icon {
   
   /* Diseño moderno con tu color sugerido */
   border-radius: 50px !important; 
-  background-color: #f4fbfb !important; /* Un fondo blanco-azulado muy sutil */
-  border: 1px solid #8fdbd9 !important; 
-  color: #329d9c !important;
+  background-color: var(--user-btn-bg) !important; /* Un fondo blanco-azulado muy sutil */
+  border: 1px solid var(--border-color) !important; 
+  color: var(--user-btn-text) !important;
   
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -144,10 +144,12 @@ mat-nav-list a.active mat-icon {
 }
 .content {
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
   min-height: calc(100vh - 64px);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
+
+

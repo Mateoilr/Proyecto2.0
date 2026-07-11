@@ -4,7 +4,7 @@
   --accent-color: #8fdbd9;
   --text-dark: #000000;
   --bg-white: #ffffff;
-  --bg-light: #f9f9f9;
+  --bg-light: var(--app-bg);
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   display: block;
   /* Habilitar un scroll suave si el navegador lo soporta xd */
@@ -126,7 +126,7 @@ section {
 .mini-login-window p {
   margin: 0 0 15px 0;
   font-size: 0.85rem;
-  color: #555;
+  color: var(--text-color-muted);
 }
 
 .btn-primary {
@@ -418,7 +418,7 @@ section {
   line-height: 1.6;
   max-width: 800px;
   margin: 0 auto 40px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .mission-vision-grid {
@@ -513,7 +513,7 @@ section {
 /* ================= SECCIÓN SERVICIOS ================= */
 .services-section {
   padding: 40px 0; 
-  background: #ffffff;
+  background: var(--card-bg);
   background-size: cover;       
   background-position: center;  
   background-repeat: no-repeat; 
@@ -536,7 +536,7 @@ section {
 }
 
 .service-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border-radius: 12px; 
   border: 1px solid #e0e0e0; 
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -570,12 +570,12 @@ section {
 .summary-info {
   padding: 15px;
   text-align: center;
-  background: #ffffff;
+  background: var(--card-bg);
 }
 
 .summary-info h3 {
   font-size: 1.1rem;
-  color: #333333; 
+  color: var(--text-color); 
   margin-top: 0;
   margin-bottom: 12px;
   font-weight: 700;
@@ -613,11 +613,11 @@ section {
 
 .service-content {
   padding: 0 15px 15px 15px;
-  color: #555555;
+  color: var(--text-color-muted);
   font-size: 0.9rem;
   line-height: 1.5;
   text-align: center;
-  background: #ffffff;
+  background: var(--card-bg);
   animation: fadeDown 0.3s ease-in-out; 
 }
 
@@ -708,7 +708,7 @@ section {
   text-align: center;
   padding-top: 20px;
   font-size: 0.9rem;
-  color: #888;
+  color: var(--text-color-muted);
 }
 
 /* ================= RESPONSIVE DE TABLETS (Extraído y ordenado) ================= */
@@ -905,3 +905,5 @@ section {
     gap: 15px !important; 
   }
 }
+
+

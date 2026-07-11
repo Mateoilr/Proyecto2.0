@@ -20,7 +20,7 @@
 .header-left h1 {
   margin: 0;
   font-size: 2rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .header-actions {
@@ -49,7 +49,7 @@
 }
 
 .info-item mat-icon {
-  color: #666;
+  color: var(--text-color-muted);
   margin-top: 0.2rem;
 }
 
@@ -60,18 +60,18 @@
 
 .info-item .label {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-color-muted);
   margin-bottom: 0.25rem;
 }
 
 .info-item .value {
   font-size: 1rem;
-  color: #333;
+  color: var(--text-color);
   font-weight: 500;
 }
 
 .tabs-container {
-  background: white;
+  background: var(--card-bg);
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -83,7 +83,7 @@
 
 .empty-message {
   text-align: center;
-  color: #999;
+  color: var(--text-color-muted);
   font-style: italic;
   padding: 3rem 0;
 }
@@ -118,3 +118,5 @@
     gap: 1rem;
   }
 }
+
+

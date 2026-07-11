@@ -81,6 +81,7 @@ export class NotificationsService {
    * Ejemplo: 0995492656 -> +593995492656
    */
   formatPhoneNumber(phone: string, countryCode: string = '+593'): string {
+    if (!phone) return '';
     // Remover espacios y guiones
     phone = phone.replace(/[\s-]/g, '');
 

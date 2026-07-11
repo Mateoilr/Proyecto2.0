@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,7 +34,7 @@ interface MenuItem {
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.css']
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -67,12 +67,39 @@ export class MainLayoutComponent {
       roles: ['ADMINISTRADOR', 'LABORATORISTA', 'MEDICO', 'VALIDADOR']
     },
     {
-      label: 'Administración',
+      label: 'Administración de usuarios',
       icon: 'admin_panel_settings',
-      route: '/admin',
+      route: '/admin/users',
+      roles: ['ADMINISTRADOR']
+    },
+    {
+      label: 'Configuración del laboratorio',
+      icon: 'settings',
+      route: '/admin/settings',
       roles: ['ADMINISTRADOR']
     }
   ];
+
+  isDarkMode = false;
+
+  ngOnInit() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkMode = true;
+      document.body.classList.add('dark-theme');
+    }
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  }
 
   get currentUser() {
     return this.authService.getUser();

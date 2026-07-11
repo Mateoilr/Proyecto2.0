@@ -16,7 +16,7 @@ mat-card-title {
 }
 
 .result-info {
-  background-color: #f5f5f5;
+  background-color: var(--app-bg);
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -40,12 +40,12 @@ mat-card-title {
 
 .info-item .label {
   font-weight: 500;
-  color: #666;
+  color: var(--text-color-muted);
   min-width: 100px;
 }
 
 .info-item .value {
-  color: #333;
+  color: var(--text-color);
 }
 
 .full-width {
@@ -72,3 +72,5 @@ mat-card-title {
 .form-actions button {
   min-width: 120px;
 }
+
+
