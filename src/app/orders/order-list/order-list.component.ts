@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { OrdersService, LabOrder } from '../../core/services/orders.service';
+import { ReportsService } from '../../core/services/reports.service';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
 
@@ -42,6 +43,7 @@ import { NotificationsService } from '../../core/services/notifications.service'
 export class OrderListComponent implements OnInit {
   private ordersService = inject(OrdersService);
   private notificationsService = inject(NotificationsService);
+  private reportsService = inject(ReportsService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
@@ -157,6 +159,20 @@ export class OrderListComponent implements OnInit {
             this.snackBar.open(error.error?.message || 'Error al enviar WhatsApp', 'Cerrar', { duration: 3000 });
           }
         });
+      }
+    });
+  }
+
+  printOrder(order: LabOrder, event: Event): void {
+    event.stopPropagation();
+    this.snackBar.open('Generando reporte PDF...', '', { duration: 2000 });
+    this.reportsService.downloadReporteOrden(order.id).subscribe({
+      next: (blob) => {
+        this.reportsService.downloadFile(blob, `Resultados_${order.codigo}.pdf`);
+        this.snackBar.open('Reporte descargado', 'Cerrar', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Error al generar el reporte', 'Cerrar', { duration: 3000 });
       }
     });
   }

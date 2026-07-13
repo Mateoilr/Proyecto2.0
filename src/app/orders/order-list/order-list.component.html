@@ -66,6 +66,12 @@
                   matTooltip="Enviar por WhatsApp">
             <mat-icon>chat</mat-icon>
           </button>
+          <button mat-icon-button color="accent" 
+                  *ngIf="order.estado === 'CERRADA'" 
+                  (click)="printOrder(order, $event)" 
+                  matTooltip="Imprimir resultados">
+            <mat-icon>print</mat-icon>
+          </button>
         </td>
       </ng-container>
 

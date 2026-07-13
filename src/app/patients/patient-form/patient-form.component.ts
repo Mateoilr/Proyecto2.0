@@ -43,7 +43,7 @@ export class PatientFormComponent implements OnInit {
   patientForm!: FormGroup;
   loading = false;
   isEditMode = false;
-  patientId?: number;
+  patientId?: string;
 
   tiposDocumento = [
     { value: 'CEDULA', label: 'Cédula' },
@@ -62,7 +62,7 @@ export class PatientFormComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id && id !== 'new') {
       this.isEditMode = true;
-      this.patientId = parseInt(id);
+      this.patientId = id;
       this.loadPatient(this.patientId);
     }
   }
@@ -85,9 +85,9 @@ export class PatientFormComponent implements OnInit {
     });
   }
 
-  loadPatient(id: number): void {
+  loadPatient(id: string): void {
     this.loading = true;
-    this.patientsService.getById(id.toString()).subscribe({
+    this.patientsService.getById(id).subscribe({
       next: (patient) => {
         this.patientForm.patchValue({
           ...patient,
@@ -113,7 +113,7 @@ export class PatientFormComponent implements OnInit {
       };
 
       const request = this.isEditMode && this.patientId
-        ? this.patientsService.update(this.patientId.toString(), formData)
+        ? this.patientsService.update(this.patientId, formData)
         : this.patientsService.create(formData);
 
       request.subscribe({
