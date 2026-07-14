@@ -5,7 +5,8 @@ import { environment } from '../../../environments/environment';
 
 export interface DashboardStats {
   ordersToday?: number;
-  pendingResults?: number;
+  pendingOrderItems?: number;
+  pendingValidations?: number;
   activeExams?: number;
   registeredPatients?: number;
   recentActivity?: any[];
