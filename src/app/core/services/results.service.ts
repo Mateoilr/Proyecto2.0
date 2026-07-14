@@ -13,9 +13,11 @@ export interface Result {
   id: string;
   orderItemId: string;
   valor: string;
+  unidad?: string;
   interpretacion?: string;
   estado: 'REGISTRADO' | 'VALIDADO' | 'RECHAZADO' | 'ENTREGADO';
   createdById?: string;
+  createdBy?: { nombres: string; apellidos: string };
   validatedById?: string;
   validatedAt?: Date | string;
   createdAt: Date | string;
