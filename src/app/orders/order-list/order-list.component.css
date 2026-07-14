@@ -4,17 +4,27 @@
   margin: 0 auto;
 }
 
-.header {
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.header h1 {
+.header-content h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin: 0;
-  font-size: 2rem;
+  font-size: 28px;
+  font-weight: 500;
   color: var(--text-color);
+}
+
+.header-content h1 mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
 }
 
 .search-field {
@@ -89,13 +99,13 @@ mat-paginator {
     padding: 1rem;
   }
 
-  .header {
+  .header-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .header h1 {
+  .header-content h1 {
     font-size: 1.5rem;
   }
 
