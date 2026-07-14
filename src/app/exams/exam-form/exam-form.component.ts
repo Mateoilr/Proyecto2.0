@@ -162,9 +162,22 @@ export class ExamFormComponent implements OnInit {
     if (this.examForm.valid && !this.loading) {
       this.loading = true;
 
+      const payload = { ...this.examForm.value };
+
+      // Limpiar strings vacíos que causan errores de UUID o validación en el backend
+      if (!payload.unidadId) delete payload.unidadId;
+      if (!payload.muestraId) delete payload.muestraId;
+      if (!payload.tecnicaId) delete payload.tecnicaId;
+      if (!payload.descripcion) delete payload.descripcion;
+
+      // El backend no espera el campo "estado" al crear (CreateExamDto no lo tiene)
+      if (!this.isEditMode) {
+        delete payload.estado;
+      }
+
       const request = this.isEditMode && this.examId
-        ? this.examsService.update(this.examId, this.examForm.value)
-        : this.examsService.create(this.examForm.value);
+        ? this.examsService.update(this.examId, payload)
+        : this.examsService.create(payload);
 
       request.subscribe({
         next: (savedExam) => {
