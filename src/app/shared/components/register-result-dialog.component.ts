@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 export interface RegisterResultDialogData {
   examName: string;
+  valorGenerado?: string;
+  observaciones?: string;
 }
 
 @Component({
@@ -24,7 +26,7 @@ export interface RegisterResultDialogData {
     MatIconModule
   ],
   template: `
-    <h2 mat-dialog-title>Registrar Resultado</h2>
+    <h2 mat-dialog-title>{{ data.valorGenerado ? 'Editar' : 'Registrar' }} Resultado</h2>
     <mat-dialog-content>
       <p style="margin-bottom: 20px; color: #666;">
         Ingrese el resultado para el examen: <strong>{{ data.examName }}</strong>
@@ -56,7 +58,10 @@ export class RegisterResultDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<RegisterResultDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterResultDialogData
-  ) {}
+  ) {
+    if (data.valorGenerado) this.valorGenerado = data.valorGenerado;
+    if (data.observaciones) this.observaciones = data.observaciones;
+  }
 
   onCancel(): void {
     this.dialogRef.close();

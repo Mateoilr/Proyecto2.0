@@ -90,8 +90,10 @@ export class OrderDetailComponent implements OnInit {
 
   formatEstado(estado: string): string {
     if (!estado) return '';
-    if (estado === 'EN_PROCESO') return 'En Proceso';
-    return estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase();
+    return estado
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   }
 
   canSendNotifications(): boolean {
@@ -183,6 +185,36 @@ export class OrderDetailComponent implements OnInit {
           error: (error: any) => {
             this.snackBar.open(error.error?.message || 'Error al registrar el resultado', 'Cerrar', { duration: 3000 });
             // console.error(error);
+          }
+        });
+      }
+    });
+  }
+
+  onEditResult(resultData: any, examName: string): void {
+    const dialogRef = this.dialog.open(RegisterResultDialogComponent, {
+      width: '400px',
+      data: { 
+        examName,
+        valorGenerado: resultData.valor,
+        observaciones: resultData.interpretacion
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.resultsService.update(resultData.id, {
+          valorGenerado: result.valorGenerado,
+          observaciones: result.observaciones
+        }).subscribe({
+          next: () => {
+            this.snackBar.open('Resultado editado exitosamente', 'Cerrar', { duration: 3000 });
+            if (this.order) {
+              this.loadOrder(this.order.id);
+            }
+          },
+          error: (error: any) => {
+            this.snackBar.open(error.error?.message || 'Error al editar el resultado', 'Cerrar', { duration: 3000 });
           }
         });
       }

@@ -147,9 +147,7 @@ export class ResultListComponent implements OnInit {
           }
         });
       } else if (res?.action === 'reject') {
-        // En un futuro, el comentario puede enviarse en un nuevo DTO para el endpoint de reject
-        // this.resultsService.reject(result.id, { motivo: res.comentario })...
-        this.resultsService.reject(result.id).subscribe({
+        this.resultsService.reject(result.id, res.comentario).subscribe({
           next: () => {
             this.snackBar.open('Resultado rechazado por inconsistencias', 'Cerrar', { duration: 3000 });
             this.loadResults();

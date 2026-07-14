@@ -114,7 +114,7 @@ export class OrderListComponent implements OnInit {
       'CERRADA': 'Cerrada',
       'CANCELADA': 'Cancelada'
     };
-    return labels[estado] || estado;
+    return labels[estado] || estado.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   }
 
   getPacienteNombre(order: LabOrder): string {

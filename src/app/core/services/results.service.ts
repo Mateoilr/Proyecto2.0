@@ -15,6 +15,7 @@ export interface Result {
   valor: string;
   unidad?: string;
   interpretacion?: string;
+  motivoRechazo?: string;
   estado: 'REGISTRADO' | 'VALIDADO' | 'RECHAZADO' | 'ENTREGADO';
   createdById?: string;
   createdBy?: { nombres: string; apellidos: string };
@@ -67,8 +68,8 @@ export class ResultsService {
     return this.http.patch<Result>(`${this.apiUrl}/${id}/validate`, {});
   }
 
-  reject(id: string): Observable<Result> {
-    return this.http.patch<Result>(`${this.apiUrl}/${id}/reject`, {});
+  reject(id: string, motivo: string): Observable<Result> {
+    return this.http.patch<Result>(`${this.apiUrl}/${id}/reject`, { motivo });
   }
 
   deliver(id: string): Observable<Result> {
