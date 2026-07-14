@@ -103,6 +103,11 @@ export class OrderDetailComponent implements OnInit {
   getItemEstadoColor(estado: string): string {
     const colors: { [key: string]: string } = {
       'PENDIENTE': 'var(--c-exa-pendiente)',
+      'MUESTRA_TOMADA': 'var(--c-exa-proceso)',
+      'EN_ANALISIS': 'var(--c-exa-proceso)',
+      'VALIDADO': 'var(--c-exa-completado)',
+      'REQUIERE_CORRECCION': 'var(--c-exa-cancelado)',
+      'ENTREGADO': 'var(--c-exa-completado)',
       'EN_PROCESO': 'var(--c-exa-proceso)',
       'COMPLETADO': 'var(--c-exa-completado)',
       'CANCELADO': 'var(--c-exa-cancelado)'
@@ -224,7 +229,7 @@ export class OrderDetailComponent implements OnInit {
   onCloseOrder(): void {
     if (!this.order) return;
 
-    const allCompleted = this.order.items.every(item => item.estado === 'COMPLETADO');
+    const allCompleted = this.order.items.every(item => item.estado === 'VALIDADO' || item.estado === 'ENTREGADO');
     if (!allCompleted) {
       this.snackBar.open('No se puede cerrar la orden. Todos los exámenes deben tener sus resultados ingresados.', 'Entendido', { duration: 5000 });
       return;

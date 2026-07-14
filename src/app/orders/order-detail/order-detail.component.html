@@ -189,7 +189,7 @@
           <ng-container matColumnDef="muestra">
             <th mat-header-cell *matHeaderCellDef>Tipo Muestra</th>
             <td mat-cell *matCellDef="let item">
-              {{ item.sampleType || '-' }}
+              {{ item.sampleType?.nombre || '-' }}
             </td>
           </ng-container>
 
@@ -212,7 +212,7 @@
                     </button>
                     <!-- Botón PDF (solo si completado) -->
                     <button mat-icon-button color="primary" 
-                            *ngIf="item.estado === 'COMPLETADO' || item.result.estado === 'VALIDADO' || item.result.estado === 'ENTREGADO'"
+                            *ngIf="item.estado === 'VALIDADO' || item.estado === 'ENTREGADO' || item.result.estado === 'VALIDADO' || item.result.estado === 'ENTREGADO'"
                             (click)="downloadResultReport(item.result.id, item.exam.nombre)"
                             matTooltip="Descargar Reporte de Resultado">
                       <mat-icon>picture_as_pdf</mat-icon>

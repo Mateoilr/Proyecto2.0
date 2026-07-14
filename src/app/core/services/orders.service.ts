@@ -11,8 +11,8 @@ export interface OrderItem {
   examId: string;
   exam: Exam;
   result?: Result;
-  estado: 'PENDIENTE' | 'EN_PROCESO' | 'COMPLETADO' | 'CANCELADO';
-  sampleType?: string;
+  estado: 'PENDIENTE' | 'MUESTRA_TOMADA' | 'EN_ANALISIS' | 'VALIDADO' | 'REQUIERE_CORRECCION' | 'ENTREGADO';
+  sampleType?: { id: string; nombre: string; colorTubo?: string };
   observaciones?: string;
 }
 
@@ -24,7 +24,8 @@ export interface Result {
   valorMin?: number;
   valorMax?: number;
   interpretacion?: string;
-  estado: 'PENDIENTE' | 'ENTREGADO' | 'VALIDADO';
+  motivoRechazo?: string;
+  estado: 'REGISTRADO' | 'VALIDADO' | 'RECHAZADO' | 'ENTREGADO';
   createdById?: string;
   validatedById?: string;
   validatedAt?: Date | string;
