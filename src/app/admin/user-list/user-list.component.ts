@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -110,18 +110,17 @@ export class UserListComponent implements OnInit {
   }
 
   getEstadoColor(estado: string): string {
-    return estado === 'ACTIVE' ? '#4caf50' : '#f44336';
+    return estado === 'ACTIVE' ? 'var(--c-usr-active)' : 'var(--c-usr-inactive)';
   }
 
   getRoleColor(role: string): string {
-    const colors: Record<string, string> = {
-      'ADMINISTRADOR': '#9c27b0',
-      'RECEPCION': '#2196f3',
-      'LABORATORISTA': '#ff9800',
-      'MEDICO': '#4caf50',
-      'VALIDADOR': '#00bcd4'
+    const colors: { [key: string]: string } = {
+      'ADMINISTRADOR': 'var(--c-rol-admin)',
+      'SECRETARIO': 'var(--c-rol-secretario)',
+      'LABORATORISTA': 'var(--c-rol-laboratorista)',
+      'VALIDADOR': 'var(--c-rol-validador)'
     };
-    return colors[role] || '#666';
+    return colors[role] || 'var(--c-usr-inactive)';
   }
 
   onCreate(): void {

@@ -4,8 +4,9 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
   margin-bottom: 24px;
 }
 
@@ -27,8 +28,35 @@
 }
 
 .header-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+  width: 100%;
+  padding-left: 64px; /* Alinear debajo de la O (48px del botón de retroceso + 16px de gap) */
+}
+
+.header-actions button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 42px; /* Evitar que se corten los íconos */
+}
+
+.header-actions button ::ng-deep .mdc-button__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  white-space: normal; /* Permitir salto de línea si el texto es muy largo */
+  text-align: center;
+}
+
+.header-actions button mat-icon {
+  margin-right: 14px;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
 }
 
 .estado-chip {
@@ -146,6 +174,7 @@ mat-divider {
   
   .header-actions button {
     width: 100%;
+    max-width: none;
   }
   
   .info-grid {

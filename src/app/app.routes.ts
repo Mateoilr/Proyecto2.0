@@ -55,6 +55,10 @@ export const routes: Routes = [
     path: 'download/:type/:id',
     loadComponent: () => import('./reports/download-report/download-report.component').then(m => m.DownloadReportComponent)
   },
+  {
+    path: 'dev/chips',
+    loadComponent: () => import('./dev/chips-preview.component').then(m => m.ChipsPreviewComponent)
+  },
 
   // RUTAS PROTEGIDAS CON LAYOUT
   {
@@ -79,11 +83,11 @@ export const routes: Routes = [
         ]
       },
 
-      // Exámenes - Solo ADMINISTRADOR y RECEPCION
+      // Exámenes - Solo ADMINISTRADOR y SECRETARIO
       {
         path: 'exams',
         canActivate: roleGuardFor(),
-        data: { roles: ['ADMINISTRADOR', 'RECEPCION'] },
+        data: { roles: ['ADMINISTRADOR', 'SECRETARIO'] },
         children: [
           { path: '', component: ExamListComponent },
           { path: 'new', component: ExamFormComponent },
@@ -102,11 +106,11 @@ export const routes: Routes = [
         ]
       },
 
-      // Resultados - ADMINISTRADOR, LABORATORISTA, MEDICO, VALIDADOR
+      // Resultados - ADMINISTRADOR, LABORATORISTA, VALIDADOR
       {
         path: 'results',
         canActivate: roleGuardFor(),
-        data: { roles: ['ADMINISTRADOR', 'LABORATORISTA', 'MEDICO', 'VALIDADOR'] },
+        data: { roles: ['ADMINISTRADOR', 'LABORATORISTA', 'VALIDADOR'] },
         children: [
           { path: '', component: ResultListComponent },
           { path: ':id/edit', component: ResultFormComponent }

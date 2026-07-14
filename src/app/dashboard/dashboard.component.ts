@@ -62,16 +62,17 @@ export class DashboardComponent implements OnInit {
   setupDashboardByRole(): void {
     const roles = this.authService.getRoles();
     const isAdmin = roles.includes('ADMINISTRADOR');
-    const isSecretario = roles.includes('SECRETARIO') || roles.includes('RECEPCION');
+    const isSecretario = roles.includes('SECRETARIO');
     const isLaboratorista = roles.includes('LABORATORISTA');
-    const isMedico = roles.includes('MEDICO') || roles.includes('VALIDADOR');
+    const isValidador = roles.includes('VALIDADOR');
 
     if (isAdmin) {
       this.stats = [
-        { title: 'Órdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
         { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' },
-        { title: 'Exámenes Pend.', value: 0, icon: 'science', color: '#748799', route: '/orders' }
+        { title: 'Exámenes Pend.', value: 0, icon: 'science', color: '#748799', route: '/orders' },
+        { title: 'Exámenes Disp.', value: 0, icon: 'biotech', color: '#9C27B0', route: '/exams' }
       ];
       this.quickActions = [
         { title: 'Nueva Orden', description: 'Crear nueva orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
@@ -105,7 +106,7 @@ export class DashboardComponent implements OnInit {
         { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#E91E63', route: '/orders' },
         { title: 'Ver Exámenes', description: 'Consultar catálogo', icon: 'science', color: '#748799', route: '/exams' }
       ];
-    } else if (isMedico) {
+    } else if (isValidador) {
       this.stats = [
         { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
         { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
@@ -118,17 +119,18 @@ export class DashboardComponent implements OnInit {
     }
 
     // 2. Cargar datos reales usando el nuevo endpoint
-    this.loadRealStats(isAdmin, isSecretario, isLaboratorista, isMedico);
+    this.loadRealStats(isAdmin, isSecretario, isLaboratorista, isValidador);
   }
 
-  private loadRealStats(isAdmin: boolean, isSecretario: boolean, isLaboratorista: boolean, isMedico: boolean): void {
+  private loadRealStats(isAdmin: boolean, isSecretario: boolean, isLaboratorista: boolean, isValidador: boolean): void {
     this.dashboardService.getStats().subscribe({
       next: (data) => {
         if (isAdmin) {
-          this.updateStat('Órdenes Totales', data.ordersToday || 0);
+          this.updateStat('Órdenes Hoy', data.ordersToday || 0);
           this.updateStat('Por Validar', data.pendingValidations || 0);
           this.updateStat('Pacientes', data.registeredPatients || 0);
           this.updateStat('Exámenes Pend.', data.pendingOrderItems || 0);
+          this.updateStat('Exámenes Disp.', data.activeExams || 0);
         }
         
         if (isSecretario) {
@@ -141,7 +143,7 @@ export class DashboardComponent implements OnInit {
           this.updateStat('Exámenes Pend.', data.pendingOrderItems || 0);
         }
         
-        if (isMedico) {
+        if (isValidador) {
           this.updateStat('Por Validar', data.pendingValidations || 0);
           this.updateStat('Órdenes Hoy', data.ordersToday || 0);
         }

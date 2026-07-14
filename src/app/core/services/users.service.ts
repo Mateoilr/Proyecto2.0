@@ -7,6 +7,7 @@ export interface User {
   id: string;
   nombres: string;
   apellidos?: string;
+  nombreFirma?: string;
   email: string;
   status: 'ACTIVE' | 'INACTIVE';
   roles: string[];
@@ -22,6 +23,7 @@ export interface Role {
 export interface CreateUserDto {
   nombres: string;
   apellidos?: string;
+  nombreFirma?: string;
   email: string;
   password: string;
   roleIds: string[];
@@ -30,6 +32,7 @@ export interface CreateUserDto {
 export interface UpdateUserDto {
   nombres?: string;
   apellidos?: string;
+  nombreFirma?: string;
   email?: string;
   password?: string;
   roleIds?: string[];
@@ -50,6 +53,10 @@ export class UsersService {
 
   getById(id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
+  create(data: CreateUserDto): Observable<User> {
+    return this.http.post<User>(this.apiUrl, data);
   }
 
 

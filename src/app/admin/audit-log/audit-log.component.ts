@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -103,13 +103,13 @@ export class AuditLogComponent implements OnInit {
 
   getActionColor(accion: string): string {
     const colors: Record<string, string> = {
-      'CREATE': '#4caf50',
-      'UPDATE': '#2196f3',
-      'DELETE': '#f44336',
-      'LOGIN': '#9c27b0',
-      'LOGOUT': '#ff9800'
+      'CREATE': 'var(--c-aud-create)',
+      'UPDATE': 'var(--c-aud-update)',
+      'DELETE': 'var(--c-aud-delete)',
+      'LOGIN': 'var(--c-aud-login)',
+      'LOGOUT': 'var(--c-aud-logout)'
     };
-    return colors[accion] || '#666';
+    return colors[accion] || 'var(--color-neutral)';
   }
 }
 

@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AuthService } from '../../services/auth.service';
 
@@ -30,7 +31,8 @@ interface MenuItem {
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTooltipModule
   ],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.css']
@@ -54,7 +56,7 @@ export class MainLayoutComponent implements OnInit {
       label: 'Exámenes',
       icon: 'science',
       route: '/exams',
-      roles: ['ADMINISTRADOR', 'RECEPCION']
+      roles: ['ADMINISTRADOR', 'SECRETARIO']
     },
     {
       label: 'Órdenes',
@@ -65,7 +67,7 @@ export class MainLayoutComponent implements OnInit {
       label: 'Resultados',
       icon: 'assignment_turned_in',
       route: '/results',
-      roles: ['ADMINISTRADOR', 'LABORATORISTA', 'MEDICO', 'VALIDADOR']
+      roles: ['ADMINISTRADOR', 'LABORATORISTA', 'VALIDADOR']
     },
     {
       label: 'Administración de usuarios',
@@ -83,6 +85,7 @@ export class MainLayoutComponent implements OnInit {
 
   isDarkMode = false;
   isMobile = false;
+  isCollapsed = false;
 
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -92,10 +95,23 @@ export class MainLayoutComponent implements OnInit {
       this.isDarkMode = true;
       document.body.classList.add('dark-theme');
     }
+    
+    const savedCollapse = localStorage.getItem('sidebar_collapsed');
+    if (savedCollapse === 'true') {
+      this.isCollapsed = true;
+    }
 
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobile = result.matches;
+      if (this.isMobile) {
+        this.isCollapsed = false; // Never collapse on mobile, use over mode
+      }
     });
+  }
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    localStorage.setItem('sidebar_collapsed', this.isCollapsed.toString());
   }
 
   toggleTheme() {

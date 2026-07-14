@@ -9,6 +9,53 @@
   --user-btn-bg: #f4fbfb;
   --user-btn-text: #329d9c;
   --card-bg: #ffffff;
+
+  /* Estados de la Orden */
+  --c-ord-creada: #a78bfa;
+  --c-ord-proceso: #589bf7;
+  --c-ord-completada: #6ee7b7;
+  --c-ord-cerrada: #8a919e;
+  --c-ord-cancelada: #e04a4a;
+
+  /* Estados del Examen */
+  --c-exa-pendiente: #f5ba22;
+  --c-exa-proceso: #589bf7;
+  --c-exa-completado: #6ee7b7;
+  --c-exa-cancelado: #e04a4a;
+
+  /* Estados de Resultados */
+  --c-res-registrado: #45b6b5;
+  --c-res-validado: #6ee7b7;
+  --c-res-rechazado: #e04a4a;
+  --c-res-entregado: #8a919e;
+
+  /* Prioridad */
+  --c-pri-normal: #45b6b5;
+  --c-pri-urgente: #e04a4a;
+
+  /* Roles de Usuario */
+  --c-rol-admin: #8552d6;
+  --c-rol-secretario: #45b6b5;
+  --c-rol-laboratorista: #589bf7;
+  --c-rol-validador: #6ee7b7;
+
+  /* Acciones de Auditoría */
+  --c-aud-create: #6ee7b7;
+  --c-aud-update: #45b6b5;
+  --c-aud-delete: #e04a4a;
+  --c-aud-login: #589bf7;
+  --c-aud-logout: #8a919e;
+
+  /* Estado de Usuarios */
+  --c-usr-active: #6ee7b7;
+  --c-usr-inactive: #e04a4a;
+}
+
+/* Reducir tamaño de letra de los chips */
+.mdc-evolution-chip__text-label {
+  font-size: 12px !important;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .dark-theme {
@@ -21,6 +68,16 @@
   --user-btn-bg: #2d2d2d;
   --user-btn-text: #8fdbd9;
   --card-bg: #1e1e1e;
+
+  /* Variantes oscuras para etiquetas */
+  --color-institucional: #8fdbd9;
+  --color-creada: #c4b5fd;
+  --color-proceso: #6EA8FE;
+  --color-exito: #6FCF97;
+  --color-advertencia: #F4C95D;
+  --color-error: #F28B82;
+  --color-neutral: #B0B7C3;
+  --color-admin: #C4B5FD;
 }
 
 html, body { height: 100%; }

@@ -59,6 +59,7 @@ export class UserFormComponent implements OnInit {
     this.userForm = this.fb.group({
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
+      nombreFirma: [''],
       email: ['', [Validators.required, Validators.email]],
       password: [
         '',
@@ -98,6 +99,7 @@ export class UserFormComponent implements OnInit {
         this.userForm.patchValue({
           nombres: user.nombres,
           apellidos: user.apellidos || '',
+          nombreFirma: user.nombreFirma || '',
           email: user.email,
           roleIds: mappedRoleIds
         });
@@ -126,6 +128,7 @@ export class UserFormComponent implements OnInit {
       const updateDto: Partial<UpdateUserDto> = {
         nombres: formValue.nombres,
         apellidos: formValue.apellidos,
+        nombreFirma: formValue.nombreFirma,
         email: formValue.email
       };
 
@@ -153,12 +156,13 @@ export class UserFormComponent implements OnInit {
       const createDto: CreateUserDto = {
         nombres: formValue.nombres,
         apellidos: formValue.apellidos,
+        nombreFirma: formValue.nombreFirma,
         email: formValue.email,
         password: formValue.password,
         roleIds: formValue.roleIds
       };
 
-      this.authService.register(createDto).subscribe({
+      this.usersService.create(createDto).subscribe({
         next: () => {
           this.snackBar.open('Usuario creado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/admin/users']);

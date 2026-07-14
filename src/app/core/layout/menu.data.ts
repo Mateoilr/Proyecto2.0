@@ -5,42 +5,42 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Dashboard',
     icon: 'dashboard',
     route: '/dashboard',
-    roles: ['ADMIN', 'MEDICO', 'LABORATORISTA', 'RECEPCIONISTA']
+    roles: ['ADMINISTRADOR', 'VALIDADOR', 'LABORATORISTA', 'SECRETARIO']
   },
   {
     label: 'Pacientes',
     icon: 'people',
     route: '/patients',
-    roles: ['ADMIN', 'MEDICO', 'RECEPCIONISTA']
+    roles: ['ADMINISTRADOR', 'VALIDADOR', 'SECRETARIO']
   },
   {
     label: 'Órdenes',
     icon: 'assignment',
     route: '/orders',
-    roles: ['ADMIN', 'MEDICO', 'LABORATORISTA', 'RECEPCIONISTA']
+    roles: ['ADMINISTRADOR', 'VALIDADOR', 'LABORATORISTA', 'SECRETARIO']
   },
   {
     label: 'Resultados',
     icon: 'science',
     route: '/results',
-    roles: ['ADMIN', 'MEDICO', 'LABORATORISTA']
+    roles: ['ADMINISTRADOR', 'VALIDADOR', 'LABORATORISTA']
   },
   {
     label: 'Reportes',
     icon: 'assessment',
     route: '/reports',
-    roles: ['ADMIN', 'MEDICO']
+    roles: ['ADMINISTRADOR', 'VALIDADOR']
   },
   {
     label: 'Administración',
     icon: 'manage_accounts',
     route: '/admin/users',
-    roles: ['ADMIN']
+    roles: ['ADMINISTRADOR']
   },
   {
     label: 'Configuración',
     icon: 'settings',
     route: '/admin/settings',
-    roles: ['ADMIN']
+    roles: ['ADMINISTRADOR']
   }
 ];

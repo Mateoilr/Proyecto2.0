@@ -170,3 +170,52 @@ mat-nav-list a.active mat-icon {
     width: 280px;
   }
 }
+
+.menu-toggle-btn {
+  margin-right: 16px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sidebar Collapsed State */
+.sidenav {
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.sidenav.collapsed {
+  width: 72px;
+}
+
+.sidenav.collapsed .logo-text,
+.sidenav.collapsed .menu-text {
+  display: none;
+}
+
+.sidenav.collapsed .logo {
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.sidenav.collapsed mat-nav-list a {
+  padding: 0 !important;
+}
+
+/* Forzar centrado absoluto de íconos en Material MDC */
+.sidenav.collapsed ::ng-deep .mdc-list-item__start,
+.sidenav.collapsed ::ng-deep .mdc-list-item__content {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.sidenav.collapsed mat-icon[matListItemIcon] {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+}

@@ -1,9 +1,9 @@
-<mat-sidenav-container class="layout-container">
+<mat-sidenav-container autosize class="layout-container">
 
-  <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="sidenav">
+  <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="sidenav" [class.collapsed]="isCollapsed && !isMobile">
     <div class="logo">
       <mat-icon class="logo-icon">biotech</mat-icon>
-      <span>LaboratorioAG</span>
+      <span class="logo-text">LaboratorioAG</span>
     </div>
 
     <mat-nav-list>
@@ -14,9 +14,11 @@
           [routerLink]="item.route"
           routerLinkActive="active"
           (click)="isMobile ? sidenav.close() : null"
+          [matTooltip]="isCollapsed && !isMobile ? item.label : ''"
+          matTooltipPosition="right"
         >
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
+          <span matListItemTitle class="menu-text">{{ item.label }}</span>
         </a>
       </ng-container>
     </mat-nav-list>
@@ -24,7 +26,7 @@
 
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="toolbar">
-      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="isMobile" style="margin-right: 16px; color: var(--text-color);">
+      <button mat-icon-button (click)="isMobile ? sidenav.toggle() : toggleCollapse()" class="menu-toggle-btn">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="spacer"></span>

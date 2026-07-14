@@ -78,14 +78,20 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getEstadoColor(estado: string): string {
-    const colors: Record<string, string> = {
-      'CREADA': '#2196f3',
-      'EN_PROCESO': '#ff9800',
-      'COMPLETADA': '#4caf50',
-      'CERRADA': '#9e9e9e',
-      'CANCELADA': '#f44336'
+    const colors: { [key: string]: string } = {
+      'CREADA': 'var(--c-ord-creada)',
+      'EN_PROCESO': 'var(--c-ord-proceso)',
+      'COMPLETADA': 'var(--c-ord-completada)',
+      'CERRADA': 'var(--c-ord-cerrada)',
+      'CANCELADA': 'var(--c-ord-cancelada)'
     };
-    return colors[estado] || '#666';
+    return colors[estado] || 'var(--color-neutral)';
+  }
+
+  formatEstado(estado: string): string {
+    if (!estado) return '';
+    if (estado === 'EN_PROCESO') return 'En Proceso';
+    return estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase();
   }
 
   canSendNotifications(): boolean {
@@ -93,17 +99,17 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getItemEstadoColor(estado: string): string {
-    const colors: Record<string, string> = {
-      'PENDIENTE': '#ff9800',
-      'EN_PROCESO': '#2196f3',
-      'COMPLETADO': '#4caf50',
-      'CANCELADO': '#f44336'
+    const colors: { [key: string]: string } = {
+      'PENDIENTE': 'var(--c-exa-pendiente)',
+      'EN_PROCESO': 'var(--c-exa-proceso)',
+      'COMPLETADO': 'var(--c-exa-completado)',
+      'CANCELADO': 'var(--c-exa-cancelado)'
     };
-    return colors[estado] || '#666';
+    return colors[estado] || 'var(--color-neutral)';
   }
 
   getPrioridadColor(prioridad: string): string {
-    return prioridad === 'URGENTE' ? '#f44336' : '#4caf50';
+    return prioridad === 'URGENTE' ? 'var(--c-pri-urgente)' : 'var(--c-pri-normal)';
   }
 
   getAge(fechaNacimiento: Date | string): number {
@@ -186,11 +192,17 @@ export class OrderDetailComponent implements OnInit {
   onCloseOrder(): void {
     if (!this.order) return;
 
+    const allCompleted = this.order.items.every(item => item.estado === 'COMPLETADO');
+    if (!allCompleted) {
+      this.snackBar.open('No se puede cerrar la orden. Todos los exámenes deben tener sus resultados ingresados.', 'Entendido', { duration: 5000 });
+      return;
+    }
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
         title: 'Cerrar Orden',
-        message: 'Â¿Está seguro de que desea cerrar esta orden? Después de cerrarla podrá enviar las notificaciones.',
+        message: '\u00BFEstá seguro de que desea cerrar esta orden? Después de cerrarla podrá enviar las notificaciones.',
         color: 'primary'
       }
     });
@@ -205,6 +217,37 @@ export class OrderDetailComponent implements OnInit {
           error: (error: any) => {
             this.snackBar.open(
               error.error?.message || 'Error al cerrar la orden',
+              'Cerrar',
+              { duration: 3000 }
+            );
+          }
+        });
+      }
+    });
+  }
+
+  onCancelOrder(): void {
+    if (!this.order) return;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Anular Orden',
+        message: '\u00BFEstá seguro de que desea anular esta orden? Esta acción cambiará el estado a CANCELADA.',
+        color: 'warn'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.ordersService.update(this.order!.id, { estado: 'CANCELADA' }).subscribe({
+          next: (updatedOrder: any) => {
+            this.snackBar.open('Orden anulada exitosamente', 'Cerrar', { duration: 3000 });
+            this.order = updatedOrder;
+          },
+          error: (error: any) => {
+            this.snackBar.open(
+              error.error?.message || 'Error al anular la orden',
               'Cerrar',
               { duration: 3000 }
             );

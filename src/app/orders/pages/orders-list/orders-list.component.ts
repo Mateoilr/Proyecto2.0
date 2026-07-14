@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -43,13 +43,14 @@ export class OrdersListComponent implements OnInit {
   ngOnInit(): void {}
 
   getStatusColor(estado: string): string {
-    const colors: any = {
-      'CREADA': 'accent',
-      'EN_PROCESO': 'primary',
-      'VALIDADO': 'warn',
-      'ENTREGADO': ''
+    const colors: { [key: string]: string } = {
+      'CREADA': 'var(--c-ord-creada)',
+      'EN_PROCESO': 'var(--c-ord-proceso)',
+      'COMPLETADA': 'var(--c-ord-completada)',
+      'CERRADA': 'var(--c-ord-cerrada)',
+      'CANCELADA': 'var(--c-ord-cancelada)'
     };
-    return colors[estado] || '';
+    return colors[estado] || 'var(--color-neutral)';
   }
 
   getStatusLabel(estado: string): string {

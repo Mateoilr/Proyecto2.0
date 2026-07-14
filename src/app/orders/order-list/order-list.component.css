@@ -48,13 +48,13 @@ mat-paginator {
 }
 
 .estado-creada {
-  background-color: #2196f3 !important;
-  color: white;
+  background-color: var(--c-ord-creada) !important;
+  color: white !important;
 }
 
 .estado-en-proceso {
-  background-color: #ff9800 !important;
-  color: white;
+  background-color: var(--c-ord-proceso) !important;
+  color: white !important;
 }
 
 .mat-column-actions {
@@ -69,18 +69,18 @@ mat-paginator {
 }
 
 .estado-completada {
-  background-color: #4caf50 !important;
-  color: white;
+  background-color: var(--c-ord-completada) !important;
+  color: white !important;
 }
 
 .estado-cerrada {
-  background-color: #9e9e9e !important;
-  color: white;
+  background-color: var(--c-ord-cerrada) !important;
+  color: white !important;
 }
 
 .estado-cancelada {
-  background-color: #f44336 !important;
-  color: white;
+  background-color: var(--c-ord-cancelada) !important;
+  color: white !important;
 }
 
 /* Responsive */
@@ -103,5 +103,3 @@ mat-paginator {
     max-width: 100%;
   }
 }
-
-

@@ -100,13 +100,13 @@ export class ResultListComponent implements OnInit {
   }
 
   getEstadoColor(estado: string): string {
-    const colors: Record<string, string> = {
-      'REGISTRADO': '#ff9800',
-      'VALIDADO': '#4caf50',
-      'RECHAZADO': '#f44336',
-      'ENTREGADO': '#2196f3'
+    const colors: { [key: string]: string } = {
+      'REGISTRADO': 'var(--c-res-registrado)',
+      'VALIDADO': 'var(--c-res-validado)',
+      'RECHAZADO': 'var(--c-res-rechazado)',
+      'ENTREGADO': 'var(--c-res-entregado)'
     };
-    return colors[estado] || '#666';
+    return colors[estado] || 'var(--color-neutral)';
   }
 
   groupResultsByExam(): void {

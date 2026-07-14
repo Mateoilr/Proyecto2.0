@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
 
   loadQuickActions(): void {
     // Accesos rápidos según el rol del usuario
-    if (this.userRole === 'ADMIN') {
+    if (this.userRole === 'ADMINISTRADOR') {
       this.quickActions = [
         { label: 'Gestionar Usuarios', icon: 'group', route: '/admin/users' },
         { label: 'Configurar Exámenes', icon: 'settings', route: '/admin/exams' },
@@ -128,13 +128,13 @@ export class DashboardComponent implements OnInit {
         { label: 'Capturar Resultados', icon: 'edit_note', route: '/results' },
         { label: 'Ver Órdenes', icon: 'assignment', route: '/orders' }
       ];
-    } else if (this.userRole === 'MEDICO') {
+    } else if (this.userRole === 'VALIDADOR') {
       this.quickActions = [
         { label: 'Validar Resultados', icon: 'fact_check', route: '/results' },
         { label: 'Ver Pacientes', icon: 'people', route: '/patients' },
         { label: 'Reportes Clínicos', icon: 'description', route: '/reports' }
       ];
-    } else if (this.userRole === 'RECEPCIONISTA') {
+    } else if (this.userRole === 'SECRETARIO') {
       this.quickActions = [
         { label: 'Registrar Paciente', icon: 'person_add', route: '/patients' },
         { label: 'Nueva Orden', icon: 'add_box', route: '/orders/new' },
@@ -170,9 +170,9 @@ export class DashboardComponent implements OnInit {
   getPendingTasksRoute(): string {
     const routes: any = {
       'LABORATORISTA': '/orders?filter=in-process',
-      'MEDICO': '/results?filter=pending-validation',
-      'RECEPCIONISTA': '/orders?filter=ready-to-deliver',
-      'ADMIN': '/orders'
+      'VALIDADOR': '/results?filter=pending-validation',
+      'SECRETARIO': '/orders?filter=ready-to-deliver',
+      'ADMINISTRADOR': '/orders'
     };
     return routes[this.userRole] || '/orders';
   }
