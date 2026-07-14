@@ -59,7 +59,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Unidad de Medida</mat-label>
             <mat-select formControlName="unidadId">
-              <mat-option>Ninguna</mat-option>
+              <mat-option value="">Ninguna</mat-option>
               <mat-option *ngFor="let unit of unidades" [value]="unit.id">
                 {{ $any(unit).descripcion ? $any(unit).descripcion + ' (' + $any(unit).simbolo + ')' : $any(unit).simbolo }}
               </mat-option>
@@ -71,7 +71,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Tipo de Muestra</mat-label>
             <mat-select formControlName="muestraId">
-              <mat-option>Ninguna</mat-option>
+              <mat-option value="">Ninguna</mat-option>
               <mat-option *ngFor="let m of tiposMuestra" [value]="m.id">
                 {{ $any(m).nombre }}
               </mat-option>
@@ -81,7 +81,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Técnica</mat-label>
             <mat-select formControlName="tecnicaId">
-              <mat-option>Ninguna</mat-option>
+              <mat-option value="">Ninguna</mat-option>
               <mat-option *ngFor="let t of tecnicas" [value]="t.id">
                 {{ $any(t).nombre }}
               </mat-option>
