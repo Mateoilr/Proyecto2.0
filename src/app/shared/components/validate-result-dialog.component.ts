@@ -29,126 +29,231 @@ export interface ValidateResultDialogData {
     MatDividerModule
   ],
   template: `
-    <h2 mat-dialog-title>Revisar Resultado</h2>
+    <h2 mat-dialog-title class="dialog-title">
+      <mat-icon color="primary">fact_check</mat-icon> 
+      Validar Resultado
+    </h2>
     <mat-dialog-content>
-      <!-- Detalles Generales -->
-      <div class="review-section">
-        <h3>Información del Paciente y Orden</h3>
-        <p><strong>Paciente:</strong> {{ data.result.orderItem?.labOrder?.patient?.nombres }} {{ data.result.orderItem?.labOrder?.patient?.apellidos }}</p>
-        <p><strong>Orden Médica:</strong> {{ data.result.orderItem?.labOrder?.codigo }} 
-           <mat-chip class="small-chip" [style.background-color]="data.result.orderItem?.labOrder?.prioridad === 'URGENTE' ? '#f44336' : '#4caf50'">
-             {{ data.result.orderItem?.labOrder?.prioridad }}
-           </mat-chip>
-        </p>
-        <p><strong>Fecha Registro:</strong> {{ data.result.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <!-- Detalles del Examen -->
-      <div class="review-section">
-        <h3>Detalles del Examen</h3>
-        <p><strong>Examen:</strong> {{ data.result.orderItem?.exam?.nombre }} ({{ data.result.orderItem?.exam?.codigo }})</p>
-        
-        <div class="result-box">
-          <div class="result-value">
-            <span class="label">Valor Ingresado:</span>
-            <span class="value">{{ data.result.valor }}</span>
+      
+      <div class="review-grid">
+        <!-- Detalles Generales -->
+        <div class="review-card">
+          <div class="card-header">
+            <mat-icon>person</mat-icon> Información del Paciente
           </div>
-          <!-- TODO: Backend will implement Reference Ranges in the future. We'll use ngIf here when ready -->
-          <div class="result-ranges">
-            <mat-icon color="accent" style="vertical-align: middle; margin-right: 4px;">info</mat-icon>
-            <span style="font-size: 12px; color: #666;">Los rangos de referencia estarán disponibles en la próxima actualización del servidor.</span>
+          <div class="card-body">
+            <div class="info-row">
+              <span class="lbl">Paciente:</span>
+              <span class="val">{{ data.result.orderItem?.labOrder?.patient?.nombres }} {{ data.result.orderItem?.labOrder?.patient?.apellidos }}</span>
+            </div>
+            <div class="info-row">
+              <span class="lbl">Orden:</span>
+              <span class="val">
+                <strong>{{ data.result.orderItem?.labOrder?.codigo }}</strong>
+                <mat-chip class="small-chip" [style.background-color]="data.result.orderItem?.labOrder?.prioridad === 'URGENTE' ? '#e04a4a' : '#45b6b5'">
+                  {{ data.result.orderItem?.labOrder?.prioridad }}
+                </mat-chip>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="lbl">Registro:</span>
+              <span class="val">{{ data.result.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
           </div>
         </div>
 
-        <p *ngIf="data.result.interpretacion">
-          <strong>Observaciones del Técnico:</strong><br/>
-          {{ data.result.interpretacion }}
-        </p>
+        <!-- Detalles del Examen -->
+        <div class="review-card">
+          <div class="card-header">
+            <mat-icon>science</mat-icon> Datos del Examen
+          </div>
+          <div class="card-body">
+            <div class="info-row">
+              <span class="lbl">Examen:</span>
+              <span class="val">{{ data.result.orderItem?.exam?.nombre }} ({{ data.result.orderItem?.exam?.codigo }})</span>
+            </div>
+            <div class="info-row">
+              <span class="lbl">Técnico:</span>
+              <span class="val">{{ data.result.createdBy?.nombres }} {{ data.result.createdBy?.apellidos }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <mat-divider></mat-divider>
+      <!-- Resultado Final -->
+      <div class="result-highlight">
+        <div class="result-header">Resultado Registrado</div>
+        <div class="result-value-container">
+          <span class="result-value">{{ data.result.valor }}</span>
+          <span class="result-unit" *ngIf="data.result.unidad">{{ data.result.unidad }}</span>
+        </div>
+        
+        <div class="result-interpretation" *ngIf="data.result.interpretacion">
+          <mat-icon [color]="data.result.interpretacion === 'NORMAL' ? 'primary' : 'warn'">analytics</mat-icon>
+          <span><strong>Interpretación / Obs:</strong> {{ data.result.interpretacion }}</span>
+        </div>
+      </div>
 
       <!-- Zona de Rechazo (Opcional) -->
-      <div class="review-section" *ngIf="isRejecting">
-        <h3 style="color: #f44336;">Motivo de Rechazo</h3>
-        <mat-form-field appearance="outline" style="width: 100%">
+      <div class="reject-section" *ngIf="isRejecting">
+        <h3 class="reject-title"><mat-icon>warning</mat-icon> Motivo de Rechazo</h3>
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Comentario de Rechazo</mat-label>
           <textarea matInput [(ngModel)]="rechazoComentario" rows="3" placeholder="Explique las inconsistencias encontradas..." required></textarea>
         </mat-form-field>
       </div>
 
     </mat-dialog-content>
-    <mat-dialog-actions align="end" style="padding-bottom: 20px; padding-right: 24px;">
+    
+    <mat-dialog-actions align="end" class="dialog-actions">
       <button mat-button (click)="onCancel()" [disabled]="loading">Cancelar</button>
       
       <ng-container *ngIf="!isRejecting">
-        <button mat-stroked-button color="warn" (click)="toggleReject()" style="margin-right: 8px;">
-          <mat-icon>cancel</mat-icon>
-          Rechazar Resultado
+        <button mat-stroked-button color="warn" (click)="toggleReject()" class="action-btn">
+          <mat-icon>cancel</mat-icon> Rechazar
         </button>
-        <button mat-raised-button color="primary" (click)="onValidate()">
-          <mat-icon>check_circle</mat-icon>
-          Validar Resultado
+        <button mat-raised-button color="primary" (click)="onValidate()" class="action-btn">
+          <mat-icon>check_circle</mat-icon> Validar
         </button>
       </ng-container>
 
       <ng-container *ngIf="isRejecting">
-        <button mat-raised-button color="warn" (click)="onConfirmReject()" [disabled]="!rechazoComentario.trim()">
-          <mat-icon>send</mat-icon>
-          Confirmar Rechazo
+        <button mat-raised-button color="warn" (click)="onConfirmReject()" [disabled]="!rechazoComentario.trim()" class="action-btn">
+          <mat-icon>send</mat-icon> Confirmar Rechazo
         </button>
       </ng-container>
-
     </mat-dialog-actions>
   `,
   styles: [`
-    .review-section {
-      margin: 16px 0;
+    .dialog-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0;
+      padding: 24px 24px 16px;
     }
-    .review-section h3 {
-      margin-bottom: 8px;
-      font-size: 16px;
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+      margin-top: 8px;
+    }
+    @media (max-width: 600px) {
+      .review-grid { grid-template-columns: 1fr; }
+    }
+    .review-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #f5f5f5;
+      padding: 8px 12px;
+      font-weight: 500;
       color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #e0e0e0;
     }
-    .review-section p {
-      margin: 4px 0;
-      color: #555;
+    .card-header mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: #666;
+    }
+    .card-body {
+      padding: 12px;
+    }
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+    }
+    .info-row:last-child { margin-bottom: 0; }
+    .lbl {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 2px;
+    }
+    .val {
+      font-size: 14px;
+      color: #333;
+      display: flex;
+      align-items: center;
     }
     .small-chip {
       color: white !important;
       font-size: 10px;
       min-height: 20px;
-      padding: 2px 6px;
+      padding: 2px 8px;
       margin-left: 8px;
+      border-radius: 12px;
     }
-    .result-box {
-      background-color: #f5f5f5;
+    .result-highlight {
+      background: #f0f7ff;
+      border: 1px solid #bbdefb;
       border-radius: 8px;
-      padding: 16px;
-      margin: 12px 0;
-      border-left: 4px solid #2196f3;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .result-header {
+      color: #1976d2;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+    .result-value-container {
+      margin-bottom: 16px;
     }
     .result-value {
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
-    .result-value .label {
-      font-weight: 500;
-      color: #333;
-      margin-right: 8px;
-    }
-    .result-value .value {
+      font-size: 32px;
       font-weight: bold;
-      color: #2196f3;
+      color: #1565c0;
     }
-    .result-ranges {
+    .result-unit {
+      font-size: 16px;
+      color: #1976d2;
+      margin-left: 8px;
+    }
+    .result-interpretation {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #333;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .reject-section {
+      background: #fff5f5;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid #f44336;
+      margin-bottom: 16px;
+    }
+    .reject-title {
+      color: #d32f2f;
       display: flex;
       align-items: center;
-      background: #e3f2fd;
-      padding: 6px 10px;
-      border-radius: 4px;
+      gap: 8px;
+      margin-top: 0;
+      font-size: 16px;
+    }
+    .full-width {
+      width: 100%;
+    }
+    .dialog-actions {
+      padding: 0 24px 24px !important;
+    }
+    .action-btn {
+      margin-left: 8px !important;
     }
   `]
 })
