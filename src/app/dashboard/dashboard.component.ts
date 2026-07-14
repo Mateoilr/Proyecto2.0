@@ -66,7 +66,6 @@ export class DashboardComponent implements OnInit {
     const isLaboratorista = roles.includes('LABORATORISTA');
     const isMedico = roles.includes('MEDICO') || roles.includes('VALIDADOR');
 
-    // 1. Configurar Tarjetas de Métricas (Stats)
     if (isAdmin) {
       this.stats = [
         { title: 'Órdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
@@ -75,9 +74,14 @@ export class DashboardComponent implements OnInit {
         { title: 'Exámenes Pend.', value: 0, icon: 'science', color: '#748799', route: '/orders' }
       ];
       this.quickActions = [
-        { title: 'Nueva Orden', description: 'Crear una orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
-        { title: 'Ver Usuarios', description: 'Gestión de sistema', icon: 'manage_accounts', color: '#F29C38', route: '/admin/users' },
-        { title: 'Auditoría', description: 'Log de actividades', icon: 'history', color: '#4A90E2', route: '/admin/audit' },
+        { title: 'Nueva Orden', description: 'Crear nueva orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
+        { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'assignment', color: '#4A90E2', route: '/orders' },
+        { title: 'Nuevo Paciente', description: 'Registrar paciente', icon: 'person_add', color: '#F29C38', route: '/patients/new' },
+        { title: 'Ver Pacientes', description: 'Consultar pacientes', icon: 'people', color: '#9C27B0', route: '/patients' },
+        { title: 'Ingresar Resultados', description: 'Registrar resultados', icon: 'biotech', color: '#E91E63', route: '/orders' },
+        { title: 'Validar Resultados', description: 'Aprobar o rechazar', icon: 'fact_check', color: '#FF5722', route: '/results' },
+        { title: 'Ver Usuarios', description: 'Gestión de sistema', icon: 'manage_accounts', color: '#3F51B5', route: '/admin/users' },
+        { title: 'Auditoría', description: 'Log de actividades', icon: 'history', color: '#607D8B', route: '/admin/audit' },
         { title: 'Exámenes', description: 'Gestión de exámenes', icon: 'science', color: '#748799', route: '/exams' }
       ];
     } else if (isSecretario) {
@@ -87,8 +91,9 @@ export class DashboardComponent implements OnInit {
       ];
       this.quickActions = [
         { title: 'Nueva Orden', description: 'Crear una orden de exámenes', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
-        { title: 'Ver Órdenes', description: 'Consultar órdenes existentes', icon: 'search', color: '#ff9800', route: '/orders' },
-        { title: 'Nuevo Paciente', description: 'Registrar un paciente', icon: 'person_add', color: '#4A90E2', route: '/patients/new' }
+        { title: 'Ver Órdenes', description: 'Consultar órdenes existentes', icon: 'assignment', color: '#4A90E2', route: '/orders' },
+        { title: 'Nuevo Paciente', description: 'Registrar un paciente', icon: 'person_add', color: '#F29C38', route: '/patients/new' },
+        { title: 'Ver Pacientes', description: 'Consultar pacientes', icon: 'people', color: '#9C27B0', route: '/patients' }
       ];
     } else if (isLaboratorista) {
       this.stats = [
@@ -96,8 +101,9 @@ export class DashboardComponent implements OnInit {
         { title: 'Exámenes Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/orders' }
       ];
       this.quickActions = [
-        { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'search', color: '#329d9c', route: '/orders' },
-        { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#F29C38', route: '/orders' }
+        { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'assignment', color: '#4A90E2', route: '/orders' },
+        { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#E91E63', route: '/orders' },
+        { title: 'Ver Exámenes', description: 'Consultar catálogo', icon: 'science', color: '#748799', route: '/exams' }
       ];
     } else if (isMedico) {
       this.stats = [
@@ -105,8 +111,9 @@ export class DashboardComponent implements OnInit {
         { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
       ];
       this.quickActions = [
-        { title: 'Validar Resultados', description: 'Aprobar o rechazar resultados', icon: 'fact_check', color: '#F29C38', route: '/results' },
-        { title: 'Ver Órdenes', description: 'Consultar información', icon: 'search', color: '#329d9c', route: '/orders' }
+        { title: 'Validar Resultados', description: 'Aprobar o rechazar', icon: 'fact_check', color: '#FF5722', route: '/results' },
+        { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'assignment', color: '#4A90E2', route: '/orders' },
+        { title: 'Ver Pacientes', description: 'Consultar pacientes', icon: 'people', color: '#9C27B0', route: '/patients' }
       ];
     }
 

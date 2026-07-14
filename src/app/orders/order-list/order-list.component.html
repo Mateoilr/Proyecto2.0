@@ -67,7 +67,7 @@
             <mat-icon>chat</mat-icon>
           </button>
           <button mat-icon-button color="accent" 
-                  *ngIf="order.estado === 'CERRADA'" 
+                  [disabled]="order.estado !== 'CERRADA'" 
                   (click)="printOrder(order, $event)" 
                   matTooltip="Imprimir resultados">
             <mat-icon>print</mat-icon>
