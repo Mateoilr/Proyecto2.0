@@ -73,4 +73,23 @@ mat-card-title {
   min-width: 120px;
 }
 
-
+/* Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 10px;
+  }
+  
+  .range-fields {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}

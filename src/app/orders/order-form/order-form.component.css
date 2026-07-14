@@ -152,4 +152,26 @@ mat-error {
   color: #ffc107;
 }
 
-
+/* Responsive */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 10px;
+  }
+  
+  mat-card-title {
+    font-size: 1.5rem;
+  }
+  
+  .exams-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}

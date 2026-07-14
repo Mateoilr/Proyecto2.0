@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { AuthService } from '../../services/auth.service';
 
 interface MenuItem {
@@ -81,6 +82,9 @@ export class MainLayoutComponent implements OnInit {
   ];
 
   isDarkMode = false;
+  isMobile = false;
+
+  private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
     const savedTheme = localStorage.getItem('theme');
@@ -88,6 +92,10 @@ export class MainLayoutComponent implements OnInit {
       this.isDarkMode = true;
       document.body.classList.add('dark-theme');
     }
+
+    this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
+      this.isMobile = result.matches;
+    });
   }
 
   toggleTheme() {

@@ -145,11 +145,28 @@ mat-nav-list a.active mat-icon {
 .content {
   padding: 24px;
   background-color: var(--app-bg);
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 70px);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
-
+@media (max-width: 600px) {
+  .user-name, .user-email {
+    display: none;
+  }
+  
+  .user-button {
+    padding: 0 8px;
+    margin-right: 5px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .sidenav {
+    width: 280px;
+  }
+}

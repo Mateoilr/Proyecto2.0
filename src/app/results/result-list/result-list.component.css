@@ -114,4 +114,18 @@ button[mat-icon-button] {
   margin-right: 4px;
 }
 
-
+/* Responsive */
+@media (max-width: 768px) {
+  .list-container {
+    padding: 10px;
+  }
+  
+  .filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filter-field {
+    width: 100%;
+  }
+}

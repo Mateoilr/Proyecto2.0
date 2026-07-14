@@ -1,6 +1,6 @@
 <mat-sidenav-container class="layout-container">
 
-  <mat-sidenav mode="side" opened class="sidenav">
+  <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="sidenav">
     <div class="logo">
       <mat-icon class="logo-icon">biotech</mat-icon>
       <span>LaboratorioAG</span>
@@ -13,6 +13,7 @@
           *ngIf="shouldShowMenuItem(item)"
           [routerLink]="item.route"
           routerLinkActive="active"
+          (click)="isMobile ? sidenav.close() : null"
         >
           <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
           <span matListItemTitle>{{ item.label }}</span>
@@ -23,6 +24,9 @@
 
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="isMobile" style="margin-right: 16px; color: var(--text-color);">
+        <mat-icon>menu</mat-icon>
+      </button>
       <span class="spacer"></span>
 
       <button mat-icon-button (click)="toggleTheme()" style="margin-right: 16px; color: var(--text-color);">
