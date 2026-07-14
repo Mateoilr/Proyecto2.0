@@ -168,13 +168,16 @@ mat-divider {
   }
   
   .header-actions {
+    display: flex;
     flex-direction: column;
     width: 100%;
+    padding-left: 0;
   }
   
   .header-actions button {
     width: 100%;
     max-width: none;
+    justify-content: flex-start;
   }
   
   .info-grid {
