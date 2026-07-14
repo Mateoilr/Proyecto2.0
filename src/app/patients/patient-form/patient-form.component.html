@@ -54,7 +54,7 @@
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Fecha de Nacimiento</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento">
+            <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" [max]="maxDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="patientForm.get('fechaNacimiento')?.touched">

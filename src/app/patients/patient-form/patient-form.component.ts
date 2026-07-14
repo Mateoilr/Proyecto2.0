@@ -44,6 +44,7 @@ export class PatientFormComponent implements OnInit {
   loading = false;
   isEditMode = false;
   patientId?: string;
+  maxDate = new Date();
 
   tiposDocumento = [
     { value: 'CEDULA', label: 'Cédula' },
