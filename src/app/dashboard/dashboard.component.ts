@@ -70,9 +70,9 @@ export class DashboardComponent implements OnInit {
     if (isAdmin) {
       this.stats = [
         { title: 'Órdenes Totales', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
-        { title: 'Resultados Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' },
+        { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
         { title: 'Pacientes', value: 0, icon: 'people', color: '#4A90E2', route: '/patients' },
-        { title: 'Exámenes Activos', value: 0, icon: 'science', color: '#748799', route: '/exams' }
+        { title: 'Exámenes Pend.', value: 0, icon: 'science', color: '#748799', route: '/orders' }
       ];
       this.quickActions = [
         { title: 'Nueva Orden', description: 'Crear una orden', icon: 'add_task', color: '#329d9c', route: '/orders/new' },
@@ -92,17 +92,17 @@ export class DashboardComponent implements OnInit {
       ];
     } else if (isLaboratorista) {
       this.stats = [
-        { title: 'Exámenes en Proceso', value: 0, icon: 'science', color: '#329d9c', route: '/orders' },
-        { title: 'Resultados Ptes.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/results' }
+        { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' },
+        { title: 'Exámenes Pend.', value: 0, icon: 'pending_actions', color: '#F29C38', route: '/orders' }
       ];
       this.quickActions = [
         { title: 'Ver Órdenes', description: 'Consultar órdenes', icon: 'search', color: '#329d9c', route: '/orders' },
-        { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#F29C38', route: '/results' }
+        { title: 'Ingresar Resultados', description: 'Registrar análisis', icon: 'biotech', color: '#F29C38', route: '/orders' }
       ];
     } else if (isMedico) {
       this.stats = [
         { title: 'Por Validar', value: 0, icon: 'fact_check', color: '#F29C38', route: '/results' },
-        { title: 'Órdenes', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
+        { title: 'Órdenes Hoy', value: 0, icon: 'assignment', color: '#329d9c', route: '/orders' }
       ];
       this.quickActions = [
         { title: 'Validar Resultados', description: 'Aprobar o rechazar resultados', icon: 'fact_check', color: '#F29C38', route: '/results' },
@@ -118,10 +118,10 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getStats().subscribe({
       next: (data) => {
         if (isAdmin) {
-          this.updateStat('Órdenes Totales', data.ordersToday || 0); // Asumiendo que el backend retorna todo, si return ordersToday es el nombre, dependemos de lo q mande el back. Nota: backend devuelve ordersToday.
-          this.updateStat('Resultados Pend.', data.pendingResults || 0);
+          this.updateStat('Órdenes Totales', data.ordersToday || 0);
+          this.updateStat('Por Validar', data.pendingValidations || 0);
           this.updateStat('Pacientes', data.registeredPatients || 0);
-          this.updateStat('Exámenes Activos', data.activeExams || 0);
+          this.updateStat('Exámenes Pend.', data.pendingOrderItems || 0);
         }
         
         if (isSecretario) {
@@ -130,13 +130,13 @@ export class DashboardComponent implements OnInit {
         }
         
         if (isLaboratorista) {
-          this.updateStat('Exámenes en Proceso', data.ordersToday || 0); // Mapeo temporal si el back no provee "en proceso"
-          this.updateStat('Resultados Ptes.', data.pendingResults || 0);
+          this.updateStat('Órdenes Hoy', data.ordersToday || 0);
+          this.updateStat('Exámenes Pend.', data.pendingOrderItems || 0);
         }
         
         if (isMedico) {
-          this.updateStat('Por Validar', data.pendingResults || 0);
-          this.updateStat('Órdenes', data.ordersToday || 0);
+          this.updateStat('Por Validar', data.pendingValidations || 0);
+          this.updateStat('Órdenes Hoy', data.ordersToday || 0);
         }
 
         if (data.recentActivity) {

@@ -57,6 +57,16 @@ mat-paginator {
   color: white;
 }
 
+.mat-column-actions {
+  text-align: right;
+  padding-right: 1rem;
+  white-space: nowrap;
+}
+
+.mat-column-actions button {
+  margin-left: 8px;
+}
+
 .estado-completada {
   background-color: #4caf50 !important;
   color: white;
